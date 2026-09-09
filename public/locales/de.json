@@ -1,0 +1,127 @@
+{
+  "_lang": "de",
+  "_label": "Deutsch",
+  "page_title": {
+    "index": "Δxolotl // Offizielle Website",
+    "discography": "Δxolotl // Diskographie",
+    "works": "Δxolotl // Werke",
+    "tos": "Δxolotl // Nutzungsbedingungen"
+  },
+  "nav": {
+    "home": "//_STARTSEITE",
+    "about": "/ÜBER MICH",
+    "music": "/MUSIK",
+    "portfolio": "/PORTFOLIO",
+    "affiliates": "/KOLLABORATEURE",
+    "connect": "/KONTAKT",
+    "more": "/MEHR",
+    "discography": "/DISKOGRAPHIE",
+    "works": "/WERKE",
+    "tos": "/NUTZUNGSBEDINGUNGEN",
+    "shop": "/SHOP",
+    "unknown": "/UNBEKANNT"
+  },
+  "lang_panel": {
+    "label": "SPRACHE WÄHLEN"
+  },
+  "hero": {
+    "sub": "[AKTIV]::Komponist / Musiker //",
+    "loader_label": "SYSTEM-LINKS:",
+    "reveal_tag": "SYS_LINK: HERGESTELLT // KNOTEN_FREIGESCHALTET",
+    "node_disco_label": "DISKOGRAPHIE",
+    "node_disco_sub": "ARCHIV // AUDIO-PROTOKOLL",
+    "node_works_label": "WERKE",
+    "node_works_sub": "AUSWAHL // PORTFOLIO",
+    "node_tos_label": "NUTZUNGSBEDINGUNGEN",
+    "node_tos_sub": "LEGAL // NUTZUNGSRICHTLINIE",
+    "node_shop_sub": "MERCH // ZUGRIFF_BESCHRÄNKT",
+    "node_unknown_sub": "PRJ_?? // KLASSIFIZIERT"
+  },
+  "about": {
+    "heading": "Über Mich",
+    "p1": "Wallo! Ich bin <strong>Δxolotl</strong>!<br />Ich bin Komponist, Arrangeur, Produzent und Multi-Instrumentalist mit Fokus auf zeitgenössischer Musik, die elektronische und traditionelle Einflüsse in vielen Genres verbindet.",
+    "p2": "Ich arbeite an unabhängigen Projekten und freiberuflichen Aufträgen und veröffentliche Originalkompositionen, Soundtracks, Arrangements und Covers. Meine Arbeit ist stark von japanischem Anime und der Popkultur geprägt – der Sound bleibt aber selten an einem Ort."
+  },
+  "music": {
+    "heading": "Neueste Veröffentlichungen"
+  },
+  "portfolio": {
+    "heading": "Portfolio",
+    "sub": "Ausgewählte Werke von <strong>Δxolotl</strong> //",
+    "full_portfolio": "Vollständiges_Portfolio :="
+  },
+  "affiliates": {
+    "heading": "Kollaborateure",
+    "sub": "Kollaborationsnetzwerk: //",
+    "dossier_tag": "KNOTEN_AFFILIIERT// KOLLABORATEUR",
+    "collab_log": "// KOLLABORATIONSPROTOKOLL",
+    "links": "// LINKS",
+    "alt": "// ALT"
+  },
+  "connect": {
+    "heading": "Kontakt",
+    "sub": "Verbindung über bevorzugtes Protokoll herstellen //",
+    "email_label": "E-MAIL SENDEN",
+    "commission_label": "BEAUFTRAGEN",
+    "commission_sub": ">> VGen // Verfügbar",
+    "discord_label": "MEINEM DISCORD-SERVER BEITRETEN",
+    "discord_sub": ">> X0\\K Discord-Server"
+  },
+  "footer": {
+    "rights": "©THEAXOLOTLMUSIC // ALLE RECHTE VORBEHALTEN"
+  },
+  "disco": {
+    "header_tag": "KNOTEN-ARCHIV // AUDIO-PROTOKOLL",
+    "heading": "Diskographie",
+    "filter_all": "ALLE",
+    "filter_releases": "VERÖFFENTLICHUNGEN",
+    "filter_featured": "MITWIRKEND",
+    "hint_desktop": "// ZIEHEN ODER PFEILE KLICKEN",
+    "hint_mobile": "// SCROLLEN ZUM NAVIGIEREN",
+    "bottom_hint": "AUF EINEN TRACK KLICKEN UM DOSSIER ZU ÖFFNEN",
+    "dossier_tag": "KNOTEN-ARCHIV // AUDIO-PROTOKOLL"
+  },
+  "works": {
+    "header_tag": "KNOTEN-ARCHIV // AUFTRAGSPROTOKOLL",
+    "heading": "Werke",
+    "sub": "Professionelle Credits & Projekte -"
+  },
+  "tos": {
+    "header_tag": "KNOTEN-ARCHIV // RECHTSPROTOKOLL",
+    "heading": "Nutzungsbedingungen",
+    "sub": "Δxolotl · Komponist / Arrangeur / Musikproduzent",
+    "mobile_nav": "// ZUM ABSCHNITT SPRINGEN",
+    "sidenav_label": "// ABSCHNITTE",
+    "nav_preamble": "Über diese Vereinbarung",
+    "nav_01": "Definitionen",
+    "nav_02": "Auftragsprozess",
+    "nav_03": "Verhaltenskodex",
+    "nav_04": "Leistungsumfang",
+    "nav_05": "Umfang & Änderungsaufträge",
+    "nav_06": "Preisgestaltung & Abrechnung",
+    "nav_07": "Zahlungsbedingungen",
+    "nav_08": "Überarbeitungen",
+    "nav_09": "Fristen & Lieferung",
+    "nav_10": "Geistiges Eigentum",
+    "nav_11": "Nutzungsrechte & Lizenzen",
+    "nav_12": "Stornierungen & Rückerstattungen",
+    "nav_13": "Haftungsbeschränkung",
+    "nav_14": "Änderungen",
+    "preamble_title": "Über diese Vereinbarung",
+    "preamble_sub": "// Verwaltungsdokument · Absicht · Vorrang",
+    "block_01_title": "Definitionen",
+    "block_02_title": "Auftragsprozess",
+    "block_03_title": "Verhaltenskodex",
+    "block_04_title": "Leistungsumfang",
+    "block_05_title": "Umfang & Änderungsaufträge",
+    "block_06_title": "Preisgestaltung & Abrechnung",
+    "block_07_title": "Zahlungsbedingungen",
+    "block_08_title": "Überarbeitungen",
+    "block_09_title": "Fristen & Lieferung",
+    "block_10_title": "Geistiges Eigentum",
+    "block_11_title": "Nutzungsrechte & Lizenzen",
+    "block_12_title": "Stornierungen & Rückerstattungen",
+    "block_13_title": "Haftungsbeschränkung",
+    "block_14_title": "Änderungen"
+  }
+}

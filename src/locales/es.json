@@ -1,0 +1,127 @@
+{
+  "_lang": "es",
+  "_label": "Español",
+  "page_title": {
+    "index": "Δxolotl // Sitio Oficial",
+    "discography": "Δxolotl // Discografía",
+    "works": "Δxolotl // Obras",
+    "tos": "Δxolotl // Términos de Servicio"
+  },
+  "nav": {
+    "home": "//_INICIO",
+    "about": "/ACERCA",
+    "music": "/MÚSICA",
+    "portfolio": "/PORTAFOLIO",
+    "affiliates": "/COLABORADORES",
+    "connect": "/CONTACTO",
+    "more": "/MÁS",
+    "discography": "/DISCOGRAFÍA",
+    "works": "/OBRAS",
+    "tos": "/TÉRMINOS",
+    "shop": "/TIENDA",
+    "unknown": "/DESCONOCIDO"
+  },
+  "lang_panel": {
+    "label": "SELECCIONAR IDIOMA"
+  },
+  "hero": {
+    "sub": "[ACTIVO]::Compositor / Músico //",
+    "loader_label": "ENLACES_SISTEMA:",
+    "reveal_tag": "SYS_LINK: ESTABLECIDO // NODOS_DESBLOQUEADOS",
+    "node_disco_label": "DISCOGRAFÍA",
+    "node_disco_sub": "ARCHIVO // REGISTRO_AUDIO",
+    "node_works_label": "OBRAS",
+    "node_works_sub": "SELECCIÓN // PORTAFOLIO",
+    "node_tos_label": "TÉRMINOS",
+    "node_tos_sub": "LEGAL // POLÍTICA_USO",
+    "node_shop_sub": "MERCH // ACCESO_RESTRINGIDO",
+    "node_unknown_sub": "PRJ_?? // CLASIFICADO"
+  },
+  "about": {
+    "heading": "Acerca",
+    "p1": "¡Wello! Soy <strong>Δxolotl</strong>.<br />Soy compositor, arreglista, productor y multiinstrumentista con enfoque en música contemporánea que fusiona influencias electrónicas y tradicionales en una amplia variedad de géneros.",
+    "p2": "Trabajo en proyectos independientes y comisiones freelance, lanzando composiciones originales, bandas sonoras, rearreglos y versiones. Mi trabajo está fuertemente influenciado por el anime y la cultura pop japonesa - aunque el sonido raramente se queda en un solo lugar."
+  },
+  "music": {
+    "heading": "Últimos Lanzamientos"
+  },
+  "portfolio": {
+    "heading": "Portafolio",
+    "sub": "Obras seleccionadas de <strong>Δxolotl</strong> //",
+    "full_portfolio": "Portafolio_Completo :="
+  },
+  "affiliates": {
+    "heading": "Colaboradores",
+    "sub": "Red colaborativa: //",
+    "dossier_tag": "NODO_AFILIADO// COLABORADOR",
+    "collab_log": "// REGISTRO_COLABORATIVO",
+    "links": "// ENLACES",
+    "alt": "// ALT"
+  },
+  "connect": {
+    "heading": "Contacto",
+    "sub": "Establece una conexión vía protocolo preferido //",
+    "email_label": "ESCRÍBEME",
+    "commission_label": "COMISIÓNAME",
+    "commission_sub": ">> VGen // Disponible",
+    "discord_label": "ÚNETE A MI SERVIDOR DISCORD",
+    "discord_sub": ">> Servidor Discord X0\\K"
+  },
+  "footer": {
+    "rights": "©THEAXOLOTLMUSIC // TODOS LOS DERECHOS RESERVADOS"
+  },
+  "disco": {
+    "header_tag": "ARCHIVO_NODO // REGISTRO_AUDIO",
+    "heading": "Discografía",
+    "filter_all": "TODO",
+    "filter_releases": "LANZAMIENTOS",
+    "filter_featured": "DESTACADO",
+    "hint_desktop": "// ARRASTRAR O HACER CLIC EN FLECHAS",
+    "hint_mobile": "// DESPLAZARSE PARA NAVEGAR",
+    "bottom_hint": "HACER CLIC EN UNA PISTA PARA ABRIR EXPEDIENTE",
+    "dossier_tag": "ARCHIVO_NODO // REGISTRO_AUDIO"
+  },
+  "works": {
+    "header_tag": "ARCHIVO_NODO // REGISTRO_COMISIONES",
+    "heading": "Obras",
+    "sub": "Créditos profesionales y proyectos -"
+  },
+  "tos": {
+    "header_tag": "ARCHIVO_NODO // REGISTRO_LEGAL",
+    "heading": "Términos de Servicio",
+    "sub": "Δxolotl · Compositor / Arreglista / Productor",
+    "mobile_nav": "// IR A SECCIÓN",
+    "sidenav_label": "// SECCIONES",
+    "nav_preamble": "Acerca de este acuerdo",
+    "nav_01": "Definiciones",
+    "nav_02": "Proceso de comisión",
+    "nav_03": "Código de conducta",
+    "nav_04": "Alcance de servicios",
+    "nav_05": "Alcance y órdenes de variación",
+    "nav_06": "Precios y facturación",
+    "nav_07": "Términos de pago",
+    "nav_08": "Revisiones",
+    "nav_09": "Plazos y entrega",
+    "nav_10": "Propiedad intelectual",
+    "nav_11": "Derechos de uso y licencias",
+    "nav_12": "Cancelaciones y reembolsos",
+    "nav_13": "Limitación de responsabilidad",
+    "nav_14": "Enmiendas",
+    "preamble_title": "Acerca de este acuerdo",
+    "preamble_sub": "// Documento rector · Intención · Precedencia",
+    "block_01_title": "Definiciones",
+    "block_02_title": "Proceso de comisión",
+    "block_03_title": "Código de conducta",
+    "block_04_title": "Alcance de servicios",
+    "block_05_title": "Alcance y órdenes de variación",
+    "block_06_title": "Precios y facturación",
+    "block_07_title": "Términos de pago",
+    "block_08_title": "Revisiones",
+    "block_09_title": "Plazos y entrega",
+    "block_10_title": "Propiedad intelectual",
+    "block_11_title": "Derechos de uso y licencias",
+    "block_12_title": "Cancelaciones y reembolsos",
+    "block_13_title": "Limitación de responsabilidad",
+    "block_14_title": "Enmiendas"
+  }
+}

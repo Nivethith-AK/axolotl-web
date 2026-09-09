@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Δxolotl // Official Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Composer／Music Producer :: Portfolio, Discography, Works & stuff..."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"
+    />
+    <!-- Theme: applied before render to avoid flash -->
+    <script>
+      (function () {
+        var t = localStorage.getItem("theme");
+        if (!t) {
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          t = prefersDark ? "dark" : "light";
+          localStorage.setItem("theme", t);
+        }
+        if (t === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+        var l = localStorage.getItem("lang") || "en";
+        document.documentElement.setAttribute("lang", l);
+      })();
+    </script>
+    <link rel="icon" href="/images/assets/logo_favicon.jpg" />
+    <!-- Social share / OG meta -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://theaxolotlmusic.com/" />
+    <meta property="og:title" content="Δxolotl // Official Website" />
+    <meta
+      property="og:description"
+      content="Composer／Music Producer :: Portfolio, Discography, Works & stuff..."
+    />
+    <meta
+      property="og:image"
+      content="https://theaxolotlmusic.com/images/assets/banner.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Δxolotl // Official Website" />
+    <meta
+      name="twitter:description"
+      content="Composer／Music Producer :: Portfolio, Discography, Works & stuff..."
+    />
+    <meta
+      name="twitter:image"
+      content="https://theaxolotlmusic.com/images/assets/banner.jpg"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

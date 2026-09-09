@@ -1,0 +1,127 @@
+{
+  "_lang": "ja",
+  "_label": "日本語",
+  "page_title": {
+    "index": "Δxolotl // 公式ウェブサイト",
+    "discography": "Δxolotl // ディスコグラフィー",
+    "works": "Δxolotl // 作品集",
+    "tos": "Δxolotl // 利用規約"
+  },
+  "nav": {
+    "home": "//_ホーム",
+    "about": "/について",
+    "music": "/音楽",
+    "portfolio": "/ポートフォリオ",
+    "affiliates": "/コラボレーター",
+    "connect": "/連絡先",
+    "more": "/もっと見る",
+    "discography": "/ディスコグラフィー",
+    "works": "/作品集",
+    "tos": "/利用規約",
+    "shop": "/ショップ",
+    "unknown": "/不明"
+  },
+  "lang_panel": {
+    "label": "言語を選択"
+  },
+  "hero": {
+    "sub": "[アクティブ]::作曲家 / 音楽家 //",
+    "loader_label": "システムリンク:",
+    "reveal_tag": "SYS_LINK: 確立済み // ノード解放",
+    "node_disco_label": "ディスコグラフィー",
+    "node_disco_sub": "アーカイブ // 音声ログ",
+    "node_works_label": "作品集",
+    "node_works_sub": "セレクション // ポートフォリオ",
+    "node_tos_label": "利用規約",
+    "node_tos_sub": "法律 // 使用ポリシー",
+    "node_shop_sub": "グッズ // アクセス制限中",
+    "node_unknown_sub": "PRJ_?? // 機密"
+  },
+  "about": {
+    "heading": "について",
+    "p1": "はじめまして！<strong>Δxolotl</strong>です！<br />私は作曲家・編曲家・プロデューサー・マルチ楽器奏者として、電子音楽と伝統音楽を融合した幅広いジャンルの現代音楽を制作しています。",
+    "p2": "インディープロジェクトやフリーランスの委託制作に取り組み、オリジナル楽曲・サウンドトラック・アレンジ・カバーをリリースしています。日本のアニメやポップカルチャーから大きな影響を受けていますが、サウンドは常に一か所に留まりません。"
+  },
+  "music": {
+    "heading": "最新フィード"
+  },
+  "portfolio": {
+    "heading": "ポートフォリオ",
+    "sub": "<strong>Δxolotl</strong>のセレクション作品 //",
+    "full_portfolio": "Full_Portfolio :="
+  },
+  "affiliates": {
+    "heading": "コラボレーター",
+    "sub": "コラボレーションネットワーク: //",
+    "dossier_tag": "ノード_アフィリエイト// コラボレーター",
+    "collab_log": "// コラボ履歴",
+    "links": "// リンク",
+    "alt": "// ALT"
+  },
+  "connect": {
+    "heading": "連絡先",
+    "sub": "お好みの方法でご連絡ください //",
+    "email_label": "メールを送る",
+    "commission_label": "依頼する",
+    "commission_sub": ">> VGen // 受付中",
+    "discord_label": "Discordサーバーに参加",
+    "discord_sub": ">> X0\\K Discordサーバー"
+  },
+  "footer": {
+    "rights": "©THEAXOLOTLMUSIC // 全著作権所有"
+  },
+  "disco": {
+    "header_tag": "ノードアーカイブ // 音声ログ",
+    "heading": "ディスコグラフィー",
+    "filter_all": "すべて",
+    "filter_releases": "リリース",
+    "filter_featured": "参加作品",
+    "hint_desktop": "// ドラッグまたは矢印でナビゲート",
+    "hint_mobile": "// スクロールしてナビゲート",
+    "bottom_hint": "トラックをクリックして詳細を表示",
+    "dossier_tag": "ノードアーカイブ // 音声ログ"
+  },
+  "works": {
+    "header_tag": "ノードアーカイブ // 委託ログ",
+    "heading": "作品集",
+    "sub": "プロクレジット＆プロジェクト -"
+  },
+  "tos": {
+    "header_tag": "ノードアーカイブ // 法律ログ",
+    "heading": "利用規約",
+    "sub": "Δxolotl · 作曲家 / 編曲家 / 音楽プロデューサー",
+    "mobile_nav": "// セクションへジャンプ",
+    "sidenav_label": "// セクション",
+    "nav_preamble": "本契約について",
+    "nav_01": "定義",
+    "nav_02": "委託プロセス",
+    "nav_03": "行動規範",
+    "nav_04": "サービス範囲",
+    "nav_05": "範囲と変更指示",
+    "nav_06": "価格と請求",
+    "nav_07": "支払条件",
+    "nav_08": "修正",
+    "nav_09": "締め切りと納品",
+    "nav_10": "知的財産",
+    "nav_11": "使用権とライセンス",
+    "nav_12": "キャンセルと返金",
+    "nav_13": "責任の制限",
+    "nav_14": "改訂",
+    "preamble_title": "本契約について",
+    "preamble_sub": "// 管理文書 · 意図 · 優先順位",
+    "block_01_title": "定義",
+    "block_02_title": "委託プロセス",
+    "block_03_title": "行動規範",
+    "block_04_title": "サービス範囲",
+    "block_05_title": "範囲と変更指示",
+    "block_06_title": "価格と請求",
+    "block_07_title": "支払条件",
+    "block_08_title": "修正",
+    "block_09_title": "締め切りと納品",
+    "block_10_title": "知的財産",
+    "block_11_title": "使用権とライセンス",
+    "block_12_title": "キャンセルと返金",
+    "block_13_title": "責任の制限",
+    "block_14_title": "改訂"
+  }
+}

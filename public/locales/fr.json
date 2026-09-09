@@ -1,0 +1,127 @@
+{
+  "_lang": "fr",
+  "_label": "Français",
+  "page_title": {
+    "index": "Δxolotl // Site Officiel",
+    "discography": "Δxolotl // Discographie",
+    "works": "Δxolotl // Œuvres",
+    "tos": "Δxolotl // Conditions d'utilisation"
+  },
+  "nav": {
+    "home": "//_ACCUEIL",
+    "about": "/À PROPOS",
+    "music": "/MUSIQUE",
+    "portfolio": "/PORTFOLIO",
+    "affiliates": "/COLLABORATEURS",
+    "connect": "/CONTACT",
+    "more": "/PLUS",
+    "discography": "/DISCOGRAPHIE",
+    "works": "/ŒUVRES",
+    "tos": "/CONDITIONS",
+    "shop": "/BOUTIQUE",
+    "unknown": "/INCONNU"
+  },
+  "lang_panel": {
+    "label": "CHOISIR LA LANGUE"
+  },
+  "hero": {
+    "sub": "[ACTIF]::Compositeur / Musicien //",
+    "loader_label": "LIENS_SYSTÈME :",
+    "reveal_tag": "SYS_LINK: ÉTABLI // NŒUDS_DÉVERROUILLÉS",
+    "node_disco_label": "DISCOGRAPHIE",
+    "node_disco_sub": "ARCHIVE // JOURNAL_AUDIO",
+    "node_works_label": "ŒUVRES",
+    "node_works_sub": "SÉLECTION // PORTFOLIO",
+    "node_tos_label": "CONDITIONS",
+    "node_tos_sub": "LÉGAL // POLITIQUE_USAGE",
+    "node_shop_sub": "MERCH // ACCÈS_RESTREINT",
+    "node_unknown_sub": "PRJ_?? // CLASSIFIÉ"
+  },
+  "about": {
+    "heading": "À Propos",
+    "p1": "Wello ! Je suis <strong>Δxolotl</strong> !<br />Je suis compositeur, arrangeur, producteur et multi-instrumentiste, spécialisé dans la musique contemporaine qui fusionne influences électroniques et traditionnelles dans de nombreux genres.",
+    "p2": "Je travaille sur des projets indépendants et des commissions, publiant des compositions originales, musiques de films, arrangements et reprises. Mon travail est fortement influencé par l'animation et la culture pop japonaises - mais le son ne reste jamais au même endroit."
+  },
+  "music": {
+    "heading": "Dernières Sorties"
+  },
+  "portfolio": {
+    "heading": "Portfolio",
+    "sub": "Œuvres sélectionnées de <strong>Δxolotl</strong> //",
+    "full_portfolio": "Portfolio_Complet :="
+  },
+  "affiliates": {
+    "heading": "Collaborateurs",
+    "sub": "Réseau collaboratif : //",
+    "dossier_tag": "NŒUD_AFFILIÉ// COLLABORATEUR",
+    "collab_log": "// JOURNAL_COLLABORATIF",
+    "links": "// LIENS",
+    "alt": "// ALT"
+  },
+  "connect": {
+    "heading": "Contact",
+    "sub": "Établir une connexion via le protocole préféré //",
+    "email_label": "M'ÉCRIRE",
+    "commission_label": "ME COMMANDER",
+    "commission_sub": ">> VGen // Disponible",
+    "discord_label": "REJOINDRE MON DISCORD",
+    "discord_sub": ">> Serveur Discord X0\\K"
+  },
+  "footer": {
+    "rights": "©THEAXOLOTLMUSIC // TOUS DROITS RÉSERVÉS"
+  },
+  "disco": {
+    "header_tag": "ARCHIVE_NŒUD // JOURNAL_AUDIO",
+    "heading": "Discographie",
+    "filter_all": "TOUT",
+    "filter_releases": "SORTIES",
+    "filter_featured": "EN VEDETTE",
+    "hint_desktop": "// GLISSER OU CLIQUER SUR LES FLÈCHES",
+    "hint_mobile": "// DÉFILER POUR NAVIGUER",
+    "bottom_hint": "CLIQUER SUR UNE PISTE POUR OUVRIR LE DOSSIER",
+    "dossier_tag": "ARCHIVE_NŒUD // JOURNAL_AUDIO"
+  },
+  "works": {
+    "header_tag": "ARCHIVE_NŒUD // JOURNAL_COMMISSIONS",
+    "heading": "Œuvres",
+    "sub": "Crédits professionnels & projets -"
+  },
+  "tos": {
+    "header_tag": "ARCHIVE_NŒUD // JOURNAL_LÉGAL",
+    "heading": "Conditions d'utilisation",
+    "sub": "Δxolotl · Compositeur / Arrangeur / Producteur",
+    "mobile_nav": "// ALLER À LA SECTION",
+    "sidenav_label": "// SECTIONS",
+    "nav_preamble": "À propos de cet accord",
+    "nav_01": "Définitions",
+    "nav_02": "Processus de commission",
+    "nav_03": "Code de conduite",
+    "nav_04": "Périmètre des services",
+    "nav_05": "Périmètre & ordres de modification",
+    "nav_06": "Tarification & facturation",
+    "nav_07": "Conditions de paiement",
+    "nav_08": "Révisions",
+    "nav_09": "Délais & livraison",
+    "nav_10": "Propriété intellectuelle",
+    "nav_11": "Droits d'utilisation & licences",
+    "nav_12": "Annulations & remboursements",
+    "nav_13": "Limitation de responsabilité",
+    "nav_14": "Amendements",
+    "preamble_title": "À propos de cet accord",
+    "preamble_sub": "// Document régissant · Intention · Préséance",
+    "block_01_title": "Définitions",
+    "block_02_title": "Processus de commission",
+    "block_03_title": "Code de conduite",
+    "block_04_title": "Périmètre des services",
+    "block_05_title": "Périmètre & ordres de modification",
+    "block_06_title": "Tarification & facturation",
+    "block_07_title": "Conditions de paiement",
+    "block_08_title": "Révisions",
+    "block_09_title": "Délais & livraison",
+    "block_10_title": "Propriété intellectuelle",
+    "block_11_title": "Droits d'utilisation & licences",
+    "block_12_title": "Annulations & remboursements",
+    "block_13_title": "Limitation de responsabilité",
+    "block_14_title": "Amendements"
+  }
+}

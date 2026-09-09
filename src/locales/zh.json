@@ -1,0 +1,127 @@
+{
+  "_lang": "zh",
+  "_label": "中文",
+  "page_title": {
+    "index": "Δxolotl // 官方网站",
+    "discography": "Δxolotl // 作品目录",
+    "works": "Δxolotl // 作品集",
+    "tos": "Δxolotl // 服务条款"
+  },
+  "nav": {
+    "home": "//_主页",
+    "about": "/关于",
+    "music": "/音乐",
+    "portfolio": "/作品集",
+    "affiliates": "/合作者",
+    "connect": "/联系",
+    "more": "/更多",
+    "discography": "/作品目录",
+    "works": "/作品集",
+    "tos": "/服务条款",
+    "shop": "/商店",
+    "unknown": "/未知"
+  },
+  "lang_panel": {
+    "label": "选择语言"
+  },
+  "hero": {
+    "sub": "[活跃]::作曲家 / 音乐人 //",
+    "loader_label": "系统链接:",
+    "reveal_tag": "SYS_LINK: 已建立 // 节点已解锁",
+    "node_disco_label": "作品目录",
+    "node_disco_sub": "项目存档 // 音频日志",
+    "node_works_label": "作品集",
+    "node_works_sub": "精选作品 // 作品集",
+    "node_tos_label": "服务条款",
+    "node_tos_sub": "法律 // 使用政策",
+    "node_shop_sub": "周边 // 访问受限",
+    "node_unknown_sub": "PRJ_?? // 机密"
+  },
+  "about": {
+    "heading": "关于",
+    "p1": "Wello！我是<strong>Δxolotl</strong>！<br />我是一位作曲家、编曲家、制作人和多乐器演奏者，专注于融合电子与传统音乐影响的当代音乐创作，涵盖多种风格。",
+    "p2": "我从事独立项目和自由委托创作，发布原创音乐、配乐、改编和翻唱作品。我的作品深受日本动漫和流行文化的影响--但风格从不局限于一处。"
+  },
+  "music": {
+    "heading": "最新动态"
+  },
+  "portfolio": {
+    "heading": "作品集",
+    "sub": "<strong>Δxolotl</strong>精选作品 //",
+    "full_portfolio": "完整作品集 :="
+  },
+  "affiliates": {
+    "heading": "合作者",
+    "sub": "合作网络: //",
+    "dossier_tag": "节点_合作者// 合作者",
+    "collab_log": "// 合作记录",
+    "links": "// 链接",
+    "alt": "// 别名"
+  },
+  "connect": {
+    "heading": "联系",
+    "sub": "通过您偏好的方式建立联系 //",
+    "email_label": "发送邮件",
+    "commission_label": "委托我",
+    "commission_sub": ">> VGen // 开放接单",
+    "discord_label": "加入我的Discord服务器",
+    "discord_sub": ">> X0\\K Discord服务器"
+  },
+  "footer": {
+    "rights": "©THEAXOLOTLMUSIC // 版权所有"
+  },
+  "disco": {
+    "header_tag": "节点存档 // 音频日志",
+    "heading": "作品目录",
+    "filter_all": "全部",
+    "filter_releases": "发行",
+    "filter_featured": "参与",
+    "hint_desktop": "// 拖动或点击箭头导航",
+    "hint_mobile": "// 滚动导航",
+    "bottom_hint": "点击任意曲目打开档案",
+    "dossier_tag": "节点存档 // 音频日志"
+  },
+  "works": {
+    "header_tag": "节点存档 // 委托日志",
+    "heading": "作品集",
+    "sub": "专业资历与项目 -"
+  },
+  "tos": {
+    "header_tag": "节点存档 // 法律日志",
+    "heading": "服务条款",
+    "sub": "Δxolotl · 作曲家 / 编曲家 / 音乐制作人",
+    "mobile_nav": "// 跳转至章节",
+    "sidenav_label": "// 章节",
+    "nav_preamble": "关于本协议",
+    "nav_01": "定义",
+    "nav_02": "委托流程",
+    "nav_03": "行为准则",
+    "nav_04": "服务范围",
+    "nav_05": "范围与变更订单",
+    "nav_06": "定价与账单",
+    "nav_07": "付款条款",
+    "nav_08": "修改",
+    "nav_09": "截止日期与交付",
+    "nav_10": "知识产权",
+    "nav_11": "使用权与许可",
+    "nav_12": "取消与退款",
+    "nav_13": "责任限制",
+    "nav_14": "修订",
+    "preamble_title": "关于本协议",
+    "preamble_sub": "// 管理文件 · 意图 · 优先级",
+    "block_01_title": "定义",
+    "block_02_title": "委托流程",
+    "block_03_title": "行为准则",
+    "block_04_title": "服务范围",
+    "block_05_title": "范围与变更订单",
+    "block_06_title": "定价与账单",
+    "block_07_title": "付款条款",
+    "block_08_title": "修改",
+    "block_09_title": "截止日期与交付",
+    "block_10_title": "知识产权",
+    "block_11_title": "使用权与许可",
+    "block_12_title": "取消与退款",
+    "block_13_title": "责任限制",
+    "block_14_title": "修订"
+  }
+}

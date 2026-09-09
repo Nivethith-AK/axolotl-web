@@ -1,0 +1,924 @@
+/* ── PAGE HEADER ─────────────────────────────────────────── */
+      .aff-page-header {
+        min-height: unset;
+        padding: 82px 80px 36px;
+        position: relative;
+        z-index: 3;
+      }
+      .aff-page-tag {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.52rem;
+        letter-spacing: 4px;
+        color: #ff6b00;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      .aff-page-sub {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.58rem;
+        letter-spacing: 2px;
+        color: #888;
+        text-transform: uppercase;
+        margin-top: 10px;
+      }
+      .aff-page-sub span {
+        color: #ff6b00;
+      }
+
+      /* ── FILTER BAR ──────────────────────────────────────────── */
+      .aff-filter-bar {
+        position: sticky;
+        top: 72px;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-top: 1px solid #000;
+        border-bottom: 2px solid #000;
+        display: flex;
+        overflow-x: auto;
+        scrollbar-width: none;
+        gap: 0;
+      }
+      .aff-filter-bar::-webkit-scrollbar {
+        display: none;
+      }
+      .aff-filter-btn {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.55rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 14px 14px;
+        border: none;
+        border-bottom: 3px solid transparent;
+        background: none;
+        cursor: pointer;
+        white-space: nowrap;
+        color: #999;
+        transition:
+          color 0.2s,
+          border-color 0.2s;
+        flex-shrink: 0;
+      }
+      .aff-filter-btn:hover {
+        color: #000;
+      }
+      .aff-filter-btn.active {
+        color: #000;
+        border-bottom-color: #ff6b00;
+      }
+      .aff-filter-count {
+        color: #ff6b00;
+        font-size: 0.46rem;
+        margin-left: 4px;
+      }
+
+      /* ── ROSTER GRID ─────────────────────────────────────────── */
+      .aff-roster-wrap {
+        padding: 2px 52px 100px 52px;
+      }
+      .aff-roster-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+        gap: 2px;
+      }
+      /* Prevent min-content blowout on small cells */
+      .aff-roster-grid .aff-panel,
+      .aff-roster-grid .aff-panel-nosignal {
+        min-width: 0;
+      }
+
+      /* ── CARD — uses .aff-panel from style.css, overrides below ─ */
+      .aff-roster-grid .aff-panel {
+        aspect-ratio: 1 / 1;
+        width: 100% !important;
+        height: auto !important;
+        min-height: unset !important;
+        flex-shrink: 1 !important;
+        min-width: 0 !important;
+        border: none;
+        cursor: pointer;
+        position: relative;
+      }
+      /* nosignal needs position:relative for its absolute text child */
+      .aff-roster-grid .aff-panel-nosignal {
+        position: relative;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+      }
+      /* Solid black behind every card so nothing bleeds through */
+      .aff-roster-grid .aff-panel-bg {
+        background: #0a0a0a;
+        background-image: repeating-linear-gradient(
+          0deg,
+          #000,
+          #000 1px,
+          #0d0d0d 1px,
+          #0d0d0d 2px
+        );
+      }
+      /* Cover fills the square cell, centered */
+      .aff-roster-grid .aff-panel-cover {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+      }
+      /* Bottom-only gradient for text legibility */
+      .aff-roster-grid .aff-panel-overlay {
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.82) 0%,
+          rgba(0, 0, 0, 0.1) 40%,
+          transparent 65%
+        );
+      }
+      .aff-roster-grid .aff-panel:hover .aff-panel-overlay,
+      .aff-roster-grid .aff-panel.aff-active .aff-panel-overlay {
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.7) 0%,
+          transparent 50%
+        );
+      }
+      /* Badge bottom-right */
+      .aff-roster-grid .aff-panel-affbadge {
+        top: auto;
+        bottom: 6px;
+        right: 8px;
+      }
+
+      /* Lift shared fixed bg layers above the backdrop —
+         pointer-events:none means clicks still reach modal content */
+      #geoCanvas {
+        z-index: 1001 !important;
+      }
+      #globalGrid {
+        z-index: 1001 !important;
+      }
+
+      /* ── FULL-PAGE DOSSIER ───────────────────────────────────── */
+      .aff-modal-backdrop {
+        position: fixed;
+        top: 72px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 999;
+        background: var(--surface, #fff);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        overflow: hidden;
+      }
+      .aff-modal-backdrop.is-open {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .aff-modal {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 25%) minmax(0, 75%);
+        grid-template-rows: auto 1fr;
+        grid-template-areas: "hdr hdr" "photo info";
+        overflow: hidden;
+        max-width: none;
+        max-height: none;
+        border: none;
+        transform: none;
+        transition: none;
+      }
+
+      /* Header bar — intentionally matches filter bar size so it replaces it visually */
+      .aff-modal-hdr {
+        grid-area: hdr;
+        display: flex;
+        align-items: center;
+        padding: 0 0 0 40px;
+        border-top: 1px solid var(--border, #000);
+        border-bottom: 2px solid var(--border, #000);
+        background: var(--surface, #fff);
+        position: relative;
+        z-index: 1001;
+        min-height: 46px;
+        transform: translateY(-100%);
+        opacity: 0;
+        transition:
+          transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.05s,
+          opacity 0.3s ease 0.05s;
+      }
+      .aff-modal-backdrop.is-open .aff-modal-hdr {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      .aff-modal-subline {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.55rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: var(--fg, #000);
+        text-transform: uppercase;
+        opacity: 0.9;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
+        min-width: 0;
+      }
+      .aff-hdr-desktop {
+        display: inline;
+      }
+      .aff-hdr-mobile {
+        display: none;
+      }
+      @media (max-width: 768px) {
+        .aff-hdr-desktop {
+          display: none;
+        }
+        .aff-hdr-mobile {
+          display: inline;
+        }
+      }
+      .aff-modal-accessing {
+        color: #ff6b00;
+        font-weight: 700;
+        animation: blink 1.2s infinite;
+      }
+      .aff-modal-close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        border: none;
+        border-left: 2px solid var(--border, #000);
+        background: transparent;
+        color: var(--fg, #000);
+        width: 46px;
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          background 0.2s,
+          color 0.2s;
+        letter-spacing: 0;
+        padding: 0;
+      }
+      .aff-modal-close:hover {
+        background: var(--fg, #000);
+        color: var(--accent, #ff6b00);
+      }
+
+      /* Dossier photo glitch — aliases style.css .dossier-photo-col rules */
+      .aff-modal-photo-col.raven-glitch-dossier {
+        animation: ravenGlitch 0.3s steps(4, end);
+      }
+      img.aff-modal-photo.raven-glitch-img {
+        animation: ravenCover 0.3s steps(4, end);
+      }
+      .aff-modal-photo-col {
+        grid-area: photo;
+        overflow: hidden;
+        background: #111;
+        position: relative;
+        z-index: 1001;
+        border-right: 1px solid #000;
+        transform: translateX(-40px);
+        opacity: 0;
+        transition:
+          transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.12s,
+          opacity 0.4s ease 0.12s;
+      }
+      .aff-modal-backdrop.is-open .aff-modal-photo-col {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      .aff-modal-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .aff-modal-photo-inner {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+      .aff-modal-photo-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Orbitron", sans-serif;
+        font-size: 5rem;
+        font-weight: 900;
+        background: #111;
+      }
+
+      /* Persona toggle button */
+      .aff-persona-toggle {
+        position: absolute;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.72);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.85);
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.48rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        padding: 12px 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        white-space: nowrap;
+        transition:
+          border-color 0.25s,
+          color 0.25s,
+          background 0.25s;
+      }
+      .aff-persona-toggle::before {
+        content: "⟲";
+        font-size: 1rem;
+      }
+      .aff-persona-toggle:hover {
+        border-color: rgba(255, 107, 0, 0.7);
+        color: #fff;
+        background: rgba(0, 0, 0, 0.88);
+      }
+
+      /* Photo glitch effect on persona switch */
+      .aff-modal-photo-col.glitch-swap::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 4px,
+          rgba(255, 107, 0, 0.06) 4px,
+          rgba(255, 107, 0, 0.06) 5px
+        );
+        pointer-events: none;
+        z-index: 20;
+        animation: glitch-scanline 0.22s linear;
+      }
+      @keyframes glitch-scanline {
+        0% {
+          clip-path: inset(0 0 100% 0);
+        }
+        100% {
+          clip-path: inset(100% 0 0 0);
+        }
+      }
+
+      /* Info panel — transparent so canvas at z:1001 shows through */
+      .aff-modal-info-col {
+        grid-area: info;
+        overflow-y: auto;
+        padding: 44px 60px 60px;
+        background: transparent;
+        position: relative;
+        z-index: 1001;
+        scrollbar-width: thin;
+        scrollbar-color: #ff6b00 transparent;
+        transform: translateX(40px);
+        opacity: 0;
+        transition:
+          transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.18s,
+          opacity 0.4s ease 0.18s;
+      }
+      .aff-modal-backdrop.is-open .aff-modal-info-col {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      .aff-modal-info-col::-webkit-scrollbar {
+        width: 4px;
+      }
+      .aff-modal-info-col::-webkit-scrollbar-thumb {
+        background: #ff6b00;
+      }
+
+      .aff-modal-name {
+        font-family: "Orbitron", sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        line-height: 1;
+      }
+      .aff-modal-affiliation {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        text-decoration: none;
+        margin-bottom: 10px;
+      }
+      .aff-modal-from {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.55rem;
+        letter-spacing: 1px;
+        color: #999;
+        text-transform: uppercase;
+      }
+      .aff-modal-aff-name {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #ff6b00;
+        transition: opacity 0.2s;
+      }
+      .aff-modal-affiliation:hover .aff-modal-aff-name {
+        opacity: 0.7;
+      }
+      .aff-modal-aff-badge {
+        width: 16px;
+        height: 16px;
+        object-fit: contain;
+        border-radius: 3px;
+        outline: 1px solid #888;
+      }
+      .aff-modal-role-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+      .aff-role-tag {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.56rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border: 1px solid rgba(255, 107, 0, 0.45);
+        color: #ff6b00;
+      }
+      .aff-modal-meta {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.62rem;
+        letter-spacing: 1.5px;
+        color: var(--fg, #333);
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        align-items: center;
+      }
+      .aff-meta-key {
+        color: #ff6b00;
+        font-weight: 700;
+      }
+      .aff-meta-sep {
+        opacity: 0.4;
+      }
+      .aff-modal-divider {
+        height: 1px;
+        background: var(--border, #ccc);
+        margin: 16px 0;
+      }
+      .aff-modal-section {
+        margin-bottom: 24px;
+      }
+      .aff-modal-section-label {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.62rem;
+        letter-spacing: 3px;
+        color: #ff6b00;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      /* ── FLAG BADGE — inline after name ─────────────────────────── */
+      .aff-modal-name-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+      }
+      .aff-modal-name {
+        margin-bottom: 0;
+      }
+      .aff-flag-badge {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+      }
+      .aff-flag-badge .fi {
+        font-size: 1.4rem;
+        border-radius: 2px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      .aff-flag-sep {
+        color: rgba(128, 128, 128, 0.5);
+        font-size: 0.7rem;
+        font-family: "Roboto Mono", monospace;
+      }
+      .aff-flag-text {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.5rem;
+        letter-spacing: 1px;
+      }
+
+      /* ── ABOUT — italic, full opacity, lighter on dark ──────────── */
+      .aff-modal-bio {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.7rem;
+        line-height: 1.9;
+        font-style: italic;
+        color: var(--fg, #222);
+        opacity: 1;
+        margin: 0;
+      }
+      [data-theme="dark"] .aff-modal-bio {
+        color: #d0d0d0;
+        opacity: 1;
+      }
+
+      /* Log entries */
+      .aff-modal-project {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--border, #ddd);
+        text-decoration: none;
+        transition: padding-left 0.15s;
+      }
+      .aff-modal-project.no-link {
+        cursor: default;
+      }
+      a.aff-modal-project:hover {
+        padding-left: 6px;
+      }
+      .aff-modal-project-title {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.64rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: var(--fg, #000);
+        transition: color 0.15s;
+        flex-shrink: 0;
+      }
+      a.aff-modal-project:hover .aff-modal-project-title {
+        color: #ff6b00;
+      }
+      .aff-modal-project-role {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.54rem;
+        letter-spacing: 1px;
+        color: var(--fg, #555);
+        opacity: 0.65;
+        text-transform: uppercase;
+        text-align: right;
+      }
+
+      /* Video thumbnails */
+      .aff-videos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+      }
+      .aff-video-card {
+        text-decoration: none;
+        display: block;
+      }
+      .aff-video-thumb-wrap {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background: #111;
+        margin-bottom: 6px;
+        border: 1px solid #000;
+      }
+      .aff-video-thumb {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.35s ease;
+      }
+      .aff-video-card:hover .aff-video-thumb {
+        transform: scale(1.05);
+      }
+      .aff-video-play {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: rgba(255, 255, 255, 0.9);
+        background: rgba(0, 0, 0, 0.35);
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .aff-video-card:hover .aff-video-play {
+        opacity: 1;
+      }
+      .aff-video-title {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.56rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #000;
+        text-transform: uppercase;
+        line-height: 1.4;
+      }
+      .aff-video-role {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.5rem;
+        letter-spacing: 1px;
+        color: #999;
+        margin-top: 2px;
+      }
+
+      /* Links */
+      .aff-modal-links {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .aff-modal-link {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.6rem;
+        letter-spacing: 1.5px;
+        color: #000;
+        text-decoration: none;
+        padding: 9px 16px;
+        border: 1px solid #ccc;
+        display: inline-block;
+        align-self: flex-start;
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          padding-left 0.15s;
+      }
+      .aff-modal-link:hover {
+        border-color: #ff6b00;
+        color: #ff6b00;
+        padding-left: 22px;
+      }
+
+      /* ── DARK MODE ───────────────────────────────────────────── */
+      [data-theme="dark"] .aff-filter-bar {
+        background: rgba(14, 14, 14, 0.94);
+        border-top-color: var(--border);
+        border-bottom-color: var(--border);
+      }
+      [data-theme="dark"] .aff-filter-btn {
+        color: #555;
+      }
+      [data-theme="dark"] .aff-filter-btn:hover {
+        color: var(--fg);
+      }
+      [data-theme="dark"] .aff-filter-btn.active {
+        color: var(--fg);
+        border-bottom-color: #ff6b00;
+      }
+      [data-theme="dark"] .aff-modal-hdr {
+        background: var(--surface);
+        border-bottom-color: var(--border);
+      }
+      [data-theme="dark"] .aff-modal-close {
+        background: var(--surface);
+        color: var(--fg);
+        border-left-color: var(--border);
+        border-bottom-color: var(--border);
+      }
+      [data-theme="dark"] .aff-modal-close:hover {
+        background: var(--fg);
+        color: var(--bg);
+      }
+      [data-theme="dark"] .aff-modal-photo-col {
+        border-right-color: var(--border);
+      }
+      [data-theme="dark"] .aff-modal-divider {
+        background: var(--border);
+      }
+      [data-theme="dark"] .aff-modal-project {
+        border-bottom-color: var(--border);
+      }
+      [data-theme="dark"] .aff-modal-project-title {
+        color: var(--fg);
+      }
+      [data-theme="dark"] a.aff-modal-project:hover .aff-modal-project-title {
+        color: #ff6b00;
+      }
+      [data-theme="dark"] .aff-modal-bio {
+        color: var(--text-6);
+      }
+      [data-theme="dark"] .aff-video-title {
+        color: var(--fg);
+      }
+      [data-theme="dark"] .aff-video-thumb-wrap {
+        border-color: var(--border);
+      }
+      [data-theme="dark"] .aff-modal-link {
+        color: var(--fg);
+        border-color: var(--border);
+      }
+
+      /* ── RESPONSIVE ──────────────────────────────────────────── */
+      @media (max-width: 900px) {
+        .aff-modal {
+          grid-template-columns: 30% 70%;
+        }
+        .aff-modal-info-col {
+          padding: 32px 36px 48px;
+        }
+        .aff-modal-name {
+          font-size: 1.5rem;
+        }
+      }
+      @media (max-width: 768px) {
+        /* ── FILTER / ROSTER ──────────────────────────────── */
+        .aff-filter-bar {
+          top: 66px;
+        }
+        .aff-roster-wrap {
+          padding: 0 !important;
+          margin: 0 !important;
+          overflow: hidden;
+        }
+        .aff-roster-grid {
+          grid-template-columns: repeat(4, 1fr) !important;
+          gap: 0 !important;
+          width: 100% !important;
+          min-width: 0 !important;
+        }
+        .aff-roster-grid .aff-panel {
+          aspect-ratio: 1 / 1;
+          width: 100% !important;
+          height: auto !important;
+          min-width: 0;
+          flex-shrink: 1 !important;
+        }
+        .aff-roster-grid .aff-panel-nosignal {
+          aspect-ratio: 1 / 1;
+          width: 100% !important;
+          height: auto !important;
+          min-width: 0;
+          flex-shrink: 1 !important;
+          display: block !important;
+        }
+        .aff-roster-grid .aff-panel.aff-active {
+          transform: none;
+        }
+        .aff-roster-grid .aff-panel.aff-dimmed {
+          transform: none;
+        }
+        .aff-roster-grid .aff-panel-name {
+          font-size: 0.52rem;
+          letter-spacing: 0.5px;
+        }
+        .aff-roster-grid .aff-panel-role {
+          font-size: 0.36rem;
+          letter-spacing: 0;
+        }
+        .aff-roster-grid .aff-panel-affbadge {
+          width: 14px;
+          height: 14px;
+          bottom: 18px;
+          right: 5px;
+        }
+        .aff-roster-grid .aff-panel-content {
+          padding: 8px;
+        }
+
+        /* ── PAGE HEADER ─────────────────────────────────── */
+        .aff-page-header {
+          padding: 78px 16px 20px;
+        }
+
+        /* ── MODAL: single column ────────────────────────── */
+        .aff-modal-backdrop {
+          top: 66px;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+        .aff-modal {
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-rows: auto minmax(0, max-content) auto;
+          grid-template-areas: "hdr" "photo" "info";
+          height: auto;
+          min-height: 100%;
+          overflow: visible;
+        }
+        .aff-modal-photo-col {
+          border-right: none;
+          border-bottom: 1px solid var(--border, #000);
+          width: 100%;
+          aspect-ratio: 1 / 1 !important;
+          height: auto !important;
+          max-height: none !important;
+          padding-top: 0 !important;
+          flex-shrink: 0;
+          overflow: hidden;
+          position: relative;
+        }
+        .aff-modal-photo-inner {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+        }
+        .aff-modal-photo {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center top;
+        }
+        .aff-modal-info-col {
+          padding: 16px 14px 60px;
+          min-height: unset;
+          overflow-y: visible;
+          height: auto;
+          transform: none !important;
+          opacity: 1 !important;
+          transition: none !important;
+        }
+        .aff-modal-hdr {
+          padding: 0 0 0 14px;
+          min-height: 44px;
+          position: sticky;
+          top: 0;
+          z-index: 1002;
+          border-top: none;
+        }
+        .aff-modal-close {
+          position: static;
+          flex-shrink: 0;
+          width: 46px;
+          height: auto;
+          margin-left: auto;
+          align-self: stretch;
+          border-left: 2px solid var(--border, #000);
+        }
+        .aff-modal-subline {
+          font-size: 0.55rem;
+        }
+        .aff-modal-name {
+          font-size: 1.1rem;
+        }
+        .aff-persona-toggle {
+          font-size: 0.42rem;
+          padding: 10px 16px;
+        }
+
+        /* nosignal text smaller on mobile so it fits the tiny cells */
+        .aff-nosignal-text {
+          font-size: 0.35rem;
+          letter-spacing: 1.5px;
+        }
+
+        /* compact collab log: title and role stack vertically, smaller text */
+        .aff-collab-log .aff-modal-project {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 2px;
+          padding: 6px 0;
+        }
+        .aff-collab-log .aff-modal-project-title {
+          font-size: 0.56rem;
+        }
+        .aff-collab-log .aff-modal-project-role {
+          font-size: 0.46rem;
+          text-align: left;
+        }
+      }
+      @media (max-width: 480px) {
+        .aff-filter-bar {
+          top: 62px;
+        }
+        .aff-roster-grid .aff-panel-name {
+          font-size: 0.46rem;
+        }
+        .aff-roster-grid .aff-panel-role {
+          font-size: 0.32rem;
+        }
+      }

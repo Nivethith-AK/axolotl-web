@@ -1,0 +1,140 @@
+{
+  "_lang": "en",
+  "_label": "English",
+
+  "page_title": {
+    "index": "Δxolotl // Official Website",
+    "discography": "Δxolotl // Discography",
+    "works": "Δxolotl // Works",
+    "tos": "Δxolotl // Terms of Service"
+  },
+
+  "nav": {
+    "home": "//_HOME",
+    "about": "/ABOUT",
+    "music": "/MUSIC",
+    "portfolio": "/PORTFOLIO",
+    "affiliates": "/AFFILIATES",
+    "connect": "/CONNECT",
+    "more": "/MORE",
+    "discography": "/DISCOGRAPHY",
+    "works": "/WORKS",
+    "tos": "/TERMS_OF_SERVICE",
+    "shop": "/SHOP",
+    "unknown": "/UNKNOWN"
+  },
+
+  "lang_panel": {
+    "label": "SELECT_LANGUAGE"
+  },
+
+  "hero": {
+    "sub": "[ACTIVE]::Composer / Musician //",
+    "loader_label": "SYSTEM_LINKS:",
+    "reveal_tag": "SYS_LINK: ESTABLISHED // NODES_UNLOCKED",
+    "node_disco_label": "DISCOGRAPHY",
+    "node_disco_sub": "PRJ_ARCHIVE // AUDIO_LOG",
+    "node_works_label": "WORKS",
+    "node_works_sub": "SELECTED_WORKS // PORTFOLIO",
+    "node_tos_label": "TERMS_OF_SERVICE",
+    "node_tos_sub": "LEGAL // USAGE_POLICY",
+    "node_shop_sub": "MERCH // ACCESS_RESTRICTED",
+    "node_unknown_sub": "PRJ_?? // CLASSIFIED"
+  },
+
+  "about": {
+    "heading": "About",
+    "p1": "Wello there, <strong>Δxolotl</strong> here!<br />I'm a composer, arranger, producer and multi-instrumentalist with a focus on contemporary music that bridges electronic and traditional influences across a wide range of genres.",
+    "p2": "I work across indie projects and freelance commissions, releasing original compositions, soundtracks, rearrangements and covers. My work draws heavily from Japanese anime and pop culture - though the sound rarely stays in one place for long."
+  },
+
+  "music": {
+    "heading": "Latest Feed"
+  },
+
+  "portfolio": {
+    "heading": "Portfolio",
+    "sub": "Selected works by <strong>Δxolotl</strong> //",
+    "full_portfolio": "Full_Portfolio :="
+  },
+
+  "affiliates": {
+    "heading": "Affiliates",
+    "sub": "Collaborative network: //",
+    "dossier_tag": "NODE_AFFILIATE// COLLABORATOR",
+    "collab_log": "// COLLABORATIVE_LOG",
+    "links": "// LINKS",
+    "alt": "// ALT"
+  },
+
+  "connect": {
+    "heading": "Connect",
+    "sub": "Establish a connection via preferred protocol //",
+    "email_label": "EMAIL ME",
+    "commission_label": "COMMISSION ME",
+    "commission_sub": ">> VGen // Open for work",
+    "discord_label": "JOIN MY DISCORD SERVER",
+    "discord_sub": ">> X0\\K Discord Server"
+  },
+
+  "footer": {
+    "rights": "©THEAXOLOTLMUSIC // ALL RIGHTS RESERVED"
+  },
+
+  "disco": {
+    "header_tag": "NODE_ARCHIVE // AUDIO_LOG",
+    "heading": "Discography",
+    "filter_all": "ALL",
+    "filter_releases": "RELEASES",
+    "filter_featured": "FEATURED",
+    "hint_desktop": "// DRAG OR CLICK ARROWS TO NAVIGATE",
+    "hint_mobile": "// SCROLL TO NAVIGATE",
+    "bottom_hint": "CLICK ANY TRACK TO OPEN DOSSIER",
+    "dossier_tag": "NODE_ARCHIVE // AUDIO_LOG"
+  },
+
+  "works": {
+    "header_tag": "NODE_ARCHIVE // COMMISSION_LOG",
+    "heading": "Works",
+    "sub": "Professional credits & projects -"
+  },
+
+  "tos": {
+    "header_tag": "NODE_ARCHIVE // LEGAL_LOG",
+    "heading": "Terms of Service",
+    "sub": "Δxolotl · Composer / Arranger / Music Producer",
+    "mobile_nav": "// JUMP TO SECTION",
+    "sidenav_label": "// SECTIONS",
+    "nav_preamble": "About This Agreement",
+    "nav_01": "Definitions",
+    "nav_02": "Commissioning Process",
+    "nav_03": "Code of Conduct",
+    "nav_04": "Scope of Services",
+    "nav_05": "Scope & Variation Orders",
+    "nav_06": "Pricing & Billing",
+    "nav_07": "Payment Terms",
+    "nav_08": "Revisions",
+    "nav_09": "Deadlines & Delivery",
+    "nav_10": "Intellectual Property",
+    "nav_11": "Rights of Use & Licensing",
+    "nav_12": "Cancellations & Refunds",
+    "nav_13": "Limitation of Liability",
+    "nav_14": "Amendments",
+    "preamble_title": "About This Agreement",
+    "preamble_sub": "// Governing Document · Intent · Precedence",
+    "block_01_title": "Definitions",
+    "block_02_title": "Commissioning Process",
+    "block_03_title": "Code of Conduct",
+    "block_04_title": "Scope of Services",
+    "block_05_title": "Scope & Variation Orders",
+    "block_06_title": "Pricing & Billing",
+    "block_07_title": "Payment Terms",
+    "block_08_title": "Revisions",
+    "block_09_title": "Deadlines & Delivery",
+    "block_10_title": "Intellectual Property",
+    "block_11_title": "Rights of Use & Licensing",
+    "block_12_title": "Cancellations & Refunds",
+    "block_13_title": "Limitation of Liability",
+    "block_14_title": "Amendments"
+  }
+}

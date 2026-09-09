@@ -1,0 +1,127 @@
+{
+  "_lang": "ko",
+  "_label": "한국어",
+  "page_title": {
+    "index": "Δxolotl // 공식 웹사이트",
+    "discography": "Δxolotl // 디스코그래피",
+    "works": "Δxolotl // 작품집",
+    "tos": "Δxolotl // 이용약관"
+  },
+  "nav": {
+    "home": "//_홈",
+    "about": "/소개",
+    "music": "/음악",
+    "portfolio": "/포트폴리오",
+    "affiliates": "/협업자",
+    "connect": "/연락처",
+    "more": "/더보기",
+    "discography": "/디스코그래피",
+    "works": "/작품집",
+    "tos": "/이용약관",
+    "shop": "/상점",
+    "unknown": "/미상"
+  },
+  "lang_panel": {
+    "label": "언어 선택"
+  },
+  "hero": {
+    "sub": "[활성]::작곡가 / 음악가 //",
+    "loader_label": "시스템 링크:",
+    "reveal_tag": "SYS_LINK: 연결됨 // 노드 잠금해제",
+    "node_disco_label": "디스코그래피",
+    "node_disco_sub": "프로젝트 아카이브 // 오디오 로그",
+    "node_works_label": "작품집",
+    "node_works_sub": "선정 작품 // 포트폴리오",
+    "node_tos_label": "이용약관",
+    "node_tos_sub": "법률 // 사용 정책",
+    "node_shop_sub": "굿즈 // 접근 제한",
+    "node_unknown_sub": "PRJ_?? // 기밀"
+  },
+  "about": {
+    "heading": "소개",
+    "p1": "Wello！ 저는 <strong>Δxolotl</strong>입니다！<br />저는 작곡가, 편곡가, 프로듀서이자 다중 악기 연주자로, 전자 음악과 전통 음악의 영향을 융합한 현대 음악을 다양한 장르에 걸쳐 제작합니다.",
+    "p2": "인디 프로젝트와 프리랜서 의뢰 작업을 통해 오리지널 작곡, 사운드트랙, 편곡 및 커버 작품을 발표합니다. 일본 애니메이션과 팝 문화에서 큰 영향을 받았지만, 사운드는 항상 한 곳에 머물지 않습니다."
+  },
+  "music": {
+    "heading": "최신 피드"
+  },
+  "portfolio": {
+    "heading": "포트폴리오",
+    "sub": "<strong>Δxolotl</strong>의 선정 작품 //",
+    "full_portfolio": "전체_포트폴리오 :="
+  },
+  "affiliates": {
+    "heading": "협업자",
+    "sub": "협업 네트워크: //",
+    "dossier_tag": "노드_협업자// 협업자",
+    "collab_log": "// 협업 기록",
+    "links": "// 링크",
+    "alt": "// 별칭"
+  },
+  "connect": {
+    "heading": "연락처",
+    "sub": "선호하는 방법으로 연락하세요 //",
+    "email_label": "이메일 보내기",
+    "commission_label": "의뢰하기",
+    "commission_sub": ">> VGen // 의뢰 가능",
+    "discord_label": "디스코드 서버 참여",
+    "discord_sub": ">> X0\\K 디스코드 서버"
+  },
+  "footer": {
+    "rights": "©THEAXOLOTLMUSIC // 모든 권리 보유"
+  },
+  "disco": {
+    "header_tag": "노드 아카이브 // 오디오 로그",
+    "heading": "디스코그래피",
+    "filter_all": "전체",
+    "filter_releases": "발매",
+    "filter_featured": "참여",
+    "hint_desktop": "// 드래그하거나 화살표를 클릭하여 탐색",
+    "hint_mobile": "// 스크롤하여 탐색",
+    "bottom_hint": "트랙을 클릭하여 도시에 열기",
+    "dossier_tag": "노드 아카이브 // 오디오 로그"
+  },
+  "works": {
+    "header_tag": "노드 아카이브 // 의뢰 로그",
+    "heading": "작품집",
+    "sub": "프로 크레딧 & 프로젝트 -"
+  },
+  "tos": {
+    "header_tag": "노드 아카이브 // 법률 로그",
+    "heading": "이용약관",
+    "sub": "Δxolotl · 작곡가 / 편곡가 / 음악 프로듀서",
+    "mobile_nav": "// 섹션으로 이동",
+    "sidenav_label": "// 섹션",
+    "nav_preamble": "본 계약에 대하여",
+    "nav_01": "정의",
+    "nav_02": "의뢰 프로세스",
+    "nav_03": "행동 강령",
+    "nav_04": "서비스 범위",
+    "nav_05": "범위 및 변경 지시",
+    "nav_06": "가격 및 청구",
+    "nav_07": "결제 조건",
+    "nav_08": "수정",
+    "nav_09": "마감일 및 납품",
+    "nav_10": "지식재산권",
+    "nav_11": "사용권 및 라이선스",
+    "nav_12": "취소 및 환불",
+    "nav_13": "책임의 제한",
+    "nav_14": "개정",
+    "preamble_title": "본 계약에 대하여",
+    "preamble_sub": "// 관리 문서 · 의도 · 우선순위",
+    "block_01_title": "정의",
+    "block_02_title": "의뢰 프로세스",
+    "block_03_title": "행동 강령",
+    "block_04_title": "서비스 범위",
+    "block_05_title": "범위 및 변경 지시",
+    "block_06_title": "가격 및 청구",
+    "block_07_title": "결제 조건",
+    "block_08_title": "수정",
+    "block_09_title": "마감일 및 납품",
+    "block_10_title": "지식재산권",
+    "block_11_title": "사용권 및 라이선스",
+    "block_12_title": "취소 및 환불",
+    "block_13_title": "책임의 제한",
+    "block_14_title": "개정"
+  }
+}

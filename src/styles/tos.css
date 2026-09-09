@@ -1,0 +1,723 @@
+/* ── LAYOUT ──────────────────────────────────────────── */
+      .tos-layout {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 0 48px;
+        align-items: start;
+        padding: 0 60px 120px 80px;
+        position: relative;
+        z-index: 3;
+      }
+
+      /* ── STICKY SIDEBAR NAV ──────────────────────────────── */
+      .tos-sidenav {
+        position: sticky;
+        top: 90px;
+        padding-top: 8px;
+        padding-bottom: 40px;
+        max-height: calc(100vh - 110px);
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+      .tos-sidenav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tos-sidenav-label {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.46rem;
+        letter-spacing: 3px;
+        color: #ff6b00;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .tos-sidenav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .tos-sidenav-list li {
+        margin-bottom: 2px;
+      }
+      .tos-sidenav-list a {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.54rem;
+        letter-spacing: 0.5px;
+        color: #999;
+        text-decoration: none;
+        padding: 5px 8px;
+        border-left: 2px solid transparent;
+        transition:
+          color 0.15s,
+          border-color 0.15s,
+          background 0.15s;
+        line-height: 1.4;
+      }
+      .tos-sidenav-list a:hover {
+        color: #000;
+        border-left-color: #eee;
+      }
+      .tos-sidenav-list a.active {
+        color: #000;
+        border-left-color: #ff6b00;
+        background: rgba(255, 107, 0, 0.04);
+        font-weight: 700;
+      }
+      .tos-sidenav-list .nav-id {
+        color: #ff6b00;
+        font-size: 0.44rem;
+        flex-shrink: 0;
+      }
+
+      /* mobile nav toggle */
+      .tos-mobile-nav-toggle {
+        display: none;
+        width: 100%;
+        background: #000;
+        color: #ff6b00;
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 12px 20px;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        position: fixed;
+        top: 72px;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        margin-bottom: 0;
+      }
+      .tos-mobile-nav-toggle::after {
+        content: " ▾";
+        float: right;
+      }
+      .tos-mobile-nav-toggle.open::after {
+        content: " ▴";
+      }
+
+      .tos-mobile-nav-panel {
+        display: none;
+        position: fixed;
+        top: calc(72px + 45px);
+        left: 0;
+        right: 0;
+        z-index: 49;
+        background: #fff;
+        border-bottom: 2px solid #000;
+        padding: 12px 20px 16px;
+        max-height: 60vh;
+        overflow-y: auto;
+      }
+      .tos-mobile-nav-panel.open {
+        display: block;
+      }
+      .tos-mobile-nav-panel .tos-sidenav-list a {
+        font-size: 0.62rem;
+        padding: 6px 4px;
+      }
+
+      /* ── MAIN CONTENT ────────────────────────────────────── */
+      .tos-content {
+        min-width: 0;
+      }
+
+      /* ── HEADER ──────────────────────────────────────────── */
+      .tos-header-tag {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.58rem;
+        letter-spacing: 3px;
+        color: #ff6b00;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+      .tos-header-sub {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.7rem;
+        color: #888;
+        letter-spacing: 2px;
+        margin-top: 10px;
+      }
+      .tos-header-sub span {
+        color: #ff6b00;
+      }
+
+      /* ── PREAMBLE ────────────────────────────────────────── */
+      .tos-preamble {
+        border: 2px solid #000;
+        padding: 36px 40px;
+        margin-bottom: 52px;
+        position: relative;
+        scroll-margin-top: 90px;
+      }
+      .tos-preamble::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: #ff6b00;
+      }
+      .tos-preamble-title {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #000;
+        margin-bottom: 6px;
+      }
+      .tos-preamble-sub {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.5rem;
+        letter-spacing: 2px;
+        color: #ff6b00;
+        text-transform: uppercase;
+        margin-bottom: 24px;
+      }
+      .tos-preamble p {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.82rem;
+        color: #333;
+        line-height: 2;
+        letter-spacing: 0.2px;
+        max-width: none;
+        margin-bottom: 16px;
+      }
+      .tos-preamble p:last-child {
+        margin-bottom: 0;
+      }
+      .tos-preamble p strong {
+        color: #000;
+        font-weight: 700;
+      }
+
+      /* ── SECTION BLOCKS ──────────────────────────────────── */
+      .tos-block {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        padding-top: 44px;
+        margin-bottom: 12px;
+        scroll-margin-top: 90px;
+      }
+      .tos-block:first-of-type {
+        border-top: 2px solid #000;
+      }
+
+      .tos-block-header {
+        display: flex;
+        align-items: baseline;
+        gap: 18px;
+        margin-bottom: 30px;
+      }
+      .tos-block-id {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.52rem;
+        letter-spacing: 3px;
+        color: #ff6b00;
+        text-transform: uppercase;
+        flex-shrink: 0;
+      }
+      .tos-block-title {
+        font-family: "Orbitron", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #000;
+      }
+
+      /* ── DEFINITIONS ─────────────────────────────────────── */
+      .tos-def {
+        display: grid;
+        grid-template-columns: 230px 1fr;
+        gap: 0 24px;
+        margin-bottom: 18px;
+        align-items: start;
+        padding-bottom: 18px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .tos-def:last-child {
+        border-bottom: none;
+      }
+      .tos-def-term {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: #000;
+        letter-spacing: 0.5px;
+        padding-top: 2px;
+      }
+      .tos-def-term em {
+        display: block;
+        font-style: normal;
+        font-size: 0.48rem;
+        font-weight: 400;
+        color: #ff6b00;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+      .tos-def-body {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.78rem;
+        color: #333;
+        line-height: 1.95;
+        letter-spacing: 0.2px;
+      }
+
+      /* ── CLAUSES ─────────────────────────────────────────── */
+      .tos-clause {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        gap: 0 16px;
+        margin-bottom: 20px;
+        align-items: start;
+      }
+      .tos-clause-num {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.54rem;
+        color: #ff6b00;
+        letter-spacing: 1px;
+        padding-top: 3px;
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .tos-clause-text {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.8rem;
+        color: #222;
+        line-height: 2;
+        letter-spacing: 0.2px;
+      }
+      .tos-clause-text strong {
+        color: #000;
+        font-weight: 700;
+      }
+      .tos-clause-text em {
+        color: #ff6b00;
+        font-style: normal;
+        font-weight: 700;
+      }
+
+      /* ── SUB LIST ────────────────────────────────────────── */
+      .tos-sub-list {
+        margin: 12px 0 4px;
+        padding: 0;
+        list-style: none;
+      }
+      .tos-sub-list li {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.76rem;
+        color: #444;
+        line-height: 1.9;
+        padding: 7px 0 7px 22px;
+        border-left: 2px solid #eee;
+        margin-bottom: 6px;
+        position: relative;
+      }
+      .tos-sub-list li::before {
+        content: "-";
+        position: absolute;
+        left: 6px;
+        color: #ccc;
+        font-size: 0.52rem;
+      }
+      .tos-sub-list li strong {
+        color: #000;
+      }
+
+      /* ── INLINE NOTE ─────────────────────────────────────── */
+      .tos-note {
+        border-left: 3px solid #00dde9;
+        padding: 14px 20px;
+        margin: 20px 0;
+        background: rgba(0, 221, 233, 0.03);
+      }
+      .tos-note p {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.72rem;
+        color: #444;
+        line-height: 1.85;
+        margin: 0;
+        max-width: none;
+      }
+      .tos-note p span {
+        color: #00dde9;
+        font-weight: 700;
+      }
+
+      /* ── RATE TABLE ──────────────────────────────────────── */
+      .tos-rate-section {
+        margin: 24px 0;
+      }
+      .tos-rate-category {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.52rem;
+        letter-spacing: 3px;
+        color: #ff6b00;
+        text-transform: uppercase;
+        margin: 28px 0 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #eee;
+      }
+      .tos-rate-category:first-child {
+        margin-top: 0;
+      }
+
+      .tos-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.72rem;
+        margin-bottom: 4px;
+      }
+      .tos-table th {
+        background: #000;
+        color: #ff6b00;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding: 10px 16px;
+        text-align: left;
+        font-weight: 700;
+        font-size: 0.5rem;
+      }
+      .tos-table td {
+        padding: 11px 16px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+        color: #333;
+        vertical-align: top;
+        line-height: 1.7;
+      }
+      .tos-table tr:nth-child(even) td {
+        background: rgba(0, 0, 0, 0.02);
+      }
+      .tos-table td:first-child {
+        color: #000;
+        font-weight: 700;
+      }
+      .tos-table td em {
+        color: #ff6b00;
+        font-style: normal;
+        font-weight: 700;
+      }
+      .tos-table td small {
+        font-size: 0.62rem;
+        color: #888;
+        display: block;
+        margin-top: 2px;
+        font-weight: 400;
+      }
+
+      /* refund table - same but with left indent */
+      .tos-table.refund-table {
+        margin-left: 56px;
+        width: calc(100% - 56px);
+        margin-top: 18px;
+        margin-bottom: 20px;
+      }
+
+      /* ── PDF EMBED ───────────────────────────────────────── */
+      .tos-pdf-wrap {
+        margin: 24px 0;
+        border: 2px solid #000;
+      }
+      .tos-pdf-label {
+        background: #000;
+        padding: 10px 18px;
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.48rem;
+        letter-spacing: 3px;
+        color: #ff6b00;
+        text-transform: uppercase;
+      }
+      .tos-pdf-frame {
+        display: block;
+        width: 100%;
+        height: 620px;
+        border: none;
+        background: #fff;
+      }
+
+      /* ── VERSION STAMP ───────────────────────────────────── */
+      .tos-stamp {
+        display: flex;
+        gap: 32px;
+        flex-wrap: wrap;
+        margin-top: 64px;
+        padding-top: 24px;
+        border-top: 2px solid #000;
+      }
+      .tos-stamp-item {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.52rem;
+        letter-spacing: 2px;
+        color: #bbb;
+        text-transform: uppercase;
+      }
+      .tos-stamp-item span {
+        color: #ff6b00;
+      }
+
+      /* ── RESPONSIVE ──────────────────────────────────────── */
+      @media (max-width: 1100px) {
+        .tos-layout {
+          grid-template-columns: 190px 1fr;
+          gap: 0 32px;
+          padding: 0 40px 100px 60px;
+        }
+      }
+      @media (max-width: 900px) {
+        .tos-layout {
+          grid-template-columns: 1fr;
+          padding: 0 30px 80px;
+          /* push content below the fixed toggle button */
+          padding-top: 45px;
+        }
+        .tos-sidenav {
+          display: none;
+        }
+        .tos-mobile-nav-toggle {
+          display: block;
+        }
+        .tos-def {
+          grid-template-columns: 1fr;
+          gap: 6px;
+        }
+        .tos-preamble {
+          padding: 24px 26px;
+        }
+      }
+      @media (max-width: 768px) {
+        .tos-layout {
+          padding: 0 16px 60px;
+        }
+
+        /* preamble */
+        .tos-preamble {
+          padding: 20px 18px;
+        }
+        .tos-preamble p {
+          font-size: 0.72rem;
+        }
+
+        /* section headers */
+        .tos-block {
+          padding-top: 32px;
+        }
+        .tos-block-header {
+          gap: 12px;
+          margin-bottom: 20px;
+        }
+        .tos-block-title {
+          font-size: 0.82rem;
+          letter-spacing: 2px;
+        }
+        .tos-block-id {
+          font-size: 0.44rem;
+        }
+
+        /* definitions */
+        .tos-def {
+          grid-template-columns: 1fr;
+          gap: 4px;
+          padding-bottom: 14px;
+          margin-bottom: 14px;
+        }
+        .tos-def-term {
+          font-size: 0.7rem;
+        }
+        .tos-def-body {
+          font-size: 0.7rem;
+        }
+
+        /* clauses */
+        .tos-clause {
+          grid-template-columns: 32px 1fr;
+          gap: 0 10px;
+          margin-bottom: 16px;
+        }
+        .tos-clause-num {
+          font-size: 0.46rem;
+        }
+        .tos-clause-text {
+          font-size: 0.72rem;
+        }
+
+        /* sub lists */
+        .tos-sub-list li {
+          font-size: 0.7rem;
+          padding: 5px 0 5px 18px;
+        }
+
+        /* notes */
+        .tos-note p {
+          font-size: 0.66rem;
+        }
+
+        /* tables - make them scroll horizontally on very small screens */
+        .tos-rate-section {
+          overflow-x: auto;
+        }
+        .tos-table {
+          font-size: 0.62rem;
+          min-width: 480px;
+        }
+        .tos-table th,
+        .tos-table td {
+          padding: 8px 10px;
+        }
+        .tos-table.refund-table {
+          margin-left: 0;
+          width: 100%;
+          min-width: 360px;
+        }
+
+        /* pdf */
+        .tos-pdf-frame {
+          height: 380px;
+        }
+
+        /* stamp */
+        .tos-stamp {
+          gap: 18px;
+          margin-top: 40px;
+        }
+        .tos-stamp-item {
+          font-size: 0.48rem;
+        }
+      }
+      @media (max-width: 480px) {
+        .tos-layout {
+          padding: 0 12px 48px;
+        }
+        .tos-preamble {
+          padding: 16px 14px;
+        }
+        .tos-block-title {
+          font-size: 0.75rem;
+        }
+        .tos-clause-text,
+        .tos-def-body {
+          font-size: 0.68rem;
+        }
+        .tos-table {
+          font-size: 0.58rem;
+        }
+        .tos-mobile-nav-toggle {
+          font-size: 0.54rem;
+          padding: 10px 14px;
+        }
+      }
+      /* ── DARK MODE - ToS ──────────────────────────────────── */
+      [data-theme="dark"] .tos-sidenav-list a {
+        color: var(--text-6);
+      }
+      [data-theme="dark"] .tos-sidenav-list a:hover {
+        color: var(--fg);
+        border-left-color: var(--border-soft);
+      }
+      [data-theme="dark"] .tos-sidenav-list a.active {
+        color: var(--fg);
+        background: rgba(255, 107, 0, 0.06);
+      }
+      [data-theme="dark"] .tos-mobile-nav-panel {
+        background: var(--surface);
+        border-bottom-color: var(--border);
+      }
+      [data-theme="dark"] .tos-header-sub {
+        color: var(--text-6);
+      }
+      /* Preamble */
+      [data-theme="dark"] .tos-preamble {
+        border-color: var(--border);
+      }
+      [data-theme="dark"] .tos-preamble-title {
+        color: var(--fg);
+      }
+      [data-theme="dark"] .tos-preamble p {
+        color: var(--text-2);
+      }
+      [data-theme="dark"] .tos-preamble p strong {
+        color: var(--fg);
+      }
+      /* Section blocks */
+      [data-theme="dark"] .tos-block {
+        border-top-color: rgba(255, 255, 255, 0.1);
+      }
+      [data-theme="dark"] .tos-block:first-of-type {
+        border-top-color: var(--border);
+      }
+      [data-theme="dark"] .tos-block-title {
+        color: var(--fg);
+      }
+      /* Definitions */
+      [data-theme="dark"] .tos-def {
+        border-bottom-color: rgba(255, 255, 255, 0.07);
+      }
+      [data-theme="dark"] .tos-def-term {
+        color: var(--fg);
+      }
+      [data-theme="dark"] .tos-def-body {
+        color: var(--text-2);
+      }
+      /* Clauses */
+      [data-theme="dark"] .tos-clause-text {
+        color: var(--text-2);
+      }
+      [data-theme="dark"] .tos-clause-text strong {
+        color: var(--fg);
+      }
+      /* Sub lists */
+      [data-theme="dark"] .tos-sub-list li {
+        color: var(--text-3);
+        border-left-color: var(--border-soft);
+      }
+      [data-theme="dark"] .tos-sub-list li::before {
+        color: var(--text-9);
+      }
+      [data-theme="dark"] .tos-sub-list li strong {
+        color: var(--fg);
+      }
+      /* Notes */
+      [data-theme="dark"] .tos-note {
+        background: rgba(0, 221, 233, 0.04);
+      }
+      [data-theme="dark"] .tos-note p {
+        color: var(--text-3);
+      }
+      /* Rate category divider */
+      [data-theme="dark"] .tos-rate-category {
+        border-bottom-color: var(--border-soft);
+      }
+      /* Table */
+      [data-theme="dark"] .tos-table td {
+        color: var(--text-2);
+        border-bottom-color: rgba(255, 255, 255, 0.07);
+      }
+      [data-theme="dark"] .tos-table tr:nth-child(even) td {
+        background: rgba(255, 255, 255, 0.03);
+      }
+      [data-theme="dark"] .tos-table td:first-child {
+        color: var(--fg);
+      }
+      [data-theme="dark"] .tos-table td small {
+        color: var(--text-6);
+      }
+      /* PDF wrap */
+      [data-theme="dark"] .tos-pdf-wrap {
+        border-color: var(--border);
+      }
+      /* Version stamp */
+      [data-theme="dark"] .tos-stamp {
+        border-top-color: var(--border);
+      }

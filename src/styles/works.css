@@ -1,0 +1,433 @@
+/* ── WORKS LIST ──────────────────────────────────────── */
+      .works-list {
+        padding: 0 80px 100px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        z-index: 3;
+        background: transparent;
+      }
+
+      /* ── WORK CARD ───────────────────────────────────────── */
+      .work-card {
+        display: grid;
+        grid-template-columns: 480px 1fr;
+        border-bottom: 2px solid #000;
+        min-height: 340px;
+        position: relative;
+        overflow: hidden;
+        background: transparent;
+      }
+      .work-card:first-child {
+        border-top: 2px solid #000;
+      }
+
+      /* ── VISUAL SIDE ─────────────────────────────────────── */
+      .work-visual {
+        position: relative;
+        overflow: hidden;
+        background: #0a0a0a;
+        background-image: repeating-linear-gradient(
+          0deg,
+          #000 0px,
+          #000 1px,
+          #0d0d0d 1px,
+          #0d0d0d 3px
+        );
+        border-right: 2px solid #000;
+      }
+
+      /* poster - base layer, always visible until preview fires */
+      .work-poster {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition:
+          opacity 0.4s ease,
+          transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 2;
+      }
+      .work-card:hover .work-poster {
+        transform: scale(1.03);
+      }
+
+      /* preview image - sits on top of poster */
+      .work-preview-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 3;
+      }
+
+      /* MP4 video layer (Yellow Boy, Gamesense) */
+      .work-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        display: block;
+        z-index: 3;
+      }
+
+      /* placeholder text for no-clip entries */
+      .work-placeholder {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 4px;
+        z-index: 1;
+      }
+      .work-placeholder strong {
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+        color: #ff6b00;
+        display: block;
+      }
+      .work-placeholder span {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.45rem;
+        letter-spacing: 3px;
+        color: #ff6b00;
+        opacity: 0.5;
+      }
+
+      /* hover hint */
+      .work-play-hint {
+        position: absolute;
+        bottom: 14px;
+        left: 14px;
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.47rem;
+        letter-spacing: 2px;
+        color: rgba(255, 255, 255, 0.25);
+        z-index: 5;
+        pointer-events: none;
+        transition: color 0.3s;
+      }
+      .work-card:hover .work-play-hint {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      /* hi-res YouTube hover preview - slow pan/zoom on the poster itself */
+      @keyframes ytPanZoom {
+        0% {
+          transform: scale(1) translate(0%, 0%);
+        }
+        25% {
+          transform: scale(1.09) translate(-2%, -1%);
+        }
+        50% {
+          transform: scale(1.07) translate(2%, 1%);
+        }
+        75% {
+          transform: scale(1.1) translate(-1%, 2%);
+        }
+        100% {
+          transform: scale(1) translate(0%, 0%);
+        }
+      }
+      .work-poster.yt-preview {
+        animation: ytPanZoom 4s ease-in-out infinite;
+        transform-origin: center center;
+        /* override the card:hover scale so they don't stack */
+        transform: none;
+      }
+
+      /* year / status badges */
+      .work-badge {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.5rem;
+        font-weight: 700;
+        letter-spacing: 3px;
+        color: #fff;
+        background: #000;
+        padding: 4px 12px;
+        z-index: 5;
+        pointer-events: none;
+      }
+
+      /* COMING SOON - solid orange, blinking */
+      .work-badge.badge-soon {
+        background: #ff6b00;
+        color: #000;
+        animation: blink 1.8s infinite;
+      }
+
+      /* ONGOING - solid acid green, blinking (matches COMING SOON style) */
+      .work-badge.badge-ongoing {
+        background: #a8ff3e;
+        color: #000;
+        animation: blink 1.8s infinite;
+      }
+
+      /* ── INFO SIDE - fully transparent, border only (dossier style) */
+      .work-info {
+        padding: 44px 52px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        background: transparent;
+      }
+
+      .work-type-tag {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.5rem;
+        letter-spacing: 3px;
+        color: #ff6b00;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+
+      .work-title {
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.7rem;
+        font-weight: 900;
+        letter-spacing: -0.5px;
+        line-height: 1.1;
+        color: #000;
+        margin-bottom: 6px;
+        text-decoration: none;
+        display: block;
+        transition: color 0.2s;
+      }
+      a.work-title:hover {
+        color: #ff6b00;
+      }
+
+      .work-sub {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.58rem;
+        color: #888;
+        letter-spacing: 1.5px;
+        margin-bottom: 28px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      }
+
+      .work-roles-label {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.48rem;
+        letter-spacing: 2.5px;
+        color: #ff6b00;
+        margin-bottom: 10px;
+      }
+      .work-roles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 28px;
+      }
+      .work-role-tag {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.48rem;
+        letter-spacing: 1px;
+        padding: 3px 10px;
+        border: 1px solid rgba(255, 107, 0, 0.4);
+        color: #ff6b00;
+        text-transform: uppercase;
+      }
+
+      .work-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.52rem;
+        letter-spacing: 2px;
+        color: #000;
+        text-decoration: none;
+        border: 1px solid #000;
+        padding: 9px 18px;
+        align-self: flex-start;
+        transition:
+          background 0.2s,
+          color 0.2s;
+        margin-top: auto;
+        background: transparent;
+      }
+      .work-cta:hover {
+        background: #000;
+        color: #ff6b00;
+      }
+
+      .work-cta-unavail {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.5rem;
+        letter-spacing: 2px;
+        color: #bbb;
+        margin-top: auto;
+        padding-top: 4px;
+      }
+
+      /* large index number - orange on hover */
+      .work-index-num {
+        position: absolute;
+        bottom: 20px;
+        right: 28px;
+        font-family: "Orbitron", sans-serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: rgba(0, 0, 0, 0.06);
+        line-height: 1;
+        pointer-events: none;
+        transition: color 0.3s ease;
+      }
+      .work-card:hover .work-index-num {
+        color: #ff6b00;
+      }
+
+      /* ── HEADER TAG ──────────────────────────────────────── */
+      .works-header-tag {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.55rem;
+        letter-spacing: 3px;
+        color: #ff6b00;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+      .works-header-sub {
+        font-family: "Roboto Mono", monospace;
+        font-size: 0.65rem;
+        color: #888;
+        letter-spacing: 2px;
+        margin-top: 10px;
+      }
+      .works-header-sub span {
+        color: #ff6b00;
+      }
+
+      /* ── RESPONSIVE ──────────────────────────────────────── */
+      @media (max-width: 1100px) {
+        .work-card {
+          grid-template-columns: 380px 1fr;
+        }
+        .work-info {
+          padding: 32px 36px;
+        }
+        .work-title {
+          font-size: 1.3rem;
+        }
+      }
+      @media (max-width: 900px) {
+        .works-list {
+          padding: 0 30px 60px;
+        }
+        .work-card {
+          grid-template-columns: 280px 1fr;
+          min-height: 260px;
+        }
+        .work-info {
+          padding: 28px 28px;
+        }
+        .work-title {
+          font-size: 1.1rem;
+        }
+        .work-index-num {
+          font-size: 2.2rem;
+          right: 16px;
+          bottom: 12px;
+        }
+      }
+      @media (max-width: 768px) {
+        .works-list {
+          padding: 0 0 60px;
+        }
+        .work-card {
+          grid-template-columns: 1fr;
+          grid-template-rows: 220px auto;
+          min-height: unset;
+        }
+        .work-visual {
+          border-right: none;
+          border-bottom: 2px solid #000;
+        }
+        .work-info {
+          padding: 20px 20px 28px;
+        }
+        .work-title {
+          font-size: 1rem;
+        }
+        .work-sub {
+          margin-bottom: 16px;
+          padding-bottom: 16px;
+        }
+        .work-roles {
+          margin-bottom: 16px;
+        }
+        .work-index-num {
+          display: none;
+        }
+        .work-roles-label {
+          margin-bottom: 6px;
+        }
+      }
+      @media (max-width: 480px) {
+        .work-title {
+          font-size: 0.9rem;
+        }
+        .work-type-tag {
+          font-size: 0.45rem;
+          letter-spacing: 2px;
+        }
+        .work-badge {
+          font-size: 0.42rem;
+          padding: 3px 9px;
+        }
+      }
+      /* ── DARK MODE - Works ───────────────────────────────────── */
+      [data-theme="dark"] .work-card {
+        border-bottom-color: var(--border);
+      }
+      [data-theme="dark"] .work-card:first-child {
+        border-top-color: var(--border);
+      }
+      [data-theme="dark"] .work-visual {
+        border-right-color: var(--border);
+        border-bottom-color: var(--border);
+      }
+      [data-theme="dark"] .work-title {
+        color: var(--fg);
+      }
+      [data-theme="dark"] a.work-title:hover {
+        color: var(--accent);
+      }
+      [data-theme="dark"] .work-sub {
+        color: var(--text-6);
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+      }
+      [data-theme="dark"] .work-index-num {
+        color: rgba(255, 255, 255, 0.06);
+      }
+      [data-theme="dark"] .work-cta {
+        color: var(--fg);
+        border-color: var(--border);
+      }
+      [data-theme="dark"] .work-cta:hover {
+        background: var(--fg);
+        color: var(--accent);
+      }
+      [data-theme="dark"] .work-cta-unavail {
+        color: var(--text-9);
+      }
+      [data-theme="dark"] .works-header-sub {
+        color: var(--text-6);
+      }
