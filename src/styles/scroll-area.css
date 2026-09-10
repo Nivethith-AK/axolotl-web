@@ -1,4 +1,50 @@
 /* =========================================
+   GLOBAL WEBSITE SLIDE BAR (SCROLLBAR)
+   Matches shadcn / cyberpunk minimalist design
+   ========================================= */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-dim, #ccc) transparent;
+}
+
+[data-theme="dark"] html {
+  scrollbar-color: var(--border-dim, #333) transparent;
+}
+
+/* Chrome, Edge, Safari, Opera slide bar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-dim, #ccc);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent, #ff6b00);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--border-dim, #333);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--accent, #ff6b00);
+}
+
+/* =========================================
    RADIX SCROLL AREA & SEPARATOR STYLES
    ========================================= */
 

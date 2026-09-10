@@ -130,8 +130,8 @@ export const BootScreen = ({ lines = DEFAULT_LINES, onComplete }) => {
             id="bootLogo"
             className={`boot-logo ${logoVisible ? 'boot-logo-visible' : ''}`}
             alt="Δxolotl"
-            width="180"
-            height="160"
+            width="110"
+            height="110"
             decoding="async"
           />
         </div>
