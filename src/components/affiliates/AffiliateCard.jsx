@@ -55,6 +55,9 @@ export const AffiliateCard = ({
           className="aff-panel-cover"
           alt={name}
           loading="lazy"
+          decoding="async"
+          width="200"
+          height="220"
           onError={(e) => {
             e.target.style.display = 'none';
             if (e.target.nextElementSibling) {
@@ -82,6 +85,10 @@ export const AffiliateCard = ({
           className="aff-panel-affbadge"
           alt={person.affiliation.name}
           title={person.affiliation.name}
+          loading="lazy"
+          decoding="async"
+          width="24"
+          height="24"
         />
       )}
     </div>

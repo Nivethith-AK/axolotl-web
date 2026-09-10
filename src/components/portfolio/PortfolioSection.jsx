@@ -87,6 +87,9 @@ export const PortfolioSection = () => {
           src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
           alt={item.label}
           loading="lazy"
+          decoding="async"
+          width="480"
+          height="360"
         />
         <span className="yt-facade-play">
           <svg viewBox="0 0 24 24">
@@ -309,7 +312,15 @@ export const PortfolioSection = () => {
             rel="noopener noreferrer"
             className="ext-link"
           >
-            <img src="/images/icons/foriio.png" alt="Foriio" className="ext-link-icon" />
+            <img
+              src="/images/icons/foriio.webp"
+              alt="Foriio"
+              className="ext-link-icon"
+              loading="lazy"
+              decoding="async"
+              width="16"
+              height="16"
+            />
             <span className="prompt">&gt;&gt;&gt;</span> Full_Portfolio :=
             <span className="value">Foriio</span>
           </a>

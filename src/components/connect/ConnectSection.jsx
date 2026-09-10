@@ -51,9 +51,13 @@ export const ConnectSection = () => {
               <div className="social-card-tag">PROTOCOL_02</div>
               <div className="connect-card-icon">
                 <img
-                  src="/images/icons/vgen_colour.png"
+                  src="/images/icons/vgen_colour.webp"
                   alt="VGen"
                   className="connect-icon"
+                  loading="lazy"
+                  decoding="async"
+                  width="40"
+                  height="40"
                 />
               </div>
               <div className="social-card-label" data-i18n="connect.commission_label">
@@ -76,9 +80,13 @@ export const ConnectSection = () => {
               <div className="social-card-tag">PROTOCOL_03</div>
               <div className="connect-card-icon">
                 <img
-                  src="/images/icons/discord.png"
+                  src="/images/icons/discord.webp"
                   alt="Discord"
                   className="connect-icon"
+                  loading="lazy"
+                  decoding="async"
+                  width="40"
+                  height="40"
                 />
               </div>
               <div className="social-card-label" data-i18n="connect.discord_label">

@@ -9,10 +9,19 @@ import { LangPanel } from './components/common/LangPanel';
 import { Footer } from './components/common/Footer';
 import { BootScreen } from './components/common/BootScreen';
 import { HomePage } from './pages/HomePage';
-import { WorksPage } from './pages/WorksPage';
-import { DiscographyPage } from './pages/DiscographyPage';
-import { AffiliatesPage } from './pages/AffiliatesPage';
-import { TermsOfServicePage } from './pages/TermsOfServicePage';
+
+const WorksPage = React.lazy(() =>
+  import('./pages/WorksPage').then((m) => ({ default: m.WorksPage }))
+);
+const DiscographyPage = React.lazy(() =>
+  import('./pages/DiscographyPage').then((m) => ({ default: m.DiscographyPage }))
+);
+const AffiliatesPage = React.lazy(() =>
+  import('./pages/AffiliatesPage').then((m) => ({ default: m.AffiliatesPage }))
+);
+const TermsOfServicePage = React.lazy(() =>
+  import('./pages/TermsOfServicePage').then((m) => ({ default: m.TermsOfServicePage }))
+);
 
 const ROUTE_BOOT_LINES = {
   '/': [
@@ -75,6 +84,7 @@ export const App = () => {
           entry.target.classList.add('is-visible');
           entry.target.style.opacity = '1';
           entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
 
           const pct = entry.target.querySelector('.percentage');
           if (pct && (pct.innerText === '0%' || pct.innerText === '0')) {
@@ -135,32 +145,34 @@ export const App = () => {
       <LangPanel isOpen={isLangOpen} onClose={() => setIsLangOpen(false)} />
 
       {/* Page Routes */}
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <HomePage
-              revealTrigger={revealTrigger}
-              onResetRevealTrigger={() => setRevealTrigger(false)}
-            />
-          }
-        />
-        <Route path="/works" element={<WorksPage />} />
-        <Route path="/discography" element={<DiscographyPage />} />
-        <Route path="/discography/:slug" element={<DiscographyPage />} />
-        <Route path="/affiliates" element={<AffiliatesPage />} />
-        <Route path="/affiliates/:slug" element={<AffiliatesPage />} />
-        <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-        <Route
-          path="*"
-          element={
-            <HomePage
-              revealTrigger={revealTrigger}
-              onResetRevealTrigger={() => setRevealTrigger(false)}
-            />
-          }
-        />
-      </Routes>
+      <React.Suspense fallback={null}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                revealTrigger={revealTrigger}
+                onResetRevealTrigger={() => setRevealTrigger(false)}
+              />
+            }
+          />
+          <Route path="/works" element={<WorksPage />} />
+          <Route path="/discography" element={<DiscographyPage />} />
+          <Route path="/discography/:slug" element={<DiscographyPage />} />
+          <Route path="/affiliates" element={<AffiliatesPage />} />
+          <Route path="/affiliates/:slug" element={<AffiliatesPage />} />
+          <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+          <Route
+            path="*"
+            element={
+              <HomePage
+                revealTrigger={revealTrigger}
+                onResetRevealTrigger={() => setRevealTrigger(false)}
+              />
+            }
+          />
+        </Routes>
+      </React.Suspense>
 
       {/* Footer */}
       <Footer />

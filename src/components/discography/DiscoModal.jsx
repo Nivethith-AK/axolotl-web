@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AFFILIATES_DATA, toSlug as toAffiliateSlug } from '../../data/affiliatesData';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export const DiscoModal = ({ track, onClose }) => {
   const navigate = useNavigate();
@@ -91,6 +92,7 @@ export const DiscoModal = ({ track, onClose }) => {
               src={track.cover}
               className="disco-modal-photo"
               alt={track.title}
+              decoding="async"
               onError={(e) => {
                 e.target.parentElement.innerHTML =
                   '<div class="disco-modal-photo-placeholder">NO_COVER_DATA</div>';
@@ -99,7 +101,7 @@ export const DiscoModal = ({ track, onClose }) => {
           </div>
         </div>
 
-        <div className="disco-modal-info-col">
+        <ScrollArea className="disco-modal-info-col">
           <div className="disco-modal-name" style={{ color: accentColor }}>
             {track.title}
           </div>
@@ -166,6 +168,10 @@ export const DiscoModal = ({ track, onClose }) => {
                           className="disco-collab-avatar"
                           src={img}
                           alt={c.name}
+                          loading="lazy"
+                          decoding="async"
+                          width="22"
+                          height="22"
                           onError={(e) => {
                             e.target.style.display = 'none';
                             if (e.target.nextElementSibling) {
@@ -256,7 +262,7 @@ export const DiscoModal = ({ track, onClose }) => {
               // NO EXTERNAL LINK AVAILABLE
             </div>
           )}
-        </div>
+        </ScrollArea>
       </div>
     </div>
   );

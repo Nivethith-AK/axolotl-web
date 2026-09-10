@@ -13,24 +13,6 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
   const [loadValText, setLoadValText] = useState('0%');
   const [isRevealed, setIsRevealed] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const heroGridRef = useRef(null);
-
-  // Grid background motion
-  useEffect(() => {
-    let posX = 0;
-    let posY = 0;
-    let animId;
-    const animateGrid = () => {
-      posX += 0.3;
-      posY += 0.3;
-      if (heroGridRef.current) {
-        heroGridRef.current.style.backgroundPosition = `${posX}px ${posY}px`;
-      }
-      animId = requestAnimationFrame(animateGrid);
-    };
-    animId = requestAnimationFrame(animateGrid);
-    return () => cancelAnimationFrame(animId);
-  }, []);
 
   // Initial standby animation (0% -> 50%)
   useEffect(() => {
@@ -103,7 +85,7 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
 
   return (
     <section className="hero" id="hero">
-      <div className="hero-grid" ref={heroGridRef}></div>
+      <div className="hero-grid"></div>
       <TerminalLayer isRevealed={isRevealed} isTransitioning={isTransitioning} />
       <RevealPanel isOpen={isRevealed} />
       <DiscoMarquee isVisible={isRevealed} />
@@ -144,7 +126,15 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
               }
             }}
           >
-            <img src="/images/assets/logo_main.jpg" className="hero-logo" alt="Δxolotl" />
+            <img
+              src="/images/assets/logo_main.webp"
+              className="hero-logo"
+              alt="Δxolotl"
+              width="130"
+              height="130"
+              fetchPriority="high"
+              decoding="async"
+            />
             <div className="btn-hint" aria-hidden="true">
               <svg className="btn-hint-ring" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -207,7 +197,14 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
               data-label={link.label}
             >
               <div className="side-icon-circle">
-                <img src={link.icon} alt={link.alt} className="side-icon" />
+                <img
+                  src={link.icon}
+                  alt={link.alt}
+                  className="side-icon"
+                  width="20"
+                  height="20"
+                  decoding="async"
+                />
               </div>
             </a>
           ))}

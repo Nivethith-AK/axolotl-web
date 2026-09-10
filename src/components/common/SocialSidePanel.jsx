@@ -79,7 +79,14 @@ export const SocialSidePanel = () => {
             data-label={link.label}
           >
             <div className="side-icon-circle">
-              <img src={link.icon} alt={link.alt} className="side-icon" />
+              <img
+                src={link.icon}
+                alt={link.alt}
+                className="side-icon"
+                width="20"
+                height="20"
+                decoding="async"
+              />
             </div>
           </a>
         ))}

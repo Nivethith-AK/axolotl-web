@@ -27,12 +27,14 @@ export const DiscoMarquee = ({ isVisible }) => {
 
   useEffect(() => {
     const track = trackRef.current;
-    if (!track || !releases.length) return;
+    if (!track || !releases.length || !isVisible) return;
 
     const SPEED = 0.45;
     const s = stateRef.current;
+    let running = true;
 
     const tick = () => {
+      if (!running) return;
       if (!s.hw && track.scrollWidth > 0) {
         s.hw = track.scrollWidth / 2;
       }
@@ -51,9 +53,23 @@ export const DiscoMarquee = ({ isVisible }) => {
       animRef.current = requestAnimationFrame(tick);
     };
 
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animRef.current);
+      } else {
+        cancelAnimationFrame(animRef.current);
+        animRef.current = requestAnimationFrame(tick);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
     animRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animRef.current);
-  }, [releases]);
+    return () => {
+      running = false;
+      cancelAnimationFrame(animRef.current);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, [releases, isVisible]);
 
   const handlePointerDown = (e) => {
     if (e.pointerType === 'touch') return;
@@ -105,6 +121,9 @@ export const DiscoMarquee = ({ isVisible }) => {
         className="disco-marquee-cover"
         alt={d.title}
         loading="lazy"
+        decoding="async"
+        width="144"
+        height="144"
         onError={(e) => {
           e.target.style.display = 'none';
         }}

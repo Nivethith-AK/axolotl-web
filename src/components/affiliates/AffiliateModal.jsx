@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toSlug } from '../../data/affiliatesData';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const COUNTRY_FLAGS = {
   japan: 'jp', japanese: 'jp',
@@ -150,6 +151,7 @@ export const AffiliateModal = ({ person, onClose }) => {
                 className={`aff-modal-photo ${isPhotoGlitching ? 'raven-glitch-img' : ''}`}
                 id="affDossierPhoto"
                 alt={currentName}
+                decoding="async"
                 onError={(e) => {
                   e.target.parentElement.innerHTML = `<div class="aff-modal-photo-placeholder" style="color:${currentAccent}">${currentName.charAt(0)}</div>`;
                 }}
@@ -162,7 +164,7 @@ export const AffiliateModal = ({ person, onClose }) => {
           </div>
         </div>
 
-        <div className="aff-modal-info-col">
+        <ScrollArea className="aff-modal-info-col">
           <div className="aff-modal-name-row">
             <div
               className="aff-modal-name"
@@ -204,6 +206,9 @@ export const AffiliateModal = ({ person, onClose }) => {
                 src={`/images/${person.affiliation.badge}`}
                 className="aff-modal-aff-badge"
                 alt={person.affiliation.name}
+                decoding="async"
+                width="18"
+                height="18"
               />
             </a>
           )}
@@ -308,6 +313,10 @@ export const AffiliateModal = ({ person, onClose }) => {
                           src={`https://img.youtube.com/vi/${vid}/hqdefault.jpg`}
                           alt={q.title}
                           className="aff-video-thumb"
+                          loading="lazy"
+                          decoding="async"
+                          width="120"
+                          height="68"
                           onError={(e) => {
                             e.target.src = `https://img.youtube.com/vi/${vid}/mqdefault.jpg`;
                           }}
@@ -341,7 +350,7 @@ export const AffiliateModal = ({ person, onClose }) => {
               </div>
             </div>
           )}
-        </div>
+        </ScrollArea>
       </div>
     </div>
   );

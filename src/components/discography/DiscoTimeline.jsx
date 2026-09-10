@@ -178,6 +178,9 @@ export const DiscoTimeline = ({ onSelectTrack, isModalOpen }) => {
                               src={d.cover}
                               alt={d.title}
                               loading="lazy"
+                              decoding="async"
+                              width="180"
+                              height="220"
                               onError={(e) => {
                                 e.target.style.display = 'none';
                               }}

@@ -14,7 +14,7 @@ export const GeoCanvas = () => {
     let dpr = 1;
 
     const resize = () => {
-      dpr = window.devicePixelRatio || 1;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
       const W = window.innerWidth;
       const H = window.innerHeight;
       canvas.width = W * dpr;
@@ -29,7 +29,10 @@ export const GeoCanvas = () => {
     const rand = (a, b) => a + Math.random() * (b - a);
     const randI = (a, b) => Math.floor(rand(a, b));
 
-    const dots = Array.from({ length: 55 }, () => ({
+    const isMobile = window.innerWidth <= 768;
+    const dotCount = isMobile ? 30 : 55;
+
+    const dots = Array.from({ length: dotCount }, () => ({
       x: rand(0, 1),
       y: rand(0, 1),
       r: rand(1.2, 2.8),
@@ -226,15 +229,24 @@ export const GeoCanvas = () => {
         ctx.restore();
       });
 
-      if (!reducedMotion) {
+      if (!reducedMotion && !document.hidden) {
         animId = requestAnimationFrame(draw);
       }
     };
+
+    const handleVisibility = () => {
+      if (!document.hidden && !reducedMotion) {
+        cancelAnimationFrame(animId);
+        animId = requestAnimationFrame(draw);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
 
     draw();
 
     return () => {
       window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', handleVisibility);
       clearTimeout(glitchTimeoutId);
       cancelAnimationFrame(animId);
     };

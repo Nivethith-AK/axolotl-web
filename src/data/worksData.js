@@ -4,7 +4,7 @@ export const WORKS_DATA = [
     indexNum: "01",
     badge: "ONGOING",
     badgeClass: "badge-ongoing",
-    poster: "/images/cover_art/aotnr_alt.jpg",
+    poster: "/images/cover_art/aotnr_alt.webp",
     posterFallback: "https://www.aotnorequiem.com/assets/images/posters/30.jpg",
     typeTag: "// FAN-MANGA · ORIGINAL SOUNDTRACK",
     title: "Attack on Titan:\nRequiem",

@@ -55,7 +55,15 @@ export const LangPanel = ({ isOpen, onClose }) => {
             onClose();
           }}
         >
-          <img src={`/images/lang/${l.code}.png`} alt={l.label} className="lang-flag-img" />
+          <img
+            src={`/images/lang/${l.code}.webp`}
+            alt={l.label}
+            className="lang-flag-img"
+            loading="lazy"
+            decoding="async"
+            width="24"
+            height="18"
+          />
           <span className="lang-name">{l.label}</span>
           <span className="lang-code">{l.code.toUpperCase()}</span>
         </button>

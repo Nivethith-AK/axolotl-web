@@ -122,7 +122,15 @@ export const AffiliatesTeaser = () => {
       >
         <div className="aff-panel-bg"></div>
         {coverSrc ? (
-          <img src={coverSrc} className="aff-panel-cover" alt={displayName} loading="lazy" />
+          <img
+            src={coverSrc}
+            className="aff-panel-cover"
+            alt={displayName}
+            loading="lazy"
+            decoding="async"
+            width="200"
+            height="220"
+          />
         ) : (
           <div className="aff-panel-initial" style={{ color: displayAccent }}>
             {displayName.charAt(0)}
@@ -140,6 +148,10 @@ export const AffiliatesTeaser = () => {
             className="aff-panel-affbadge"
             alt={data.affiliation.name}
             title={data.affiliation.name}
+            loading="lazy"
+            decoding="async"
+            width="24"
+            height="24"
           />
         )}
       </div>
@@ -251,6 +263,7 @@ export const AffiliatesTeaser = () => {
                       src={`/images/${activeImage}`}
                       className="dossier-photo"
                       alt={activeName}
+                      decoding="async"
                       onError={(e) => {
                         e.target.parentElement.innerHTML =
                           '<div class="dossier-photo-placeholder">IMAGE_DATA<br/>NOT_FOUND</div>';
@@ -295,6 +308,9 @@ export const AffiliatesTeaser = () => {
                       src={`/images/${activeData.affiliation.badge}`}
                       className="dossier-affiliation-badge"
                       alt={activeData.affiliation.name}
+                      decoding="async"
+                      width="18"
+                      height="18"
                     />
                   </a>
                 )}
@@ -369,9 +385,13 @@ export const AffiliatesTeaser = () => {
         <div className="ext-link-row mt-4">
           <Link to="/affiliates" className="ext-link">
             <img
-              src="/images/assets/logo_main.jpg"
+              src="/images/assets/logo_main.webp"
               alt="Affiliates"
               className="ext-link-icon"
+              width="16"
+              height="16"
+              loading="lazy"
+              decoding="async"
               style={{ borderRadius: '50%', objectFit: 'cover' }}
             />
             <span className="prompt">&gt;&gt;&gt;</span> Full_Roster :=

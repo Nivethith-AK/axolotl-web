@@ -72,6 +72,10 @@ export const WorkCard = ({ work }) => {
           className={`work-poster ${isYtHovered ? 'yt-preview' : ''}`}
           src={work.poster}
           alt={work.title.replace('\n', ' ')}
+          loading="lazy"
+          decoding="async"
+          width="360"
+          height="202"
           style={{ opacity: isPlayingVideo ? 0 : 1 }}
           onError={(e) => {
             if (work.posterFallback) e.target.src = work.posterFallback;

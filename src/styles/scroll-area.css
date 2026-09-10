@@ -1,0 +1,179 @@
+/* =========================================
+   RADIX SCROLL AREA & SEPARATOR STYLES
+   ========================================= */
+
+/* Root */
+.scroll-area-root,
+[data-radix-scroll-area-root] {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Viewport */
+.scroll-area-viewport,
+[data-radix-scroll-area-viewport] {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Hide default native scrollbars */
+  -ms-overflow-style: none;
+}
+
+.scroll-area-viewport::-webkit-scrollbar,
+[data-radix-scroll-area-viewport]::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scrollbar Track */
+.scroll-area-scrollbar,
+[data-radix-scroll-area-scrollbar] {
+  display: flex;
+  user-select: none;
+  touch-action: none;
+  padding: 2px;
+  background: transparent;
+  transition: background-color 160ms ease-out, opacity 160ms ease-out;
+  z-index: 1005;
+}
+
+.scroll-area-scrollbar[data-orientation="vertical"],
+[data-radix-scroll-area-scrollbar][data-orientation="vertical"] {
+  width: 8px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.scroll-area-scrollbar[data-orientation="horizontal"],
+[data-radix-scroll-area-scrollbar][data-orientation="horizontal"] {
+  height: 8px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  flex-direction: column;
+}
+
+.scroll-area-scrollbar:hover,
+[data-radix-scroll-area-scrollbar]:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .scroll-area-scrollbar:hover,
+[data-theme="dark"] [data-radix-scroll-area-scrollbar]:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Thumb */
+.scroll-area-thumb,
+[data-radix-scroll-area-thumb] {
+  flex: 1;
+  background: var(--border-dim, #ccc);
+  border-radius: 9999px;
+  position: relative;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.scroll-area-thumb:hover,
+[data-radix-scroll-area-thumb]:hover,
+.scroll-area-scrollbar:hover .scroll-area-thumb {
+  background: var(--accent, #ff6b00);
+}
+
+/* Corner */
+.scroll-area-corner,
+[data-radix-scroll-area-corner] {
+  background: transparent;
+}
+
+/* Separator */
+.separator-root,
+[data-radix-separator-root] {
+  background-color: var(--border-soft, #eee);
+  flex-shrink: 0;
+}
+
+.separator-root[data-orientation="horizontal"],
+[data-radix-separator-root][data-orientation="horizontal"] {
+  height: 1px;
+  width: 100%;
+}
+
+.separator-root[data-orientation="vertical"],
+[data-radix-separator-root][data-orientation="vertical"] {
+  width: 1px;
+  height: 100%;
+}
+
+/* Modal integration styles */
+.aff-modal-info-col.scroll-area-root,
+.disco-modal-info-col.scroll-area-root {
+  grid-area: info;
+  height: 100%;
+  max-height: 100%;
+  position: relative;
+  z-index: 1001;
+  padding: 0;
+}
+
+.aff-modal-info-col .scroll-area-viewport,
+.disco-modal-info-col .scroll-area-viewport {
+  padding: 44px 60px 60px;
+}
+
+@media (max-width: 768px) {
+  .aff-modal-info-col.scroll-area-root,
+  .disco-modal-info-col.scroll-area-root {
+    height: auto;
+    overflow: visible;
+  }
+  .aff-modal-info-col .scroll-area-viewport,
+  .disco-modal-info-col .scroll-area-viewport {
+    padding: 16px 14px 60px;
+    overflow: visible !important;
+  }
+}
+
+/* Demo Utility Classes (shadcn/tailwind compatibility) */
+.h-72 {
+  height: 18rem;
+}
+
+.w-48 {
+  width: 12rem;
+}
+
+.rounded-md {
+  border-radius: 6px;
+}
+
+.border {
+  border: 1px solid var(--border-soft, #eee);
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.leading-none {
+  line-height: 1;
+}
+
+.font-medium {
+  font-weight: 500;
+}

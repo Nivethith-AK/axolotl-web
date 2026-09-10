@@ -277,7 +277,7 @@
     height: auto;
     border-left: none;
     border-bottom: 2px solid var(--border-mid);
-    padding: 80px 24px 28px;
+    padding: max(80px, calc(60px + env(safe-area-inset-top))) 24px max(28px, env(safe-area-inset-bottom));
     transform: translateY(-100%);
     box-shadow: none;
   }
@@ -294,6 +294,8 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
@@ -301,9 +303,30 @@ body {
   background: var(--bg);
   color: var(--fg);
   overflow-x: hidden;
+  width: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Remove 300ms touch delay and tap gray flashes on mobile */
+a,
+button,
+.big-button,
+.nav-icon-btn,
+.side-icon-link,
+.aff-panel,
+.work-card,
+.disco-card,
+.social-card {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 /* Skip-navigation link — visually hidden until focused by keyboard.
@@ -361,6 +384,10 @@ body {
   }
   /* Stop terminal layer flicker */
   .terminal-line {
+    animation: none !important;
+  }
+  /* Stop hero background grid motion */
+  .hero-grid {
     animation: none !important;
   }
 }
@@ -637,6 +664,15 @@ body {
   padding-left: 80px;
 }
 
+@keyframes heroGridDrift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 60px 60px;
+  }
+}
+
 .hero-grid {
   position: absolute;
   inset: 0;
@@ -647,6 +683,8 @@ body {
     linear-gradient(180deg, var(--grid-line) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+  animation: heroGridDrift 20s linear infinite;
+  will-change: background-position;
 }
 
 .hero-big-button {
@@ -2124,7 +2162,7 @@ p {
    FOOTER
    ========================================= */
 .footer {
-  padding: 28px 80px 44px;
+  padding: 28px 80px max(44px, calc(20px + env(safe-area-inset-bottom)));
   border-top: 2px solid var(--border);
   background: var(--surface);
   display: flex;
@@ -2183,7 +2221,7 @@ p {
 
 @media (max-width: 768px) {
   .nav {
-    padding: 16px 20px;
+    padding: max(16px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 16px max(20px, env(safe-area-inset-left));
   }
   .nav-links {
     width: 100%;
@@ -2192,7 +2230,7 @@ p {
     height: auto;
     border-left: none;
     border-bottom: 2px solid var(--border-mid);
-    padding: 80px 24px 28px;
+    padding: max(80px, calc(60px + env(safe-area-inset-top))) 24px max(28px, env(safe-area-inset-bottom));
     transform: translateY(-100%);
     box-shadow: none;
   }
@@ -2318,10 +2356,10 @@ p {
   }
   .mobile-icons-bar {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 10px;
     width: 100%;
-    max-width: 290px;
+    max-width: 320px;
     margin: 30px auto 0;
     opacity: 1;
     max-height: 120px;

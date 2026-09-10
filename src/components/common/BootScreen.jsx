@@ -126,10 +126,13 @@ export const BootScreen = ({ lines = DEFAULT_LINES, onComplete }) => {
       <div className={`boot-content ${isGlitching ? 'content-glitch' : ''}`} id="bootContent">
         <div className="boot-logo-wrap">
           <img
-            src="/images/assets/logo_white.png"
+            src="/images/assets/logo_white.webp"
             id="bootLogo"
             className={`boot-logo ${logoVisible ? 'boot-logo-visible' : ''}`}
             alt="Δxolotl"
+            width="180"
+            height="160"
+            decoding="async"
           />
         </div>
         <div className="boot-bar-track">

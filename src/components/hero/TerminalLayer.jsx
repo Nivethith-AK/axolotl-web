@@ -54,21 +54,35 @@ export const TerminalLayer = ({ isRevealed, isTransitioning }) => {
       .join('');
 
   useEffect(() => {
+    let inViewport = true;
+    let observer;
+
+    if (typeof IntersectionObserver !== 'undefined' && layer1Ref.current) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          inViewport = entry.isIntersecting;
+        },
+        { threshold: 0 }
+      );
+      observer.observe(layer1Ref.current);
+    }
+
     const iv1 = setInterval(() => {
-      if (!layer1Ref.current || !activeRef.current) return;
+      if (!layer1Ref.current || !activeRef.current || !inViewport || document.hidden) return;
       layer1Ref.current.innerHTML = buildLayer1()
         .map((l) => `<span class="terminal-line">${l}</span>`)
         .join('');
     }, 80);
 
     const iv2 = setInterval(() => {
-      if (!layer2Ref.current || !activeRef.current) return;
+      if (!layer2Ref.current || !activeRef.current || !inViewport || document.hidden) return;
       layer2Ref.current.innerHTML = buildLayer2Lines(isMobile() ? 14 : 6);
     }, 110);
 
     return () => {
       clearInterval(iv1);
       clearInterval(iv2);
+      if (observer) observer.disconnect();
     };
   }, []);
 

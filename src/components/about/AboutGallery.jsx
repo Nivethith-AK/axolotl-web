@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const SLIDES = [
-  { src: '/images/assets/logo_main.jpg', alt: 'Δxolotl' },
-  { src: '/images/assets/profile_image.jpg', alt: 'Δxolotl' },
+  { src: '/images/assets/logo_main.webp', alt: 'Δxolotl' },
+  { src: '/images/assets/profile_image.webp', alt: 'Δxolotl' },
 ];
 
 export const AboutGallery = () => {
@@ -101,7 +101,7 @@ export const AboutGallery = () => {
             aria-hidden="true"
             style={{ width: `${100 / allSlots}%`, minWidth: `${100 / allSlots}%` }}
           >
-            <img src={SLIDES[total - 1].src} alt="" />
+            <img src={SLIDES[total - 1].src} alt="" loading="lazy" decoding="async" width="300" height="300" />
           </div>
 
           {/* real slides */}
@@ -111,7 +111,7 @@ export const AboutGallery = () => {
               className="ag-slide"
               style={{ width: `${100 / allSlots}%`, minWidth: `${100 / allSlots}%` }}
             >
-              <img src={slide.src} alt={slide.alt} />
+              <img src={slide.src} alt={slide.alt} loading="lazy" decoding="async" width="300" height="300" />
             </div>
           ))}
 
@@ -121,7 +121,7 @@ export const AboutGallery = () => {
             aria-hidden="true"
             style={{ width: `${100 / allSlots}%`, minWidth: `${100 / allSlots}%` }}
           >
-            <img src={SLIDES[0].src} alt="" />
+            <img src={SLIDES[0].src} alt="" loading="lazy" decoding="async" width="300" height="300" />
           </div>
         </div>
       </div>
