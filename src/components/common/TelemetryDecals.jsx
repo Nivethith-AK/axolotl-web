@@ -83,15 +83,20 @@ export const TelemetryDecals = () => {
         SYSTEM_STATUS: <span id="sys-status">{sysStatus}</span> //{' '}
         <span id="clock">{clock}</span>
       </div>
+
       <div className="ui-decal decal-tr">
         SESSION: <span id="session-timer">{sessionTimer}</span> //{' '}
         <span id="session-state">{sessionState}</span>
       </div>
+
       <div className="ui-decal decal-bl">
         <span id="sys-os">{sysOs}</span> //{' '}
         <span id="sys-hw">{sysHw}</span>
       </div>
-      <div className="ui-decal decal-br">&copy; 2026 THEAXOLOTLMUSIC</div>
+
+      <div className="ui-decal decal-br">
+        &copy; 2026 THEAXOLOTLMUSIC
+      </div>
     </>
   );
 };

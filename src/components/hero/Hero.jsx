@@ -13,6 +13,12 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
   const [loadValText, setLoadValText] = useState('0%');
   const [isRevealed, setIsRevealed] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [marqueeVisible, setMarqueeVisible] = useState(false);
+
+  const terminalRef = useRef(null);
+  const marqueeTimerRef = useRef(null);
+  const upIntervalRef = useRef(null);
+  const downIntervalRef = useRef(null);
 
   // Initial standby animation (0% -> 50%)
   useEffect(() => {
@@ -28,8 +34,24 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
       }, 30);
     }, 500);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(upIntervalRef.current);
+      clearInterval(downIntervalRef.current);
+      clearTimeout(marqueeTimerRef.current);
+    };
   }, []);
+
+  const handlePanelCloseComplete = () => {
+    // When RevealPanel nodes have staggered out, materialize terminals back from noise
+    if (terminalRef.current?.showTerminals) {
+      terminalRef.current.showTerminals(() => {
+        setIsTransitioning(false);
+      });
+    } else {
+      setIsTransitioning(false);
+    }
+  };
 
   const toggleBigButton = () => {
     if (isTransitioning) return;
@@ -38,44 +60,67 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
     if (progress === 50) {
       // Standby -> Online
       let count = 50;
-      const upInterval = setInterval(() => {
+      clearInterval(upIntervalRef.current);
+      upIntervalRef.current = setInterval(() => {
         count++;
         setLoadValText(`${count}%`);
         if (count >= 100) {
-          clearInterval(upInterval);
+          clearInterval(upIntervalRef.current);
           setLoadValText('100% [ONLINE]');
         }
       }, 40);
 
       setProgress(100);
-      setTimeout(() => {
+
+      // Scramble-wipe terminal lines first
+      if (terminalRef.current?.hideTerminals) {
+        terminalRef.current.hideTerminals(() => {
+          setIsRevealed(true);
+          clearTimeout(marqueeTimerRef.current);
+          marqueeTimerRef.current = setTimeout(() => {
+            setMarqueeVisible(true);
+          }, 550);
+          setTimeout(() => {
+            setIsTransitioning(false);
+          }, 6 * 90 + 320);
+        });
+      } else {
         setIsRevealed(true);
-        setIsTransitioning(false);
-      }, 600);
+        clearTimeout(marqueeTimerRef.current);
+        marqueeTimerRef.current = setTimeout(() => {
+          setMarqueeVisible(true);
+        }, 550);
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 6 * 90 + 320);
+      }
     } else {
       // Online -> Standby
-      setIsRevealed(false);
+      clearTimeout(marqueeTimerRef.current);
+      setMarqueeVisible(false);
+
       let count = 100;
-      const downInterval = setInterval(() => {
+      clearInterval(downIntervalRef.current);
+      downIntervalRef.current = setInterval(() => {
         count--;
         setLoadValText(`${count}%`);
         if (count <= 50) {
-          clearInterval(downInterval);
+          clearInterval(downIntervalRef.current);
           setLoadValText('50% [STANDBY]');
         }
       }, 30);
 
       setProgress(50);
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 600);
+      setIsRevealed(false);
     }
   };
 
   // Allow external trigger from /MORE nav link
   useEffect(() => {
-    if (revealTrigger && progress === 50) {
-      toggleBigButton();
+    if (revealTrigger) {
+      if (progress === 50) {
+        toggleBigButton();
+      }
       if (onResetRevealTrigger) onResetRevealTrigger();
     }
   }, [revealTrigger]);
@@ -86,9 +131,9 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
   return (
     <section className="hero" id="hero">
       <div className="hero-grid"></div>
-      <TerminalLayer isRevealed={isRevealed} isTransitioning={isTransitioning} />
-      <RevealPanel isOpen={isRevealed} />
-      <DiscoMarquee isVisible={isRevealed} />
+      <TerminalLayer ref={terminalRef} isRevealed={isRevealed} />
+      <RevealPanel isOpen={isRevealed} onCloseComplete={handlePanelCloseComplete} />
+      <DiscoMarquee isVisible={marqueeVisible} />
 
       <div className="hero-content d-flex flex-column justify-content-center">
         <div className="hero-big-button">
@@ -184,7 +229,7 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
         </div>
 
         <div
-          className={`mobile-icons-bar ${isRevealed ? 'icons-hidden' : ''}`}
+          className={`mobile-icons-bar ${isRevealed || isTransitioning ? 'icons-hidden' : ''}`}
           id="mobileIconsBar"
         >
           {SOCIAL_LINKS.map((link) => (

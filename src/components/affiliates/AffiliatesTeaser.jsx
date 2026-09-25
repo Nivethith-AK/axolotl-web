@@ -10,6 +10,28 @@ export const AffiliatesTeaser = () => {
   const [showingAlt, setShowingAlt] = useState(false);
   const [accessingName, setAccessingName] = useState('');
   const [altPersonaText, setAltPersonaText] = useState('');
+  const [ravenShowingAlt, setRavenShowingAlt] = useState(false);
+  const [ravenGlitching, setRavenGlitching] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    let glitchInnerTimer;
+    const scheduleNext = () => {
+      timer = setTimeout(() => {
+        setRavenGlitching(true);
+        glitchInnerTimer = setTimeout(() => {
+          setRavenShowingAlt((prev) => !prev);
+          setRavenGlitching(false);
+          scheduleNext();
+        }, 80);
+      }, 2000 + Math.random() * 500);
+    };
+    scheduleNext();
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(glitchInnerTimer);
+    };
+  }, []);
 
   const wrapRef = useRef(null);
   const track1Ref = useRef(null);
@@ -26,16 +48,20 @@ export const AffiliatesTeaser = () => {
     return a.name.localeCompare(b.name);
   });
 
+  const [hoveredAffId, setHoveredAffId] = useState(null);
+
   const row1 = sorted.slice(0, Math.ceil(sorted.length / 2));
   const row2 = sorted.slice(Math.ceil(sorted.length / 2));
 
   // Marquee animation
   const stateRef = useRef({
-    hw: 0,
+    hw1: 0,
+    hw2: 0,
     positions: [0, 0],
     velocity: 0,
     hoveredRow: null,
     isDragging: false,
+    dragStartX: 0,
     dragLastX: 0,
     hasDragged: false,
   });
@@ -44,14 +70,29 @@ export const AffiliatesTeaser = () => {
     const SPEEDS = [-0.4, 0.4];
     const s = stateRef.current;
 
+    const updateHalfWidths = () => {
+      const t1 = track1Ref.current;
+      const t2 = track2Ref.current;
+      if (t1 && t1.scrollWidth > 0) {
+        s.hw1 = t1.scrollWidth / 2;
+      }
+      if (t2 && t2.scrollWidth > 0) {
+        s.hw2 = t2.scrollWidth / 2;
+        if (!s.positions[1]) {
+          s.positions[1] = s.hw2 / 2;
+        }
+      }
+    };
+
+    updateHalfWidths();
+
     const tick = () => {
       const t1 = track1Ref.current;
       const t2 = track2Ref.current;
       if (!t1 || !t2) return;
 
-      if (!s.hw && t1.scrollWidth > 0) {
-        s.hw = t1.scrollWidth / 2;
-        s.positions[1] = s.hw / 2;
+      if (!s.hw1 || !s.hw2) {
+        updateHalfWidths();
       }
 
       if (!s.isDragging && s.hoveredRow === null) {
@@ -66,18 +107,111 @@ export const AffiliatesTeaser = () => {
         if (Math.abs(s.velocity) < 0.05) s.velocity = 0;
       }
 
-      if (s.hw) {
-        const wrap0 = ((s.positions[0] % s.hw) + s.hw) % s.hw;
-        const wrap1 = ((s.positions[1] % s.hw) + s.hw) % s.hw;
-        t1.style.transform = `translateX(${wrap0 - s.hw}px)`;
+      if (s.hw1) {
+        const wrap0 = ((s.positions[0] % s.hw1) + s.hw1) % s.hw1;
+        t1.style.transform = `translateX(${wrap0 - s.hw1}px)`;
+      }
+      if (s.hw2) {
+        const wrap1 = ((s.positions[1] % s.hw2) + s.hw2) % s.hw2;
         t2.style.transform = `translateX(${-wrap1}px)`;
       }
 
       animRef.current = requestAnimationFrame(tick);
     };
 
+    const handleResize = () => {
+      updateHalfWidths();
+    };
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animRef.current);
+      } else {
+        cancelAnimationFrame(animRef.current);
+        animRef.current = requestAnimationFrame(tick);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
     animRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animRef.current);
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, []);
+
+  // Horizontal wheel & mobile touch gesture listeners
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+
+    // Trackpad horizontal swipe & Shift+Wheel support
+    const handleWheel = (e) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        stateRef.current.positions[0] += e.deltaX * 0.8;
+        stateRef.current.positions[1] += e.deltaX * 0.8;
+        stateRef.current.velocity = 0;
+      }
+    };
+
+    // Mobile touch gestures with vertical scroll pass-through
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchLastX = 0;
+    let isHorizontalSwipe = false;
+
+    const handleTouchStart = (e) => {
+      if (e.touches.length !== 1) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchLastX = touchStartX;
+      stateRef.current.velocity = 0;
+      stateRef.current.hasDragged = false;
+      isHorizontalSwipe = false;
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches.length !== 1) return;
+      const cx = e.touches[0].clientX;
+      const cy = e.touches[0].clientY;
+      const dx = cx - touchLastX;
+      const totalX = Math.abs(cx - touchStartX);
+      const totalY = Math.abs(cy - touchStartY);
+
+      if (!isHorizontalSwipe && totalX > 8 && totalX > totalY) {
+        isHorizontalSwipe = true;
+      }
+
+      if (isHorizontalSwipe) {
+        stateRef.current.hasDragged = true;
+        stateRef.current.positions[0] -= dx;
+        stateRef.current.positions[1] -= dx;
+        stateRef.current.velocity = -dx * 0.4;
+      }
+      touchLastX = cx;
+    };
+
+    const handleTouchEnd = () => {
+      setTimeout(() => {
+        stateRef.current.hasDragged = false;
+        stateRef.current.hoveredRow = null;
+        setHoveredAffId(null);
+      }, 80);
+    };
+
+    wrap.addEventListener('wheel', handleWheel, { passive: true });
+    wrap.addEventListener('touchstart', handleTouchStart, { passive: true });
+    wrap.addEventListener('touchmove', handleTouchMove, { passive: true });
+    wrap.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      wrap.removeEventListener('wheel', handleWheel);
+      wrap.removeEventListener('touchstart', handleTouchStart);
+      wrap.removeEventListener('touchmove', handleTouchMove);
+      wrap.removeEventListener('touchend', handleTouchEnd);
+    };
   }, []);
 
   const openDossier = (data) => {
@@ -87,12 +221,30 @@ export const AffiliatesTeaser = () => {
     if (data.altName) {
       setAltPersonaText(data.altName.toUpperCase());
     }
+    setTimeout(() => {
+      if (window.lenis) {
+        window.lenis.resize();
+        const dossierEl = document.getElementById('dossierPanel');
+        if (dossierEl) {
+          window.lenis.scrollTo(dossierEl, { offset: -90, duration: 1.2 });
+        }
+      }
+    }, 60);
   };
 
   const closeDossier = () => {
     setSelectedAffiliate(null);
     setAccessingName('');
     setShowingAlt(false);
+    setTimeout(() => {
+      if (window.lenis) {
+        window.lenis.resize();
+      }
+      const t1 = track1Ref.current;
+      const t2 = track2Ref.current;
+      if (t1 && t1.scrollWidth > 0) stateRef.current.hw1 = t1.scrollWidth / 2;
+      if (t2 && t2.scrollWidth > 0) stateRef.current.hw2 = t2.scrollWidth / 2;
+    }, 60);
   };
 
   const togglePersona = () => {
@@ -103,17 +255,22 @@ export const AffiliatesTeaser = () => {
   };
 
   const renderCard = (data, idx, rowNum) => {
-    const isAlt = showingAlt && selectedAffiliate?.name === data.name;
+    const isDossierOpenForThis = selectedAffiliate?.name === data.name;
+    const isAlt = isDossierOpenForThis ? showingAlt : data.altImage ? ravenShowingAlt : false;
+    const isGlitching = !isDossierOpenForThis && data.altImage ? ravenGlitching : false;
     const coverSrc = isAlt ? `/images/${data.altImage}` : data.image ? `/images/${data.image}` : null;
     const displayName = isAlt ? data.altName : data.name;
     const displayAccent = isAlt ? data.altAccent || data.accent : data.accent || '#ff6b00';
+    const isHovered = hoveredAffId === data.name;
+    const isDimmed = hoveredAffId !== null && !isHovered;
 
     return (
       <div
         key={`${rowNum}-${data.name}-${idx}`}
-        className="aff-panel"
+        className={`aff-panel ${isGlitching ? 'raven-glitch' : ''} ${isHovered ? 'aff-active' : ''} ${isDimmed ? 'aff-dimmed' : ''}`}
         style={{ '--accent': displayAccent }}
         data-aff-id={data.name}
+        onMouseEnter={() => setHoveredAffId(data.name)}
         onClick={() => {
           if (!stateRef.current.hasDragged) {
             openDossier(data);
@@ -193,29 +350,46 @@ export const AffiliatesTeaser = () => {
           }
           onPointerDown={(e) => {
             if (e.pointerType === 'touch') return;
+            try {
+              e.currentTarget.setPointerCapture(e.pointerId);
+            } catch (err) {}
             stateRef.current.isDragging = true;
             stateRef.current.hasDragged = false;
+            stateRef.current.dragStartX = e.clientX;
             stateRef.current.dragLastX = e.clientX;
             stateRef.current.velocity = 0;
             if (wrapRef.current) wrapRef.current.style.cursor = 'grabbing';
           }}
           onPointerMove={(e) => {
             if (!stateRef.current.isDragging || e.pointerType === 'touch') return;
+            const totalDx = Math.abs(e.clientX - stateRef.current.dragStartX);
+            if (totalDx > 6) stateRef.current.hasDragged = true;
             const dx = e.clientX - stateRef.current.dragLastX;
-            if (Math.abs(dx) > 6) stateRef.current.hasDragged = true;
             stateRef.current.positions[0] -= dx;
             stateRef.current.positions[1] -= dx;
             stateRef.current.velocity = -dx * 0.4;
             stateRef.current.dragLastX = e.clientX;
           }}
-          onPointerUp={() => {
+          onPointerUp={(e) => {
+            try {
+              e.currentTarget.releasePointerCapture(e.pointerId);
+            } catch (err) {}
             stateRef.current.isDragging = false;
             if (wrapRef.current) wrapRef.current.style.cursor = '';
+            setTimeout(() => {
+              stateRef.current.hasDragged = false;
+            }, 80);
           }}
-          onPointerCancel={() => {
+          onPointerCancel={(e) => {
+            try {
+              e.currentTarget.releasePointerCapture(e.pointerId);
+            } catch (err) {}
             stateRef.current.isDragging = false;
             stateRef.current.velocity = 0;
             if (wrapRef.current) wrapRef.current.style.cursor = '';
+            setTimeout(() => {
+              stateRef.current.hasDragged = false;
+            }, 80);
           }}
         >
           <div
@@ -225,6 +399,7 @@ export const AffiliatesTeaser = () => {
             }}
             onMouseLeave={() => {
               stateRef.current.hoveredRow = null;
+              setHoveredAffId(null);
             }}
           >
             <div className="aff-marquee-track" ref={track1Ref}>
@@ -240,6 +415,7 @@ export const AffiliatesTeaser = () => {
             }}
             onMouseLeave={() => {
               stateRef.current.hoveredRow = null;
+              setHoveredAffId(null);
             }}
           >
             <div className="aff-marquee-track" ref={track2Ref}>
@@ -265,17 +441,21 @@ export const AffiliatesTeaser = () => {
                       alt={activeName}
                       decoding="async"
                       onError={(e) => {
-                        e.target.parentElement.innerHTML =
-                          '<div class="dossier-photo-placeholder">IMAGE_DATA<br/>NOT_FOUND</div>';
+                        e.target.style.display = 'none';
+                        if (e.target.nextElementSibling) {
+                          e.target.nextElementSibling.style.display = 'flex';
+                        }
                       }}
                     />
-                  ) : (
-                    <div className="dossier-photo-placeholder">
-                      IMAGE_DATA
-                      <br />
-                      NOT_FOUND
-                    </div>
-                  )}
+                  ) : null}
+                  <div
+                    className="dossier-photo-placeholder"
+                    style={{ display: activeImage ? 'none' : 'flex' }}
+                  >
+                    IMAGE_DATA
+                    <br />
+                    NOT_FOUND
+                  </div>
                 </div>
               </div>
 

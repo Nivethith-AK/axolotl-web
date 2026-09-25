@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
 
@@ -31,6 +32,7 @@ export const MusicSection = () => {
                 frameBorder="0"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                 allowFullScreen
+                loading="lazy"
               ></iframe>
             </div>
             <div className="frame-bar bottom-bar">
@@ -96,6 +98,17 @@ export const MusicSection = () => {
             </div>
             <div className="frame-bar bottom-bar">ISRC: LK-AAA-24-00001</div>
           </div>
+        </div>
+
+        <div className="ext-link-row mt-4" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center' }}>
+          <Link to="/discography" className="ext-link" style={{ textDecoration: 'none' }}>
+            <span className="prompt">&gt;&gt;&gt;</span> Full_Discography :=
+            <span className="value">Open /DISCOGRAPHY Timeline</span>
+          </Link>
+          <Link to="/music" className="ext-link" style={{ textDecoration: 'none' }}>
+            <span className="prompt">&gt;&gt;&gt;</span> Standalone_Feed :=
+            <span className="value">Open /MUSIC Stream</span>
+          </Link>
         </div>
       </div>
     </section>

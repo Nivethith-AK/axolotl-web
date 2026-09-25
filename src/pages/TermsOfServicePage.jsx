@@ -24,7 +24,11 @@ export const TermsOfServicePage = () => {
 
   useEffect(() => {
     document.title = t('page_title.tos', 'Δxolotl // Terms of Service');
-    window.scrollTo(0, 0);
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, [t]);
 
   // Scroll spy
@@ -71,7 +75,11 @@ export const TermsOfServicePage = () => {
     setMobileNavOpen(false);
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      if (window.lenis) {
+        window.lenis.scrollTo(el, { offset: -90, duration: 1.6 });
+      } else {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 

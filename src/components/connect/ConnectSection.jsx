@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
 
@@ -97,6 +98,17 @@ export const ConnectSection = () => {
               </div>
             </a>
           </div>
+        </div>
+
+        <div className="ext-link-row mt-4" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center' }}>
+          <Link to="/connect" className="ext-link" style={{ textDecoration: 'none' }}>
+            <span className="prompt">&gt;&gt;&gt;</span> Neural_Transmission :=
+            <span className="value">Open /CONNECT [All Channels &amp; Matrix]</span>
+          </Link>
+          <Link to="/terms-of-service" className="ext-link" style={{ textDecoration: 'none' }}>
+            <span className="prompt">&gt;&gt;&gt;</span> Protocol_Legal :=
+            <span className="value">Open /TERMS_OF_SERVICE</span>
+          </Link>
         </div>
       </div>
     </section>

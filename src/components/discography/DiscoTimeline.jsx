@@ -71,6 +71,38 @@ export const DiscoTimeline = ({ onSelectTrack, isModalOpen }) => {
     if (trackRef.current) trackRef.current.classList.remove('is-dragging');
   };
 
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const handleWheel = (e) => {
+      if (window.innerWidth <= 768) return;
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        const canScrollLeft = track.scrollLeft > 2;
+        const canScrollRight = track.scrollLeft < track.scrollWidth - track.clientWidth - 4;
+
+        if ((e.deltaY < 0 && canScrollLeft) || (e.deltaY > 0 && canScrollRight)) {
+          e.preventDefault();
+          track.scrollLeft += e.deltaY;
+        }
+      }
+    };
+
+    const handleGlobalMouseUp = () => {
+      if (dragRef.current.isDown) {
+        dragRef.current.isDown = false;
+        if (trackRef.current) trackRef.current.classList.remove('is-dragging');
+      }
+    };
+
+    track.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+    return () => {
+      track.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, []);
+
   return (
     <div id="discoTimeline" className={isModalOpen ? 'dossier-mode' : ''} style={{ position: 'relative', zIndex: 3 }}>
       {/* Header */}
@@ -142,6 +174,7 @@ export const DiscoTimeline = ({ onSelectTrack, isModalOpen }) => {
             <div
               className="htl-scroll-track"
               id="htlScrollTrack"
+              data-lenis-prevent
               ref={trackRef}
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}

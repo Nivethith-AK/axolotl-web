@@ -23,6 +23,11 @@ export const AffiliatesPage = () => {
 
   useEffect(() => {
     document.title = t('page_title.affiliates', 'Δxolotl // Affiliates');
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, [t]);
 
   // Sort data by tier then name
@@ -50,16 +55,23 @@ export const AffiliatesPage = () => {
 
   // Grid column count detection for NO_SIGNAL padding
   useEffect(() => {
+    let resizeTimer;
     const updateCols = () => {
       if (!gridRef.current) return;
-      const cols = window
-        .getComputedStyle(gridRef.current)
-        .gridTemplateColumns.split(' ').length;
+      const val = window.getComputedStyle(gridRef.current).gridTemplateColumns;
+      const cols = val ? val.split(' ').filter(Boolean).length : 1;
       setColumnCount(Math.max(1, cols));
     };
     updateCols();
-    window.addEventListener('resize', updateCols);
-    return () => window.removeEventListener('resize', updateCols);
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateCols, 80);
+    };
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   // Compute NO_SIGNAL padding for 'all' filter

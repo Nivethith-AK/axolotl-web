@@ -4,7 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 
 export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, transitionState } = useTheme();
   const { t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
@@ -14,10 +14,14 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
   const [unknownText, setUnknownText] = useState('/UNKNOWN');
 
   const isIndex = location.pathname === '/';
+  const onAbout = location.pathname.startsWith('/about');
+  const onMusic = location.pathname.startsWith('/music');
+  const onPortfolio = location.pathname.startsWith('/portfolio');
   const onDisco = location.pathname.startsWith('/discography');
   const onWorks = location.pathname.startsWith('/works');
-  const onTos = location.pathname.startsWith('/terms');
   const onAffiliates = location.pathname.startsWith('/affiliates');
+  const onConnect = location.pathname.startsWith('/connect');
+  const onTos = location.pathname.startsWith('/terms');
 
   const navLinksRef = useRef(null);
   const togglerRef = useRef(null);
@@ -100,7 +104,11 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
   const handleLogoClick = (e) => {
     if (isIndex) {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.lenis) {
+        window.lenis.scrollTo(0, { duration: 1.8 });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       if (onHomeClick) onHomeClick();
     }
     closeNav();
@@ -114,7 +122,11 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
         el.classList.add('is-visible');
         el.style.opacity = '1';
         el.style.transform = 'translateY(0)';
-        el.scrollIntoView({ behavior: 'smooth' });
+        if (window.lenis) {
+          window.lenis.scrollTo(el, { offset: -60, duration: 1.8 });
+        } else {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     }
     closeNav();
@@ -164,7 +176,7 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
 
       <div className="nav-right">
         <button
-          className="nav-icon-btn"
+          className={`nav-icon-btn ${transitionState?.active ? 'switching' : ''}`}
           id="modeToggle"
           aria-label="Toggle theme"
           onClick={toggleTheme}
@@ -202,132 +214,101 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
       </div>
 
       <div ref={navLinksRef} className={`nav-links ${navOpen ? 'open' : ''}`} id="navLinks">
-        {isIndex ? (
-          <>
-            <a
-              href="#hero"
-              className="nav-link-item"
-              data-i18n="nav.home"
-              onClick={(e) => {
-                handleLogoClick(e);
-                closeNav();
-              }}
-            >
-              {t('nav.home', '//_HOME')}
-            </a>
-            <a
-              href="#about"
-              className="nav-link-item"
-              data-i18n="nav.about"
-              onClick={(e) => handleSectionClick(e, 'about')}
-            >
-              {t('nav.about', '/ABOUT')}
-            </a>
-            <a
-              href="#music"
-              className="nav-link-item"
-              data-i18n="nav.music"
-              onClick={(e) => handleSectionClick(e, 'music')}
-            >
-              {t('nav.music', '/MUSIC')}
-            </a>
-            <a
-              href="#portfolio"
-              className="nav-link-item"
-              data-i18n="nav.portfolio"
-              onClick={(e) => handleSectionClick(e, 'portfolio')}
-            >
-              {t('nav.portfolio', '/PORTFOLIO')}
-            </a>
-            <a
-              href="#affiliates"
-              className="nav-link-item"
-              data-i18n="nav.affiliates"
-              onClick={(e) => handleSectionClick(e, 'affiliates')}
-            >
-              {t('nav.affiliates', '/AFFILIATES')}
-            </a>
-            <a
-              href="#connect"
-              className="nav-link-item"
-              data-i18n="nav.connect"
-              onClick={(e) => handleSectionClick(e, 'connect')}
-            >
-              {t('nav.connect', '/CONNECT')}
-            </a>
-            <a
-              href="#hero"
-              className="nav-link-item"
-              id="navMoreBtn"
-              data-i18n="nav.more"
-              onClick={(e) => {
-                e.preventDefault();
-                closeNav();
-                const hero = document.getElementById('hero');
-                if (hero) hero.scrollIntoView({ behavior: 'smooth' });
-                if (onMoreClick) onMoreClick();
-              }}
-            >
-              {t('nav.more', '/MORE')}
-            </a>
-          </>
-        ) : (
-          <>
-            <Link to="/" className="nav-link-item" data-i18n="nav.home" onClick={closeNav}>
-              {t('nav.home', '//_HOME')}
-            </Link>
-            <Link
-              to="/discography"
-              className={`nav-link-item ${onDisco ? 'active' : ''}`}
-              data-i18n="nav.discography"
-              onClick={closeNav}
-            >
-              {t('nav.discography', '/DISCOGRAPHY')}
-            </Link>
-            <Link
-              to="/works"
-              className={`nav-link-item ${onWorks ? 'active' : ''}`}
-              data-i18n="nav.works"
-              onClick={closeNav}
-            >
-              {t('nav.works', '/WORKS')}
-            </Link>
-            <Link
-              to="/terms-of-service"
-              className={`nav-link-item ${onTos ? 'active' : ''}`}
-              data-i18n="nav.tos"
-              onClick={closeNav}
-            >
-              {t('nav.tos', '/TERMS_OF_SERVICE')}
-            </Link>
-            <Link
-              to="/affiliates"
-              className={`nav-link-item ${onAffiliates ? 'active' : ''}`}
-              data-i18n="nav.affiliates_page"
-              onClick={closeNav}
-            >
-              {t('nav.affiliates_page', '/AFFILIATES')}
-            </Link>
-            <a
-              href="#"
-              className="nav-link-item"
-              id="navShopLink"
-              data-i18n="nav.shop"
-              onClick={(e) => handleGlitchLink(e, t('nav.shop', '/SHOP'), setShopText)}
-            >
-              {shopText}
-            </a>
-            <a
-              href="#"
-              className="nav-link-item"
-              id="navUnknownLink"
-              data-i18n="nav.unknown"
-              onClick={(e) => handleGlitchLink(e, t('nav.unknown', '/UNKNOWN'), setUnknownText)}
-            >
-              {unknownText}
-            </a>
-          </>
-        )}
+        <Link
+          to="/"
+          className={`nav-link-item ${isIndex ? 'active' : ''}`}
+          data-i18n="nav.home"
+          onClick={(e) => {
+            if (isIndex) {
+              handleLogoClick(e);
+            }
+            closeNav();
+          }}
+        >
+          {t('nav.home', '//_HOME')}
+        </Link>
+        <Link
+          to="/about"
+          className={`nav-link-item ${onAbout ? 'active' : ''}`}
+          data-i18n="nav.about"
+          onClick={closeNav}
+        >
+          {t('nav.about', '/ABOUT')}
+        </Link>
+        <Link
+          to="/music"
+          className={`nav-link-item ${onMusic ? 'active' : ''}`}
+          data-i18n="nav.music"
+          onClick={closeNav}
+        >
+          {t('nav.music', '/MUSIC')}
+        </Link>
+        <Link
+          to="/portfolio"
+          className={`nav-link-item ${onPortfolio ? 'active' : ''}`}
+          data-i18n="nav.portfolio"
+          onClick={closeNav}
+        >
+          {t('nav.portfolio', '/PORTFOLIO')}
+        </Link>
+        <Link
+          to="/discography"
+          className={`nav-link-item ${onDisco ? 'active' : ''}`}
+          data-i18n="nav.discography"
+          onClick={closeNav}
+        >
+          {t('nav.discography', '/DISCOGRAPHY')}
+        </Link>
+        <Link
+          to="/works"
+          className={`nav-link-item ${onWorks ? 'active' : ''}`}
+          data-i18n="nav.works"
+          onClick={closeNav}
+        >
+          {t('nav.works', '/WORKS')}
+        </Link>
+        <Link
+          to="/affiliates"
+          className={`nav-link-item ${onAffiliates ? 'active' : ''}`}
+          data-i18n="nav.affiliates"
+          onClick={closeNav}
+        >
+          {t('nav.affiliates', '/AFFILIATES')}
+        </Link>
+        <Link
+          to="/connect"
+          className={`nav-link-item ${onConnect ? 'active' : ''}`}
+          data-i18n="nav.connect"
+          onClick={closeNav}
+        >
+          {t('nav.connect', '/CONNECT')}
+        </Link>
+        <Link
+          to="/terms-of-service"
+          className={`nav-link-item ${onTos ? 'active' : ''}`}
+          data-i18n="nav.tos"
+          onClick={closeNav}
+        >
+          {t('nav.tos', '/TERMS_OF_SERVICE')}
+        </Link>
+        <a
+          href="#"
+          className="nav-link-item"
+          id="navShopLink"
+          data-i18n="nav.shop"
+          onClick={(e) => handleGlitchLink(e, t('nav.shop', '/SHOP'), setShopText)}
+        >
+          {shopText}
+        </a>
+        <a
+          href="#"
+          className="nav-link-item"
+          id="navUnknownLink"
+          data-i18n="nav.unknown"
+          onClick={(e) => handleGlitchLink(e, t('nav.unknown', '/UNKNOWN'), setUnknownText)}
+        >
+          {unknownText}
+        </a>
       </div>
     </nav>
   );

@@ -137,13 +137,15 @@ export const AboutGallery = () => {
           &#8592;
         </button>
         {Array.from({ length: total }, (_, i) => (
-          <div
+          <button
             key={i}
+            type="button"
             className={`ag-dot ${i === ri ? 'active' : ''}`}
+            aria-label={`Go to slide ${i + 1}`}
             onClick={() => {
               if (!isAnimating) goTo(i + 1);
             }}
-          ></div>
+          ></button>
         ))}
         <button
           type="button"

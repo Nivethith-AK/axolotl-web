@@ -96,8 +96,7 @@ export const DiscoMarquee = ({ isVisible }) => {
   };
 
   const handleWheel = (e) => {
-    e.preventDefault();
-    stateRef.current.position += e.deltaY * 0.9;
+    stateRef.current.position += (e.deltaX || e.deltaY) * 0.7;
     stateRef.current.velocity = 0;
   };
 

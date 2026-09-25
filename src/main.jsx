@@ -10,7 +10,7 @@ import './styles/works.css';
 import './styles/discography.css';
 import './styles/affiliates.css';
 import './styles/tos.css';
-import './styles/scroll-area.css';
+import './styles/tailwind.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
 import { AboutGallery } from './AboutGallery';
@@ -26,6 +27,12 @@ export const About = () => {
               data-i18n-html="about.p2"
               dangerouslySetInnerHTML={{ __html: t('about.p2', defaultP2) }}
             ></p>
+            <div style={{ marginTop: '1.4rem' }}>
+              <Link to="/about" className="ext-link" style={{ textDecoration: 'none' }}>
+                <span className="prompt">&gt;&gt;&gt;</span> Dossier :=
+                <span className="value">Open /ABOUT [Capabilities Profile]</span>
+              </Link>
+            </div>
           </div>
 
           {/* Right: gallery */}

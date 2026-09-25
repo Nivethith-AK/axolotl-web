@@ -8,7 +8,11 @@ export const WorksPage = () => {
 
   useEffect(() => {
     document.title = t('page_title.works', 'Δxolotl // Works');
-    window.scrollTo(0, 0);
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, [t]);
 
   return (

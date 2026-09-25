@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AFFILIATES_DATA, toSlug as toAffiliateSlug } from '../../data/affiliatesData';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea } from '../ui/scroll-area';
 
 export const DiscoModal = ({ track, onClose }) => {
   const navigate = useNavigate();
@@ -11,7 +11,12 @@ export const DiscoModal = ({ track, onClose }) => {
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    if (window.lenis) window.lenis.stop();
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      if (window.lenis) window.lenis.start();
+    };
   }, [onClose]);
 
   if (!track) return null;
@@ -59,11 +64,12 @@ export const DiscoModal = ({ track, onClose }) => {
       id="discoModalBackdrop"
       role="dialog"
       aria-modal="true"
+      data-lenis-prevent=""
       onClick={(e) => {
         if (e.target.id === 'discoModalBackdrop') onClose();
       }}
     >
-      <div className="disco-modal" id="discoModal">
+      <div className="disco-modal" id="discoModal" data-lenis-prevent="">
         <div className="disco-modal-hdr">
           <span className="disco-modal-subline">
             NODE_ARCHIVE // AUDIO_LOG:{' '}
@@ -94,14 +100,23 @@ export const DiscoModal = ({ track, onClose }) => {
               alt={track.title}
               decoding="async"
               onError={(e) => {
-                e.target.parentElement.innerHTML =
-                  '<div class="disco-modal-photo-placeholder">NO_COVER_DATA</div>';
+                e.target.style.display = 'none';
+                if (e.target.nextElementSibling) {
+                  e.target.nextElementSibling.style.display = 'flex';
+                }
               }}
             />
+            <div className="disco-modal-photo-placeholder" style={{ display: 'none' }}>
+              NO_COVER_DATA
+            </div>
           </div>
         </div>
 
-        <ScrollArea className="disco-modal-info-col">
+        <ScrollArea
+          className="disco-modal-info-col"
+          viewportClassName="disco-modal-info-scroll"
+          thumbStyle={{ background: accentColor, boxShadow: `0 0 8px ${accentColor}` }}
+        >
           <div className="disco-modal-name" style={{ color: accentColor }}>
             {track.title}
           </div>

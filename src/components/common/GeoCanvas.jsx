@@ -23,8 +23,17 @@ export const GeoCanvas = () => {
       canvas.style.height = H + 'px';
       ctx.scale(dpr, dpr);
     };
+
+    let resizeRaf = null;
+    const handleResize = () => {
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => {
+        resizeRaf = null;
+        resize();
+      });
+    };
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', handleResize, { passive: true });
 
     const rand = (a, b) => a + Math.random() * (b - a);
     const randI = (a, b) => Math.floor(rand(a, b));
@@ -245,7 +254,8 @@ export const GeoCanvas = () => {
     draw();
 
     return () => {
-      window.removeEventListener('resize', resize);
+      if (resizeRaf) cancelAnimationFrame(resizeRaf);
+      window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibility);
       clearTimeout(glitchTimeoutId);
       cancelAnimationFrame(animId);

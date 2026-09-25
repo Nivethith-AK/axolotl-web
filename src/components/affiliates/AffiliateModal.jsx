@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toSlug } from '../../data/affiliatesData';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea } from '../ui/scroll-area';
 
 const COUNTRY_FLAGS = {
   japan: 'jp', japanese: 'jp',
@@ -65,7 +65,12 @@ export const AffiliateModal = ({ person, onClose }) => {
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    if (window.lenis) window.lenis.stop();
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      if (window.lenis) window.lenis.start();
+    };
   }, [onClose]);
 
   if (!person) return null;
@@ -119,11 +124,12 @@ export const AffiliateModal = ({ person, onClose }) => {
       id="affModalBackdrop"
       role="dialog"
       aria-modal="true"
+      data-lenis-prevent=""
       onClick={(e) => {
         if (e.target.id === 'affModalBackdrop') onClose();
       }}
     >
-      <div className="aff-modal" id="affModal">
+      <div className="aff-modal" id="affModal" data-lenis-prevent="">
         <div className="aff-modal-hdr">
           <span className="aff-modal-subline">
             <span className="aff-hdr-desktop">Collaborative network: // Accessing Dossier: </span>
@@ -164,7 +170,11 @@ export const AffiliateModal = ({ person, onClose }) => {
           </div>
         </div>
 
-        <ScrollArea className="aff-modal-info-col">
+        <ScrollArea
+          className="aff-modal-info-col"
+          viewportClassName="aff-modal-info-scroll"
+          thumbStyle={{ background: currentAccent, boxShadow: `0 0 8px ${currentAccent}` }}
+        >
           <div className="aff-modal-name-row">
             <div
               className="aff-modal-name"

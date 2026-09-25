@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
 import { PORTFOLIO_DATA } from '../../data/portfolioData';
@@ -24,13 +25,12 @@ export const PortfolioSection = () => {
   const [isMobileAnimating, setIsMobileAnimating] = useState(false);
   const mobileTrackRef = useRef(null);
   const mobileStartRef = useRef(0);
-
-  // Desktop Marquee overflow measurement
   const desktopGridRef = useRef(null);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!desktopGridRef.current) return;
-      desktopGridRef.current.querySelectorAll('.frame-bar-value-viewport').forEach((viewport) => {
+
+  const applyMarquee = (container) => {
+    if (!container) return;
+    setTimeout(() => {
+      container.querySelectorAll('.frame-bar-value-viewport').forEach((viewport) => {
         const valueEl = viewport.querySelector('.frame-bar-value');
         if (!valueEl) return;
         const overflow = valueEl.scrollWidth - viewport.clientWidth;
@@ -43,8 +43,27 @@ export const PortfolioSection = () => {
         }
       });
     }, 120);
-    return () => clearTimeout(timer);
+  };
+
+  // Desktop Marquee overflow measurement
+  useEffect(() => {
+    applyMarquee(desktopGridRef.current);
   }, [currentPageDesktop]);
+
+  // Mobile Marquee overflow measurement
+  useEffect(() => {
+    applyMarquee(mobileTrackRef.current);
+  }, [currentMobileSlot]);
+
+  // Window resize measurement
+  useEffect(() => {
+    const handleResize = () => {
+      applyMarquee(desktopGridRef.current);
+      applyMarquee(mobileTrackRef.current);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Mobile carousel navigation
   const goToMobileSlot = (slot, animated = true) => {
@@ -71,6 +90,7 @@ export const PortfolioSection = () => {
 
   useEffect(() => {
     goToMobileSlot(1, false);
+    applyMarquee(mobileTrackRef.current);
   }, []);
 
   const renderFacade = (item) => (
@@ -132,11 +152,20 @@ export const PortfolioSection = () => {
             &#8592;
           </button>
 
-          <div className="portfolio-video-grid row gx-3 gy-3" id="portfolioGrid" ref={desktopGridRef}>
+          <div
+            key={currentPageDesktop}
+            className="portfolio-video-grid row gx-3 gy-3"
+            id="portfolioGrid"
+            ref={desktopGridRef}
+          >
             {currentItemsDesktop.map((item, i) => {
               const globalIndex = startDesktop + i;
               return (
-                <div key={item.youtubeId} className="portfolio-video-item col-lg-3">
+                <div
+                  key={item.youtubeId}
+                  className="portfolio-video-item col-lg-3"
+                  style={{ '--item-idx': i }}
+                >
                   <div
                     className="frame-bar top-bar"
                     title={`PRJ_${pad(globalIndex + 1)} // ${item.label}`}
@@ -160,11 +189,13 @@ export const PortfolioSection = () => {
             {/* Locked Placeholders */}
             {Array.from({ length: padCountDesktop }).map((_, i) => {
               const globalIndex = startDesktop + currentItemsDesktop.length + i;
+              const idx = currentItemsDesktop.length + i;
               return (
                 <div
                   key={`locked-${i}`}
                   className="portfolio-video-item encrypted-slot col-lg-3"
                   data-placeholder="true"
+                  style={{ '--item-idx': idx }}
                 >
                   <div className="frame-bar top-bar">PRJ_{pad(globalIndex + 1)} // [LOCKED]</div>
                   <div className="encrypted-bg">
@@ -304,8 +335,8 @@ export const PortfolioSection = () => {
           </div>
         </div>
 
-        {/* External Foriio Link */}
-        <div className="ext-link-row mt-4">
+        {/* External Foriio Link & Standalone Portfolio Route Link */}
+        <div className="ext-link-row mt-4" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center' }}>
           <a
             href="https://foriio.com/theaxolotlmusic"
             target="_blank"
@@ -321,9 +352,18 @@ export const PortfolioSection = () => {
               width="16"
               height="16"
             />
-            <span className="prompt">&gt;&gt;&gt;</span> Full_Portfolio :=
+            <span className="prompt">&gt;&gt;&gt;</span> External_Archive :=
             <span className="value">Foriio</span>
           </a>
+
+          <Link
+            to="/portfolio"
+            className="ext-link"
+            style={{ textDecoration: 'none' }}
+          >
+            <span className="prompt">&gt;&gt;&gt;</span> Standalone_Archive :=
+            <span className="value">Open /PORTFOLIO [All Projects &amp; Filters]</span>
+          </Link>
         </div>
       </div>
     </section>
