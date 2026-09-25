@@ -14,9 +14,9 @@ export const ThemeTransitionOverlay = () => {
       aria-hidden="true"
     >
       <div className="theme-transition-raster"></div>
-      <div className="theme-transition-flash"></div>
-      <div className="theme-transition-glitch"></div>
-      <div className="theme-transition-beam"></div>
+      <div className="theme-transition-glitch-tear"></div>
+      <div className="theme-transition-chromatic"></div>
+      <div className="theme-transition-scanline"></div>
       <div className="theme-telemetry-badge">
         <span className="theme-badge-dot"></span>
         <span>

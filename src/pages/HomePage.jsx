@@ -6,7 +6,6 @@ import { MusicSection } from '../components/music/MusicSection';
 import { PortfolioSection } from '../components/portfolio/PortfolioSection';
 import { AffiliatesTeaser } from '../components/affiliates/AffiliatesTeaser';
 import { ConnectSection } from '../components/connect/ConnectSection';
-import { SignalBoard } from '../components/home/SignalBoard';
 
 export const HomePage = ({ revealTrigger, onResetRevealTrigger }) => {
   const location = useLocation();
@@ -36,7 +35,6 @@ export const HomePage = ({ revealTrigger, onResetRevealTrigger }) => {
         onResetRevealTrigger={onResetRevealTrigger}
       />
       <About />
-      <SignalBoard />
       <MusicSection />
       <PortfolioSection />
       <AffiliatesTeaser />

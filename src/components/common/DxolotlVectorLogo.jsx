@@ -45,7 +45,7 @@ export const DxolotlVectorLogo = ({
         justifyContent: 'center',
       }}
     >
-      {/* Glitch Shadow Clone 1 */}
+      {/* Glitch Shadow Clone 1 (Orange slice) */}
       {isGlitching && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -56,6 +56,25 @@ export const DxolotlVectorLogo = ({
           aria-hidden="true"
         >
           <g fill="none" stroke="var(--accent, #ff6b00)" strokeLinecap="round" strokeLinejoin="round" opacity="0.85">
+            <line x1="382" y1="38" x2="382" y2="726" strokeWidth="36" />
+            <line x1="108" y1="382" x2="656" y2="382" strokeWidth="36" />
+            <circle cx="382" cy="382" r="158" strokeWidth="38" />
+            <path d="M 382 224 L 519 457 L 245 457 Z" strokeWidth="38" />
+          </g>
+        </svg>
+      )}
+
+      {/* Glitch Shadow Clone 2 (Cyan chromatic slice) */}
+      {isGlitching && (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 764 764"
+          width={size}
+          height={size}
+          className="dxo-glitch-clone dxo-glitch-clone-2"
+          aria-hidden="true"
+        >
+          <g fill="none" stroke="#00dde9" strokeLinecap="round" strokeLinejoin="round" opacity="0.8">
             <line x1="382" y1="38" x2="382" y2="726" strokeWidth="36" />
             <line x1="108" y1="382" x2="656" y2="382" strokeWidth="36" />
             <circle cx="382" cy="382" r="158" strokeWidth="38" />
