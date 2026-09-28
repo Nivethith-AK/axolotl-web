@@ -773,7 +773,6 @@ button:focus-visible {
 }
 .big-button:hover .hero-logo {
   border-color: var(--accent);
-  animation: heroLogoGlitchHover 0.35s steps(2) infinite;
 }
 .big-button:hover .btn-hint-ring-text {
   fill: #fff;
@@ -1303,10 +1302,95 @@ p {
 
 
 /* =========================================
-   PORTFOLIO GRID
+   PORTFOLIO GRID & PAGING TRANSITIONS
    ========================================= */
 .portfolio-video-grid {
   margin-top: 0;
+  transition: opacity 0.13s ease, transform 0.13s cubic-bezier(0.4, 0, 1, 1);
+  will-change: opacity, transform;
+}
+
+.portfolio-video-grid.is-paging-out.dir-next {
+  opacity: 0;
+  transform: translateX(-24px);
+  pointer-events: none;
+}
+
+.portfolio-video-grid.is-paging-out.dir-prev {
+  opacity: 0;
+  transform: translateX(24px);
+  pointer-events: none;
+}
+
+@keyframes portfolioSlideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes portfolioSlideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.portfolio-video-grid.is-paging-in.dir-next .portfolio-video-item {
+  animation: portfolioSlideInFromRight 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--item-idx, 0) * 20ms);
+}
+
+.portfolio-video-grid.is-paging-in.dir-prev .portfolio-video-item {
+  animation: portfolioSlideInFromLeft 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--item-idx, 0) * 20ms);
+}
+
+/* Full Portfolio Page Filtering */
+.portfolio-full-grid {
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.portfolio-full-grid.is-filtering-out {
+  opacity: 0.15;
+  transform: translateY(6px);
+  pointer-events: none;
+}
+
+@keyframes portfolioCardCascadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.portfolio-full-grid.is-filtering-in .portfolio-card {
+  animation: portfolioCardCascadeIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--stagger-idx, 0) * 20ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-video-grid,
+  .portfolio-video-grid.is-paging-in.dir-next .portfolio-video-item,
+  .portfolio-video-grid.is-paging-in.dir-prev .portfolio-video-item,
+  .portfolio-full-grid,
+  .portfolio-full-grid.is-filtering-in .portfolio-card {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
 }
 .portfolio-filter-status {
   display: flex;
@@ -1397,6 +1481,11 @@ p {
   letter-spacing: 2px;
   color: var(--text-6, #888);
   text-transform: uppercase;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.portfolio-pager-counter.is-changing {
+  opacity: 0.25;
+  transform: scale(0.96);
 }
 
 /* Desktop pager grid vs. mobile swipeable carousel — only one is
@@ -2774,6 +2863,8 @@ p {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  cursor: default;
+  user-select: none;
 }
 .boot-scanlines {
   position: absolute;
@@ -3674,18 +3765,23 @@ img.dossier-photo.raven-glitch-img {
    CYBERPUNK THEME TRANSITION EFFECT
    ========================================= */
 
-/* Smooth color interpolation during theme toggle across all elements */
-html.theme-transitioning,
-html.theme-transitioning *,
-html.theme-transitioning *::before,
-html.theme-transitioning *::after {
+/* Smooth color interpolation during theme toggle across major layout containers */
+html.theme-transitioning body,
+html.theme-transitioning nav,
+html.theme-transitioning main,
+html.theme-transitioning footer,
+html.theme-transitioning .section,
+html.theme-transitioning .container,
+html.theme-transitioning .container-lg,
+html.theme-transitioning .card,
+html.theme-transitioning .frame-bar,
+html.theme-transitioning .nav-links,
+html.theme-transitioning button,
+html.theme-transitioning a {
   transition:
-    background-color 0.35s ease,
-    border-color 0.35s ease,
-    color 0.35s ease,
-    fill 0.35s ease,
-    stroke 0.35s ease,
-    outline-color 0.35s ease !important;
+    background-color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 /* Fullscreen Cyberpunk Overlay */
@@ -3701,55 +3797,15 @@ html.theme-transitioning *::after {
   display: block;
 }
 
-/* CRT Scanline Raster */
-.theme-transition-raster {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.28),
-    rgba(0, 0, 0, 0.28) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  opacity: 0;
-  animation: themeRasterGlitch 0.45s steps(2) forwards;
-}
-
-/* Fullscreen Stepped Glitch Tear Slice */
-.theme-transition-glitch-tear {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: transparent;
-  animation: themeGlitchTear 0.42s steps(1) forwards;
-}
-
-/* Chromatic Aberration RGB Channel Offset */
-.theme-transition-chromatic {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  animation: themeChromaticSplit 0.4s steps(2) forwards;
-}
-
-.theme-transition-overlay.to-dark .theme-transition-chromatic {
-  box-shadow: inset 8px 0 0 rgba(0, 221, 233, 0.3), inset -8px 0 0 rgba(255, 107, 0, 0.3);
-}
-
-.theme-transition-overlay.to-light .theme-transition-chromatic {
-  box-shadow: inset 8px 0 0 rgba(255, 107, 0, 0.3), inset -8px 0 0 rgba(0, 221, 233, 0.3);
-}
-
-/* Sharp Traveling Matrix Scanline (Zero Glow) */
+/* Sharp Traveling Matrix Scanline (Zero Glow, Hardware Accelerated) */
 .theme-transition-scanline {
   position: absolute;
   left: 0;
   right: 0;
   height: 2px;
   top: 0;
-  animation: themeScanlineTravel 0.38s steps(24) forwards;
+  will-change: transform, opacity;
+  animation: themeScanlineTravel 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .theme-transition-overlay.to-dark .theme-transition-scanline {
   background: #00dde9;
@@ -3773,7 +3829,8 @@ html.theme-transitioning *::after {
   display: flex;
   align-items: center;
   gap: 8px;
-  animation: themeBadgeGlitchSnap 0.45s steps(3) forwards;
+  will-change: opacity, transform;
+  animation: themeBadgeGlitchSnap 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .theme-transition-overlay.to-dark .theme-telemetry-badge {
   border-color: #00dde9;
@@ -3787,7 +3844,7 @@ html.theme-transitioning *::after {
   width: 6px;
   height: 6px;
   border-radius: 0;
-  animation: themeDotBlink 0.15s steps(1) infinite alternate;
+  animation: themeDotBlink 0.14s steps(1) infinite alternate;
 }
 .theme-transition-overlay.to-dark .theme-badge-dot {
   background: #00dde9;
@@ -3796,35 +3853,12 @@ html.theme-transitioning *::after {
   background: #ff6b00;
 }
 
-/* Mode Button Digital Glitch Animation (Zero Glow) */
-#modeToggle.switching {
-  animation: modeToggleGlitch 0.4s steps(2);
+/* Mode Button Smooth Rotation */
+#modeToggle img {
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
 }
-@keyframes modeToggleGlitch {
-  0% {
-    transform: scale(1) translate(0, 0);
-    filter: none;
-  }
-  20% {
-    transform: scale(1.1) translate(-2px, 2px);
-    filter: drop-shadow(2px 0 0 #00dde9) drop-shadow(-2px 0 0 #ff6b00);
-  }
-  40% {
-    transform: scale(1.05) translate(3px, -1px);
-    filter: none;
-  }
-  60% {
-    transform: scale(1.12) translate(-3px, -1px);
-    filter: drop-shadow(-2px 0 0 #00dde9) drop-shadow(2px 0 0 #ff6b00);
-  }
-  80% {
-    transform: scale(0.98) translate(1px, 1px);
-    filter: none;
-  }
-  100% {
-    transform: scale(1) translate(0, 0);
-    filter: none;
-  }
+#modeToggle.switching img {
+  transform: rotate(180deg) scale(0.92);
 }
 
 @keyframes themeScanlineTravel {
@@ -3832,7 +3866,7 @@ html.theme-transitioning *::after {
     transform: translateY(0);
     opacity: 1;
   }
-  95% {
+  90% {
     transform: translateY(100vh);
     opacity: 1;
   }
@@ -3842,82 +3876,21 @@ html.theme-transitioning *::after {
   }
 }
 
-@keyframes themeRasterGlitch {
-  0% { opacity: 0.55; }
-  25% { opacity: 0.15; }
-  50% { opacity: 0.45; }
-  75% { opacity: 0.2; }
-  100% { opacity: 0; }
-}
-
-@keyframes themeChromaticSplit {
-  0% { opacity: 0; }
-  15% { opacity: 0.9; }
-  35% { opacity: 0.3; }
-  60% { opacity: 0.8; }
-  85% { opacity: 0.2; }
-  100% { opacity: 0; }
-}
-
-@keyframes themeGlitchTear {
-  0% {
-    clip-path: inset(0 0 0 0);
-    transform: translate(0, 0);
-    background: transparent;
-  }
-  15% {
-    clip-path: inset(25% 0 45% 0);
-    transform: translate(-10px, 0);
-    background: rgba(0, 221, 233, 0.08);
-  }
-  30% {
-    clip-path: inset(60% 0 10% 0);
-    transform: translate(12px, 0);
-    background: rgba(255, 107, 0, 0.08);
-  }
-  45% {
-    clip-path: inset(10% 0 70% 0);
-    transform: translate(-8px, 0);
-    background: rgba(0, 0, 0, 0.12);
-  }
-  60% {
-    clip-path: inset(40% 0 35% 0);
-    transform: translate(6px, 0);
-    background: rgba(255, 255, 255, 0.06);
-  }
-  75% {
-    clip-path: inset(80% 0 5% 0);
-    transform: translate(-4px, 0);
-    background: transparent;
-  }
-  100% {
-    clip-path: inset(0 0 0 0);
-    transform: translate(0, 0);
-    background: transparent;
-  }
-}
-
 @keyframes themeBadgeGlitchSnap {
   0% {
-    transform: translateX(30px);
+    transform: translateX(20px);
     opacity: 0;
-    clip-path: inset(30% 0 20% 0);
   }
   20% {
-    transform: translateX(-4px);
+    transform: translateX(-3px);
     opacity: 1;
-    clip-path: inset(10% 0 50% 0);
-  }
-  40% {
-    transform: translateX(2px);
-    clip-path: none;
   }
   75% {
     transform: translateX(0);
     opacity: 1;
   }
   100% {
-    transform: translateX(20px);
+    transform: translateX(12px);
     opacity: 0;
   }
 }
@@ -3930,11 +3903,11 @@ html.theme-transitioning *::after {
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .theme-transition-scanline,
-  .theme-transition-glitch-tear,
-  .theme-transition-chromatic,
-  .theme-transition-raster,
   .theme-telemetry-badge {
     display: none !important;
+  }
+  #modeToggle img {
+    transition: none !important;
   }
 }
 

@@ -1364,42 +1364,44 @@ const TOS_HTML = `<div class="tos-content">
             >
           </div>
 
-          <table class="tos-table refund-table">
-            <thead>
-              <tr>
-                <th>Production Stage</th>
-                <th>Refund</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Not yet started</td>
-                <td><em>100%</em></td>
-                <td>Full refund, no conditions</td>
-              </tr>
-              <tr>
-                <td>Pre-production / concept development</td>
-                <td><em>50%</em></td>
-                <td>No deliverables sent</td>
-              </tr>
-              <tr>
-                <td>Active production</td>
-                <td><em>25%</em></td>
-                <td>No deliverables sent</td>
-              </tr>
-              <tr>
-                <td>Draft delivered &amp; approved</td>
-                <td><em>First instalment only - non-refundable</em></td>
-                <td>Work up to draft stage is billable</td>
-              </tr>
-              <tr>
-                <td>Final delivery &amp; Final Approval given</td>
-                <td><em>0%</em></td>
-                <td>Commission is closed</td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="tos-table-wrap">
+            <table className="tos-table refund-table">
+              <thead>
+                <tr>
+                  <th>Production Stage</th>
+                  <th>Refund</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Not yet started</td>
+                  <td><em>100%</em></td>
+                  <td>Full refund, no conditions</td>
+                </tr>
+                <tr>
+                  <td>Pre-production / concept development</td>
+                  <td><em>50%</em></td>
+                  <td>No deliverables sent</td>
+                </tr>
+                <tr>
+                  <td>Active production</td>
+                  <td><em>25%</em></td>
+                  <td>No deliverables sent</td>
+                </tr>
+                <tr>
+                  <td>Draft delivered &amp; approved</td>
+                  <td><em>First instalment only - non-refundable</em></td>
+                  <td>Work up to draft stage is billable</td>
+                </tr>
+                <tr>
+                  <td>Final delivery &amp; Final Approval given</td>
+                  <td><em>0%</em></td>
+                  <td>Commission is closed</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
           <div class="tos-clause">
             <span class="tos-clause-num">12.2</span>

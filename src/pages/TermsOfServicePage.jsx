@@ -4,16 +4,20 @@ import { TosContent } from '../components/tos/TosContent';
 
 const SECTIONS = [
   { id: 'tos-preamble', label: 'PREAMBLE', num: '' },
-  { id: 'tos-commissions', label: 'COMMISSION WORK', num: '01' },
-  { id: 'tos-non-commercial', label: 'NON-COMMERCIAL USAGE', num: '02' },
-  { id: 'tos-commercial', label: 'COMMERCIAL LICENSING', num: '03' },
-  { id: 'tos-attribution', label: 'ATTRIBUTION RULES', num: '04' },
-  { id: 'tos-ai', label: 'AI & DERIVATIVE WORK', num: '05' },
-  { id: 'tos-payment', label: 'PAYMENT & REFUNDS', num: '06' },
-  { id: 'tos-ip', label: 'INTELLECTUAL PROPERTY', num: '07' },
-  { id: 'tos-termination', label: 'TERMINATION OF RIGHTS', num: '08' },
-  { id: 'tos-complexity', label: 'COMPLEXITY MODEL', num: '09' },
-  { id: 'tos-legal', label: 'AMENDMENTS & LEGAL', num: '10' },
+  { id: 'tos-01', label: 'DEFINITIONS', num: '01' },
+  { id: 'tos-02', label: 'COMMISSIONING PROCESS', num: '02' },
+  { id: 'tos-03', label: 'CODE OF CONDUCT', num: '03' },
+  { id: 'tos-04', label: 'SCOPE OF SERVICES', num: '04' },
+  { id: 'tos-05', label: 'VARIATION ORDERS & CHANGES', num: '05' },
+  { id: 'tos-06', label: 'PRICING & BILLING', num: '06' },
+  { id: 'tos-07', label: 'PAYMENT TERMS', num: '07' },
+  { id: 'tos-08', label: 'REVISIONS', num: '08' },
+  { id: 'tos-09', label: 'DEADLINES & DELIVERY', num: '09' },
+  { id: 'tos-10', label: 'INTELLECTUAL PROPERTY', num: '10' },
+  { id: 'tos-11', label: 'RIGHTS OF USE & LICENSING', num: '11' },
+  { id: 'tos-12', label: 'CANCELLATIONS & REFUNDS', num: '12' },
+  { id: 'tos-13', label: 'LIMITATION OF LIABILITY', num: '13' },
+  { id: 'tos-14', label: 'AMENDMENTS & GOVERNING', num: '14' },
 ];
 
 export const TermsOfServicePage = () => {
@@ -31,7 +35,7 @@ export const TermsOfServicePage = () => {
     }
   }, [t]);
 
-  // Scroll spy
+  // Scroll spy observing all 15 real section blocks
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -75,16 +79,21 @@ export const TermsOfServicePage = () => {
     setMobileNavOpen(false);
     const el = document.getElementById(id);
     if (el) {
+      const isMobile = window.innerWidth <= 991;
+      const offset = isMobile ? -135 : -88;
       if (window.lenis) {
-        window.lenis.scrollTo(el, { offset: -90, duration: 1.6 });
+        window.lenis.scrollTo(el, { offset, duration: 1.2 });
       } else {
-        el.scrollIntoView({ behavior: 'smooth' });
+        const top = el.getBoundingClientRect().top + window.pageYOffset + offset;
+        window.scrollTo({ top, behavior: 'smooth' });
       }
     }
   };
 
+  const activeSectionObj = SECTIONS.find((s) => s.id === activeSection) || SECTIONS[0];
+
   return (
-    <main id="main-content">
+    <main id="main-content" style={{ minHeight: '100vh', paddingBottom: '80px' }}>
       <div
         className="section"
         id="tosHeader"
@@ -103,61 +112,70 @@ export const TermsOfServicePage = () => {
         </div>
       </div>
 
-      {/* Mobile Nav Toggle */}
-      <button
-        type="button"
-        className={`tos-mobile-nav-toggle ${mobileNavOpen ? 'open' : ''}`}
-        id="tosNavToggle"
-        onClick={() => setMobileNavOpen((prev) => !prev)}
-      >
-        CONTENTS // JUMP TO SECTION
-      </button>
+      {/* Main Container */}
+      <div className="container-lg">
+        {/* Mobile Nav Sticky Bar & Dropdown */}
+        <div className="tos-mobile-nav-container">
+          <button
+            type="button"
+            className={`tos-mobile-nav-toggle ${mobileNavOpen ? 'open' : ''}`}
+            id="tosNavToggle"
+            aria-expanded={mobileNavOpen}
+            onClick={() => setMobileNavOpen((prev) => !prev)}
+          >
+            <span className="tos-toggle-label">
+              CONTENTS // {activeSectionObj.num ? `§${activeSectionObj.num} ` : ''}{activeSectionObj.label}
+            </span>
+            <span className="tos-toggle-arrow">{mobileNavOpen ? '▲' : '▼'}</span>
+          </button>
 
-      {/* Mobile Nav Dropdown */}
-      <div
-        ref={mobileNavRef}
-        className={`tos-mobile-nav-panel ${mobileNavOpen ? 'open' : ''}`}
-        id="tosNavPanel"
-      >
-        <ul className="tos-sidenav-list" id="tosNavListMobile">
-          {SECTIONS.map((sec) => (
-            <li key={sec.id}>
-              <a
-                href={`#${sec.id}`}
-                className={activeSection === sec.id ? 'active' : ''}
-                onClick={(e) => handleLinkClick(e, sec.id)}
-              >
-                {sec.num && <span className="nav-id">{sec.num}</span>}
-                {sec.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+          {/* Mobile Nav Dropdown */}
+          <div
+            ref={mobileNavRef}
+            className={`tos-mobile-nav-panel ${mobileNavOpen ? 'open' : ''}`}
+            id="tosNavPanel"
+          >
+            <ul className="tos-sidenav-list" id="tosNavListMobile">
+              {SECTIONS.map((sec) => (
+                <li key={sec.id}>
+                  <a
+                    href={`#${sec.id}`}
+                    className={activeSection === sec.id ? 'active' : ''}
+                    onClick={(e) => handleLinkClick(e, sec.id)}
+                  >
+                    {sec.num && <span className="nav-id">§{sec.num}</span>}
+                    {sec.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
-      {/* Main Layout */}
-      <div className="tos-layout">
-        {/* Desktop Sticky Sidenav */}
-        <aside className="tos-sidenav">
-          <div className="tos-sidenav-label">SECTIONS // TOC</div>
-          <ul className="tos-sidenav-list" id="tosNavList">
-            {SECTIONS.map((sec) => (
-              <li key={sec.id}>
-                <a
-                  href={`#${sec.id}`}
-                  className={activeSection === sec.id ? 'active' : ''}
-                  onClick={(e) => handleLinkClick(e, sec.id)}
-                >
-                  {sec.num && <span className="nav-id">{sec.num}</span>}
-                  {sec.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </aside>
+        {/* 2-Column Main Layout */}
+        <div className="tos-layout">
+          {/* Desktop Sticky Sidenav */}
+          <aside className="tos-sidenav">
+            <div className="tos-sidenav-label">SECTIONS // TOC</div>
+            <ul className="tos-sidenav-list" id="tosNavList">
+              {SECTIONS.map((sec) => (
+                <li key={sec.id}>
+                  <a
+                    href={`#${sec.id}`}
+                    className={activeSection === sec.id ? 'active' : ''}
+                    onClick={(e) => handleLinkClick(e, sec.id)}
+                  >
+                    {sec.num && <span className="nav-id">§{sec.num}</span>}
+                    {sec.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </aside>
 
-        {/* Content */}
-        <TosContent />
+          {/* Content */}
+          <TosContent />
+        </div>
       </div>
     </main>
   );

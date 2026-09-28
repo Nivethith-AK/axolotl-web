@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
@@ -7,6 +7,24 @@ export const PortfolioPage = () => {
   const { t } = useLanguage();
   const [activeFilter, setActiveFilter] = useState('ALL');
   const [activeVideo, setActiveVideo] = useState(null);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const filterTimerRef = useRef(null);
+
+  const handleFilterChange = (categoryId) => {
+    if (categoryId === activeFilter || isFiltering) return;
+    setIsFiltering(true);
+    if (filterTimerRef.current) clearTimeout(filterTimerRef.current);
+    filterTimerRef.current = setTimeout(() => {
+      setActiveFilter(categoryId);
+      setIsFiltering(false);
+    }, 110);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (filterTimerRef.current) clearTimeout(filterTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     document.title = t('page_title.portfolio', 'Δxolotl // Portfolio');
@@ -93,8 +111,9 @@ export const PortfolioPage = () => {
                   key={cat.id}
                   type="button"
                   className={`portfolio-filter-button${isActive ? ' is-active' : ''}`}
-                  onClick={() => setActiveFilter(cat.id)}
+                  onClick={() => handleFilterChange(cat.id)}
                   aria-pressed={isActive}
+                  disabled={isFiltering}
                   style={{
                     fontFamily: "'Roboto Mono', monospace",
                     fontSize: '0.62rem',
@@ -104,7 +123,7 @@ export const PortfolioPage = () => {
                     border: `1px solid ${isActive ? 'var(--accent)' : 'var(--border-dim)'}`,
                     background: isActive ? 'var(--accent)' : 'var(--surface)',
                     color: isActive ? '#fff' : 'var(--fg)',
-                    cursor: 'pointer',
+                    cursor: isFiltering ? 'default' : 'pointer',
                     textTransform: 'uppercase',
                     transition: 'background-color 0.32s cubic-bezier(0.16, 1, 0.3, 1), color 0.32s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
@@ -124,13 +143,21 @@ export const PortfolioPage = () => {
 
       {/* Main Grid of all projects */}
       <div className="container-lg">
-        <div className="row gx-4 gy-4" style={{ marginTop: '4px' }}>
+        <div
+          key={activeFilter}
+          className={`row gx-4 gy-4 portfolio-full-grid ${isFiltering ? 'is-filtering-out' : 'is-filtering-in'}`}
+          style={{ marginTop: '4px' }}
+        >
           {filteredItems.map((item, idx) => {
             const originalIdx = PORTFOLIO_DATA.indexOf(item);
             const isPlaying = activeVideo === item.youtubeId;
 
             return (
-              <div key={item.youtubeId} className="col-12 col-md-6 col-lg-4 col-xl-3">
+              <div
+                key={item.youtubeId}
+                className="col-12 col-md-6 col-lg-4 col-xl-3"
+                style={{ '--stagger-idx': Math.min(idx, 15) }}
+              >
                 <div
                   className="portfolio-video-item portfolio-card"
                   style={{ height: '100%' }}
@@ -193,6 +220,7 @@ export const PortfolioPage = () => {
                         <img
                           src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
                           alt={item.label}
+                          className="yt-facade-thumb"
                           loading="lazy"
                           decoding="async"
                           style={{

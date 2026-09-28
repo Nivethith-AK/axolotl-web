@@ -35,10 +35,12 @@ export const WorksPage = () => {
         </div>
       </div>
 
-      <div className="works-list">
-        {WORKS_DATA.map((work) => (
-          <WorkCard key={work.id} work={work} />
-        ))}
+      <div className="container-lg">
+        <div className="works-list">
+          {WORKS_DATA.map((work) => (
+            <WorkCard key={work.id} work={work} />
+          ))}
+        </div>
       </div>
     </main>
   );

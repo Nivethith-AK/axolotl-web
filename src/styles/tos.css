@@ -4,7 +4,7 @@
         grid-template-columns: 220px 1fr;
         gap: 0 48px;
         align-items: start;
-        padding: 0 60px 120px 80px;
+        padding: 0 0 100px 0;
         position: relative;
         z-index: 3;
       }
@@ -75,55 +75,61 @@
         flex-shrink: 0;
       }
 
-      /* mobile nav toggle */
+      /* ── MOBILE NAV CONTAINER & DROPDOWN ───────────────── */
+      .tos-mobile-nav-container {
+        display: none;
+      }
       .tos-mobile-nav-toggle {
         display: none;
         width: 100%;
         background: #000;
         color: #ff6b00;
         font-family: "Roboto Mono", monospace;
-        font-size: 0.6rem;
+        font-size: 0.62rem;
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 12px 20px;
-        border: none;
+        padding: 12px 18px;
+        border: 1px solid #222;
         cursor: pointer;
         text-align: left;
-        position: fixed;
-        top: 72px;
-        left: 0;
-        right: 0;
-        z-index: 50;
-        margin-bottom: 0;
+        align-items: center;
+        justify-content: space-between;
       }
-      .tos-mobile-nav-toggle::after {
-        content: " ▾";
-        float: right;
+      .tos-toggle-label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+        padding-right: 12px;
       }
-      .tos-mobile-nav-toggle.open::after {
-        content: " ▴";
+      .tos-toggle-arrow {
+        flex-shrink: 0;
+        font-size: 0.7rem;
+        color: #ff6b00;
       }
-
       .tos-mobile-nav-panel {
         display: none;
-        position: fixed;
-        top: calc(72px + 45px);
+        position: absolute;
+        top: 100%;
         left: 0;
         right: 0;
-        z-index: 49;
+        z-index: 96;
         background: #fff;
-        border-bottom: 2px solid #000;
-        padding: 12px 20px 16px;
-        max-height: 60vh;
+        border: 2px solid #000;
+        border-top: none;
+        padding: 12px 18px 16px;
+        max-height: 55vh;
         overflow-y: auto;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
       }
       .tos-mobile-nav-panel.open {
         display: block;
       }
       .tos-mobile-nav-panel .tos-sidenav-list a {
-        font-size: 0.62rem;
-        padding: 6px 4px;
+        font-size: 0.65rem;
+        padding: 8px 6px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
       }
 
       /* ── MAIN CONTENT ────────────────────────────────────── */
@@ -471,23 +477,30 @@
       /* ── RESPONSIVE ──────────────────────────────────────── */
       @media (max-width: 1100px) {
         .tos-layout {
-          grid-template-columns: 190px 1fr;
+          grid-template-columns: 200px 1fr;
           gap: 0 32px;
-          padding: 0 40px 100px 60px;
+          padding: 0 0 90px 0;
         }
       }
-      @media (max-width: 900px) {
+      @media (max-width: 991px) {
         .tos-layout {
           grid-template-columns: 1fr;
-          padding: 0 30px 80px;
-          /* push content below the fixed toggle button */
-          padding-top: 45px;
+          padding: 0 0 80px 0;
+          gap: 0;
         }
         .tos-sidenav {
-          display: none;
+          display: none !important;
+        }
+        .tos-mobile-nav-container {
+          display: block;
+          position: sticky;
+          top: 64px;
+          z-index: 95;
+          margin-bottom: 24px;
+          background: var(--surface, #fff);
         }
         .tos-mobile-nav-toggle {
-          display: block;
+          display: flex;
         }
         .tos-def {
           grid-template-columns: 1fr;
@@ -499,7 +512,7 @@
       }
       @media (max-width: 768px) {
         .tos-layout {
-          padding: 0 16px 60px;
+          padding: 0 0 60px 0;
         }
 
         /* preamble */
@@ -564,13 +577,18 @@
           font-size: 0.66rem;
         }
 
-        /* tables - make them scroll horizontally on very small screens */
+        /* tables - make them scroll horizontally on mobile without viewport overflow */
+        .tos-table-wrap,
         .tos-rate-section {
+          width: 100%;
           overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          margin: 20px 0;
         }
         .tos-table {
           font-size: 0.62rem;
           min-width: 480px;
+          width: 100%;
         }
         .tos-table th,
         .tos-table td {
@@ -598,7 +616,10 @@
       }
       @media (max-width: 480px) {
         .tos-layout {
-          padding: 0 12px 48px;
+          padding: 0 0 48px 0;
+        }
+        .tos-mobile-nav-container {
+          top: 58px;
         }
         .tos-preamble {
           padding: 16px 14px;
@@ -630,9 +651,20 @@
         color: var(--fg);
         background: rgba(255, 107, 0, 0.06);
       }
+      [data-theme="dark"] .tos-mobile-nav-container {
+        background: var(--surface);
+      }
+      [data-theme="dark"] .tos-mobile-nav-toggle {
+        background: var(--surface);
+        color: var(--primary, #ff6b00);
+        border-color: var(--border);
+      }
       [data-theme="dark"] .tos-mobile-nav-panel {
         background: var(--surface);
-        border-bottom-color: var(--border);
+        border-color: var(--border);
+      }
+      [data-theme="dark"] .tos-mobile-nav-panel .tos-sidenav-list a {
+        border-bottom-color: var(--border-soft);
       }
       [data-theme="dark"] .tos-header-sub {
         color: var(--text-6);

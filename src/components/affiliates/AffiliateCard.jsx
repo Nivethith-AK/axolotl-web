@@ -4,6 +4,7 @@ export const AffiliateCard = ({
   person,
   isDimmed,
   isActive,
+  staggerIndex = 0,
   onMouseEnter,
   onMouseLeave,
   onClick,
@@ -14,21 +15,25 @@ export const AffiliateCard = ({
   useEffect(() => {
     if (!person.altImage) return;
 
+    let to;
     const interval = setInterval(() => {
       if (isDimmed) return;
       setIsGlitching(true);
-      setTimeout(() => {
+      to = setTimeout(() => {
         setShowingAlt((prev) => !prev);
         setIsGlitching(false);
       }, 80);
     }, 2200 + Math.random() * 500);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(to);
+    };
   }, [person.altImage, isDimmed]);
 
   if (person.noSignal) {
     return (
-      <div className="aff-panel aff-panel-nosignal">
+      <div className="aff-panel aff-panel-nosignal" style={{ '--stagger-idx': staggerIndex }}>
         <div className="aff-panel-bg"></div>
         <div className="aff-nosignal-text">NO_SIGNAL</div>
       </div>
@@ -42,7 +47,7 @@ export const AffiliateCard = ({
   return (
     <div
       className={`aff-panel ${isDimmed ? 'aff-dimmed' : ''} ${isActive ? 'aff-active' : ''} ${isGlitching ? 'raven-glitch' : ''}`}
-      style={{ '--accent': accent }}
+      style={{ '--accent': accent, '--stagger-idx': staggerIndex }}
       data-aff-id={person.name}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

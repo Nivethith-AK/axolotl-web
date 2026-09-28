@@ -31,24 +31,30 @@ export const ThemeProvider = ({ children }) => {
   }, [theme]);
 
   const toggleTheme = () => {
-    if (transitionState.active) return;
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
 
-    // Activate transition state & CSS smoothing class
+    // Synchronously update DOM attributes immediately for zero perceived lag
+    if (nextTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      document.documentElement.classList.remove('dark');
+    }
+
+    // Update state immediately
+    setTheme(nextTheme);
+
+    // Activate transition state & CSS smoothing class without blocking rapid clicks
     document.documentElement.classList.add('theme-transitioning');
     setTransitionState({ active: true, targetTheme: nextTheme });
 
-    // Switch theme halfway through the beam sweep so the laser beam unveils the new palette
-    setTimeout(() => {
-      setTheme(nextTheme);
-    }, 130);
-
-    // End transition & remove helper classes
-    clearTimeout(timerRef.current);
+    // End transition after brief, smooth sweep
+    if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       document.documentElement.classList.remove('theme-transitioning');
       setTransitionState({ active: false, targetTheme: null });
-    }, 550);
+    }, 280);
   };
 
   return (

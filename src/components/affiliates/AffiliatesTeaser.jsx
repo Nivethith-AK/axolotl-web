@@ -119,6 +119,15 @@ export const AffiliatesTeaser = () => {
       animRef.current = requestAnimationFrame(tick);
     };
 
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => {
+        updateHalfWidths();
+      });
+      if (track1Ref.current) ro.observe(track1Ref.current);
+      if (track2Ref.current) ro.observe(track2Ref.current);
+    }
+
     const handleResize = () => {
       updateHalfWidths();
     };
@@ -137,12 +146,13 @@ export const AffiliatesTeaser = () => {
     animRef.current = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(animRef.current);
+      if (ro) ro.disconnect();
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibility);
     };
   }, []);
 
-  // Horizontal wheel & mobile touch gesture listeners
+  // Horizontal wheel, window pointer & mobile touch gesture listeners
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
@@ -161,6 +171,7 @@ export const AffiliatesTeaser = () => {
     let touchStartY = 0;
     let touchLastX = 0;
     let isHorizontalSwipe = false;
+    let isVerticalScroll = false;
 
     const handleTouchStart = (e) => {
       if (e.touches.length !== 1) return;
@@ -170,6 +181,7 @@ export const AffiliatesTeaser = () => {
       stateRef.current.velocity = 0;
       stateRef.current.hasDragged = false;
       isHorizontalSwipe = false;
+      isVerticalScroll = false;
     };
 
     const handleTouchMove = (e) => {
@@ -180,8 +192,12 @@ export const AffiliatesTeaser = () => {
       const totalX = Math.abs(cx - touchStartX);
       const totalY = Math.abs(cy - touchStartY);
 
-      if (!isHorizontalSwipe && totalX > 8 && totalX > totalY) {
-        isHorizontalSwipe = true;
+      if (!isHorizontalSwipe && !isVerticalScroll) {
+        if (totalY > 8 && totalY > totalX) {
+          isVerticalScroll = true;
+        } else if (totalX > 10 && totalX > totalY * 1.5) {
+          isHorizontalSwipe = true;
+        }
       }
 
       if (isHorizontalSwipe) {
@@ -198,19 +214,47 @@ export const AffiliatesTeaser = () => {
         stateRef.current.hasDragged = false;
         stateRef.current.hoveredRow = null;
         setHoveredAffId(null);
-      }, 80);
+      }, 100);
+    };
+
+    const handleGlobalPointerMove = (e) => {
+      if (!stateRef.current.isDragging || e.pointerType === 'touch') return;
+      const totalDx = Math.abs(e.clientX - stateRef.current.dragStartX);
+      if (totalDx > 6) stateRef.current.hasDragged = true;
+      const dx = e.clientX - stateRef.current.dragLastX;
+      stateRef.current.positions[0] -= dx;
+      stateRef.current.positions[1] -= dx;
+      stateRef.current.velocity = -dx * 0.4;
+      stateRef.current.dragLastX = e.clientX;
+    };
+
+    const handleGlobalPointerUp = (e) => {
+      if (e.pointerType === 'touch') return;
+      if (stateRef.current.isDragging) {
+        stateRef.current.isDragging = false;
+        if (wrapRef.current) wrapRef.current.style.cursor = '';
+        setTimeout(() => {
+          stateRef.current.hasDragged = false;
+        }, 120);
+      }
     };
 
     wrap.addEventListener('wheel', handleWheel, { passive: true });
     wrap.addEventListener('touchstart', handleTouchStart, { passive: true });
     wrap.addEventListener('touchmove', handleTouchMove, { passive: true });
     wrap.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('pointermove', handleGlobalPointerMove);
+    window.addEventListener('pointerup', handleGlobalPointerUp);
+    window.addEventListener('pointercancel', handleGlobalPointerUp);
 
     return () => {
       wrap.removeEventListener('wheel', handleWheel);
       wrap.removeEventListener('touchstart', handleTouchStart);
       wrap.removeEventListener('touchmove', handleTouchMove);
       wrap.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('pointermove', handleGlobalPointerMove);
+      window.removeEventListener('pointerup', handleGlobalPointerUp);
+      window.removeEventListener('pointercancel', handleGlobalPointerUp);
     };
   }, []);
 
@@ -350,46 +394,12 @@ export const AffiliatesTeaser = () => {
           }
           onPointerDown={(e) => {
             if (e.pointerType === 'touch') return;
-            try {
-              e.currentTarget.setPointerCapture(e.pointerId);
-            } catch (err) {}
             stateRef.current.isDragging = true;
             stateRef.current.hasDragged = false;
             stateRef.current.dragStartX = e.clientX;
             stateRef.current.dragLastX = e.clientX;
             stateRef.current.velocity = 0;
             if (wrapRef.current) wrapRef.current.style.cursor = 'grabbing';
-          }}
-          onPointerMove={(e) => {
-            if (!stateRef.current.isDragging || e.pointerType === 'touch') return;
-            const totalDx = Math.abs(e.clientX - stateRef.current.dragStartX);
-            if (totalDx > 6) stateRef.current.hasDragged = true;
-            const dx = e.clientX - stateRef.current.dragLastX;
-            stateRef.current.positions[0] -= dx;
-            stateRef.current.positions[1] -= dx;
-            stateRef.current.velocity = -dx * 0.4;
-            stateRef.current.dragLastX = e.clientX;
-          }}
-          onPointerUp={(e) => {
-            try {
-              e.currentTarget.releasePointerCapture(e.pointerId);
-            } catch (err) {}
-            stateRef.current.isDragging = false;
-            if (wrapRef.current) wrapRef.current.style.cursor = '';
-            setTimeout(() => {
-              stateRef.current.hasDragged = false;
-            }, 80);
-          }}
-          onPointerCancel={(e) => {
-            try {
-              e.currentTarget.releasePointerCapture(e.pointerId);
-            } catch (err) {}
-            stateRef.current.isDragging = false;
-            stateRef.current.velocity = 0;
-            if (wrapRef.current) wrapRef.current.style.cursor = '';
-            setTimeout(() => {
-              stateRef.current.hasDragged = false;
-            }, 80);
           }}
         >
           <div

@@ -12,6 +12,27 @@ export const PortfolioSection = () => {
   const PAGE_SIZE_DESKTOP = 8;
   const totalPagesDesktop = Math.max(1, Math.ceil(PORTFOLIO_DATA.length / PAGE_SIZE_DESKTOP));
   const [currentPageDesktop, setCurrentPageDesktop] = useState(0);
+  const [pageDirection, setPageDirection] = useState('next');
+  const [isPaging, setIsPaging] = useState(false);
+  const pagingTimerRef = useRef(null);
+
+  const goToDesktopPage = (nextPage, direction) => {
+    if (isPaging || nextPage === currentPageDesktop || nextPage < 0 || nextPage >= totalPagesDesktop) return;
+    setPageDirection(direction);
+    setIsPaging(true);
+
+    if (pagingTimerRef.current) clearTimeout(pagingTimerRef.current);
+    pagingTimerRef.current = setTimeout(() => {
+      setCurrentPageDesktop(nextPage);
+      setIsPaging(false);
+    }, 130);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (pagingTimerRef.current) clearTimeout(pagingTimerRef.current);
+    };
+  }, []);
 
   /* Mobile swipeable carousel */
   const PAGE_SIZE_MOBILE = 6;
@@ -146,15 +167,15 @@ export const PortfolioSection = () => {
             className="portfolio-pager-arrow portfolio-pager-prev"
             id="portfolioPrev"
             aria-label="Previous page"
-            disabled={currentPageDesktop === 0}
-            onClick={() => setCurrentPageDesktop((p) => Math.max(0, p - 1))}
+            disabled={currentPageDesktop === 0 || isPaging}
+            onClick={() => goToDesktopPage(currentPageDesktop - 1, 'prev')}
           >
             &#8592;
           </button>
 
           <div
             key={currentPageDesktop}
-            className="portfolio-video-grid row gx-3 gy-3"
+            className={`portfolio-video-grid row gx-3 gy-3 ${isPaging ? 'is-paging-out' : 'is-paging-in'} dir-${pageDirection}`}
             id="portfolioGrid"
             ref={desktopGridRef}
           >
@@ -216,14 +237,17 @@ export const PortfolioSection = () => {
             className="portfolio-pager-arrow portfolio-pager-next"
             id="portfolioNext"
             aria-label="Next page"
-            disabled={currentPageDesktop >= totalPagesDesktop - 1}
-            onClick={() => setCurrentPageDesktop((p) => Math.min(totalPagesDesktop - 1, p + 1))}
+            disabled={currentPageDesktop >= totalPagesDesktop - 1 || isPaging}
+            onClick={() => goToDesktopPage(currentPageDesktop + 1, 'next')}
           >
             &#8594;
           </button>
         </div>
 
-        <div className="portfolio-pager-counter portfolio-desktop-only" id="portfolioPagerCounter">
+        <div
+          className={`portfolio-pager-counter portfolio-desktop-only ${isPaging ? 'is-changing' : ''}`}
+          id="portfolioPagerCounter"
+        >
           PAGE {pad(currentPageDesktop + 1)} / {pad(totalPagesDesktop)}
         </div>
 

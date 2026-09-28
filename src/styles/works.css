@@ -1,6 +1,6 @@
 /* ── WORKS LIST ──────────────────────────────────────── */
       .works-list {
-        padding: 0 80px 100px;
+        padding: 0 0 100px;
         display: flex;
         flex-direction: column;
         position: relative;
@@ -329,7 +329,7 @@
       }
       @media (max-width: 900px) {
         .works-list {
-          padding: 0 30px 60px;
+          padding: 0 0 60px;
         }
         .work-card {
           grid-template-columns: 280px 1fr;

@@ -6,8 +6,38 @@ export const DiscoTimeline = ({ onSelectTrack, isModalOpen }) => {
   const { t } = useLanguage();
   const [filter, setFilter] = useState('all');
   const [hoveredId, setHoveredId] = useState(null);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const transitionTimerRef = useRef(null);
   const trackRef = useRef(null);
   const dragRef = useRef({ isDown: false, startX: 0, scrollLeft: 0, hasDragged: false });
+
+  const handleFilterSelect = (newFilter, e) => {
+    if (newFilter === filter || isFiltering) return;
+
+    if (e && e.currentTarget) {
+      e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    if (transitionTimerRef.current) {
+      clearTimeout(transitionTimerRef.current);
+    }
+
+    setIsFiltering(true);
+
+    transitionTimerRef.current = setTimeout(() => {
+      setFilter(newFilter);
+      setIsFiltering(false);
+      if (trackRef.current) {
+        trackRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+      }
+    }, 120);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+    };
+  }, []);
 
   const releasesCount = DISCO_DATA.filter((d) => d.type === 'release').length;
   const featuredCount = DISCO_DATA.filter((d) => d.type === 'featured').length;
@@ -103,6 +133,8 @@ export const DiscoTimeline = ({ onSelectTrack, isModalOpen }) => {
     };
   }, []);
 
+  let staggerCount = 0;
+
   return (
     <div id="discoTimeline" className={isModalOpen ? 'dossier-mode' : ''} style={{ position: 'relative', zIndex: 3 }}>
       {/* Header */}
@@ -125,7 +157,8 @@ export const DiscoTimeline = ({ onSelectTrack, isModalOpen }) => {
         <button
           type="button"
           className={`disco-tab ${filter === 'all' ? 'active' : ''}`}
-          onClick={() => setFilter('all')}
+          onClick={(e) => handleFilterSelect('all', e)}
+          disabled={isFiltering}
         >
           <span data-i18n="disco.filter_all">{t('disco.filter_all', 'ALL')}</span>
           <span className="tab-count">[{totalCount}]</span>
@@ -133,7 +166,8 @@ export const DiscoTimeline = ({ onSelectTrack, isModalOpen }) => {
         <button
           type="button"
           className={`disco-tab ${filter === 'release' ? 'active' : ''}`}
-          onClick={() => setFilter('release')}
+          onClick={(e) => handleFilterSelect('release', e)}
+          disabled={isFiltering}
         >
           <span data-i18n="disco.filter_releases">{t('disco.filter_releases', 'RELEASES')}</span>
           <span className="tab-count">[{releasesCount}]</span>
@@ -141,7 +175,8 @@ export const DiscoTimeline = ({ onSelectTrack, isModalOpen }) => {
         <button
           type="button"
           className={`disco-tab ${filter === 'featured' ? 'active' : ''}`}
-          onClick={() => setFilter('featured')}
+          onClick={(e) => handleFilterSelect('featured', e)}
+          disabled={isFiltering}
         >
           <span data-i18n="disco.filter_featured">{t('disco.filter_featured', 'FEATURED')}</span>
           <span className="tab-count">[{featuredCount}]</span>
@@ -181,18 +216,24 @@ export const DiscoTimeline = ({ onSelectTrack, isModalOpen }) => {
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
             >
-              <div className="htl-inner" id="htlInner">
+              <div
+                key={filter}
+                className={`htl-inner ${isFiltering ? 'is-filtering' : 'is-filtering-in'}`}
+                id="htlInner"
+              >
                 {groupedYears.map((grp, grpIdx) => (
                   <React.Fragment key={`grp-${grp.year}-${grpIdx}`}>
                     {grp.items.map((d, i) => {
                       const posClass = i % 2 === 0 ? 'pos-above' : 'pos-below';
                       const isDimmed = hoveredId !== null && hoveredId !== d.id;
                       const isActive = hoveredId === d.id;
+                      const currentStagger = staggerCount++;
 
                       return (
                         <div
                           key={d.id}
                           className={`htl-entry-col type-${d.type} ${posClass} ${isDimmed ? 'disco-dimmed' : ''} ${isActive ? 'disco-active' : ''}`}
+                          style={{ '--stagger-idx': Math.min(currentStagger, 20) }}
                           data-disco-id={d.id}
                           data-type={d.type}
                           onMouseEnter={() => setHoveredId(d.id)}
@@ -230,7 +271,10 @@ export const DiscoTimeline = ({ onSelectTrack, isModalOpen }) => {
                       );
                     })}
 
-                    <div className="htl-year-col">
+                    <div
+                      className="htl-year-col"
+                      style={{ '--stagger-idx': Math.min(staggerCount++, 20) }}
+                    >
                       <div className="htl-year-badge">{grp.year}</div>
                     </div>
                   </React.Fragment>

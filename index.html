@@ -44,6 +44,7 @@
         }
         if (t === "dark") {
           document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.classList.add("dark");
         }
         var l = localStorage.getItem("lang") || "en";
         document.documentElement.setAttribute("lang", l);

@@ -32,29 +32,46 @@
         padding: 14px 24px;
         border: none;
         border-right: 1px solid #eee;
-        border-bottom: 3px solid transparent;
         background: none;
         cursor: pointer;
-        color: var(--c-text-dim);
+        color: var(--c-text-dim, #999);
         white-space: nowrap;
-        margin-bottom: -2px;
+        position: relative;
+        flex-shrink: 0;
         transition:
-          color 0.2s,
-          border-color 0.2s,
-          background 0.2s;
+          color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.15s ease,
+          background 0.2s ease;
+      }
+      .disco-tab::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: #ff6b00;
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .disco-tab:hover {
         color: #000;
-        background: #f8f8f8;
+        background: rgba(0, 0, 0, 0.03);
+        transform: translateY(-1px);
       }
       .disco-tab.active {
         color: #000;
-        border-bottom-color: #ff6b00;
+        transform: translateY(0);
+      }
+      .disco-tab.active::after {
+        transform: scaleX(1);
       }
       .disco-tab .tab-count {
         font-size: 0.5rem;
         color: #ff6b00;
         margin-left: 4px;
+        transition: opacity 0.2s ease;
       }
 
       /* ── HEADER ──────────────────────────────────────────── */
@@ -408,6 +425,33 @@
         width: max-content;
         height: 500px;
         padding: 0 100px;
+        transition:
+          opacity 0.12s cubic-bezier(0.4, 0, 1, 1),
+          transform 0.12s cubic-bezier(0.4, 0, 1, 1);
+        will-change: opacity, transform;
+      }
+      .htl-inner.is-filtering {
+        opacity: 0;
+        transform: translateY(4px) scale(0.995);
+        pointer-events: none;
+      }
+      .htl-inner.is-filtering-in .htl-entry-col,
+      .htl-inner.is-filtering-in .htl-year-col {
+        animation: discoEntryCascadeIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-delay: calc(min(var(--stagger-idx, 0), 20) * 18ms);
+      }
+      @keyframes discoEntryCascadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(14px) scale(0.97);
+        }
+        60% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
       }
       .htl-inner::before {
         content: "";
@@ -1053,6 +1097,10 @@
         background: rgba(10, 10, 10, 0.92);
         border-bottom-color: var(--border-mid);
       }
+      [data-theme="dark"] .disco-tab {
+        border-right-color: rgba(255, 255, 255, 0.08);
+        color: var(--text-6, #888);
+      }
       [data-theme="dark"] .disco-tab:hover {
         color: var(--fg);
         background: rgba(255, 255, 255, 0.06);
@@ -1090,4 +1138,21 @@
       [data-theme="dark"] .htl-bottom,
       [data-theme="dark"] .htl-hint {
         color: var(--text-9);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .disco-tab,
+        .disco-tab::after {
+          transition: none !important;
+          transform: none !important;
+        }
+        .htl-inner {
+          transition: none !important;
+          transform: none !important;
+        }
+        .htl-inner.is-filtering-in .htl-entry-col,
+        .htl-inner.is-filtering-in .htl-year-col {
+          animation: none !important;
+          transform: none !important;
+        }
       }

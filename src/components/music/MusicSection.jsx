@@ -3,20 +3,26 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
 
-export const MusicSection = () => {
+export const MusicSection = ({ hideHeader = false }) => {
   const { t } = useLanguage();
   const youtubeVideoId = 'qR_bDjRskpg';
 
   return (
-    <section id="music" className="section">
+    <section
+      id="music"
+      className="section"
+      style={hideHeader ? { paddingTop: '8px', minHeight: 'unset' } : undefined}
+    >
       <div className="container-lg">
-        <WaveformHeader
-          title={t('music.heading', 'Latest Feed')}
-          dataText="Latest Feed"
-          i18nKey="music.heading"
-        />
+        {!hideHeader && (
+          <WaveformHeader
+            title={t('music.heading', 'Latest Feed')}
+            dataText="Latest Feed"
+            i18nKey="music.heading"
+          />
+        )}
 
-        <div className="music-grid-container row gx-4 gy-4 mt-2">
+        <div className={`music-grid-container row gx-4 gy-4 ${hideHeader ? 'mt-0' : 'mt-2'}`}>
           {/* Video Column */}
           <div className="video-column col-12 col-lg-6">
             <div className="frame-bar top-bar">

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
 
-export const ConnectSection = () => {
+export const ConnectSection = ({ hideHeader = false }) => {
   const { t } = useLanguage();
 
   const handleEmailClick = (e) => {
@@ -12,18 +12,26 @@ export const ConnectSection = () => {
   };
 
   return (
-    <section id="connect" className="section">
+    <section
+      id="connect"
+      className="section"
+      style={hideHeader ? { paddingTop: '8px', minHeight: 'unset' } : undefined}
+    >
       <div className="container-lg">
-        <WaveformHeader
-          title={t('connect.heading', 'Connect')}
-          dataText="Connect"
-          i18nKey="connect.heading"
-        />
-        <p data-i18n="connect.sub">
-          {t('connect.sub', 'Establish a connection via preferred protocol //')}
-        </p>
+        {!hideHeader && (
+          <>
+            <WaveformHeader
+              title={t('connect.heading', 'Connect')}
+              dataText="Connect"
+              i18nKey="connect.heading"
+            />
+            <p data-i18n="connect.sub">
+              {t('connect.sub', 'Establish a connection via preferred protocol //')}
+            </p>
+          </>
+        )}
 
-        <div className="connect-grid row gx-3 gy-3 mt-2">
+        <div className={`connect-grid row gx-3 gy-3 ${hideHeader ? 'mt-0' : 'mt-2'}`}>
           {/* Protocol 01: Email */}
           <div className="col-12 col-sm-6 col-lg-4">
             <a

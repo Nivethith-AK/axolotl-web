@@ -37,7 +37,7 @@ export const ConnectPage = () => {
       </div>
 
       {/* Main Connect Protocols */}
-      <ConnectSection />
+      <ConnectSection hideHeader={true} />
 
       {/* Full Social Matrix Array */}
       <div className="container-lg" style={{ marginTop: '50px' }}>
@@ -89,6 +89,7 @@ export const ConnectPage = () => {
                 <img
                   src={link.icon}
                   alt={link.label}
+                  className="side-icon"
                   width="18"
                   height="18"
                   style={{ objectFit: 'contain' }}

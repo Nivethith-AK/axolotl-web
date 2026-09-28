@@ -49,29 +49,46 @@
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 14px 14px;
+        padding: 14px 16px;
         border: none;
-        border-bottom: 3px solid transparent;
         background: none;
         cursor: pointer;
         white-space: nowrap;
         color: #999;
         transition:
-          color 0.2s,
-          border-color 0.2s;
+          color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.15s ease;
         flex-shrink: 0;
+        position: relative;
+      }
+      .aff-filter-btn::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: #ff6b00;
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .aff-filter-btn:hover {
         color: #000;
+        transform: translateY(-1px);
       }
       .aff-filter-btn.active {
         color: #000;
-        border-bottom-color: #ff6b00;
+        transform: translateY(0);
+      }
+      .aff-filter-btn.active::after {
+        transform: scaleX(1);
       }
       .aff-filter-count {
         color: #ff6b00;
         font-size: 0.46rem;
         margin-left: 4px;
+        transition: opacity 0.2s ease;
       }
 
       /* ── ROSTER GRID ─────────────────────────────────────────── */
@@ -82,11 +99,35 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
         gap: 2px;
+        transition:
+          opacity 0.12s cubic-bezier(0.4, 0, 1, 1),
+          transform 0.12s cubic-bezier(0.4, 0, 1, 1);
+        will-change: opacity, transform;
       }
-      /* Prevent min-content blowout on small cells */
+      .aff-roster-grid.is-filtering {
+        opacity: 0;
+        transform: translateY(4px) scale(0.995);
+        pointer-events: none;
+      }
+      /* Prevent min-content blowout on small cells and apply staggered entry */
       .aff-roster-grid .aff-panel,
       .aff-roster-grid .aff-panel-nosignal {
         min-width: 0;
+        animation: affCardCascadeIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+        animation-delay: calc(min(var(--stagger-idx, 0), 24) * 18ms);
+      }
+      @keyframes affCardCascadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(14px) scale(0.97);
+        }
+        60% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
       }
 
       /* ── CARD — uses .aff-panel from style.css, overrides below ─ */
@@ -696,7 +737,6 @@
       }
       [data-theme="dark"] .aff-filter-btn.active {
         color: var(--fg);
-        border-bottom-color: #ff6b00;
       }
       [data-theme="dark"] .aff-modal-hdr {
         background: var(--surface);

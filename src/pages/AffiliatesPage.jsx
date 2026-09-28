@@ -16,10 +16,20 @@ export const AffiliatesPage = () => {
   const { t } = useLanguage();
 
   const [activeFilter, setActiveFilter] = useState('all');
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [hoveredName, setHoveredName] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const gridRef = useRef(null);
   const [columnCount, setColumnCount] = useState(5);
+  const transitionTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimerRef.current) {
+        clearTimeout(transitionTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     document.title = t('page_title.affiliates', 'Δxolotl // Affiliates');
@@ -92,6 +102,42 @@ export const AffiliatesPage = () => {
     }
   }, [slug]);
 
+  const handleFilterSelect = (e, tag) => {
+    if (tag === activeFilter) return;
+
+    if (e && e.currentTarget) {
+      e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    if (transitionTimerRef.current) {
+      clearTimeout(transitionTimerRef.current);
+    }
+
+    setIsTransitioning(true);
+
+    const filterBar = document.getElementById('affFilterBar');
+    if (filterBar) {
+      const rect = filterBar.getBoundingClientRect();
+      if (rect.top < 70) {
+        if (window.lenis) {
+          window.lenis.scrollTo(filterBar, { offset: -74, duration: 0.8 });
+        } else {
+          filterBar.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }
+
+    transitionTimerRef.current = setTimeout(() => {
+      setActiveFilter(tag);
+      setIsTransitioning(false);
+      setTimeout(() => {
+        if (window.lenis) {
+          window.lenis.resize();
+        }
+      }, 60);
+    }, 120);
+  };
+
   const handleCardClick = (person) => {
     navigate(`/affiliates/${toSlug(person.name)}`);
   };
@@ -111,7 +157,7 @@ export const AffiliatesPage = () => {
           </h2>
           <div className="aff-page-sub">
             Collaborative network -{' '}
-            <span id="affTotalCount">{sortedData.length}</span> ENTRIES &nbsp;·&nbsp; 2022 - PRESENT
+            <span id="affTotalCount">{filteredData.length}</span> ENTRIES &nbsp;·&nbsp; 2022 - PRESENT
           </div>
         </div>
       </div>
@@ -121,7 +167,7 @@ export const AffiliatesPage = () => {
         <button
           type="button"
           className={`aff-filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
-          onClick={() => setActiveFilter('all')}
+          onClick={(e) => handleFilterSelect(e, 'all')}
         >
           ALL <span className="aff-filter-count">[{sortedData.length}]</span>
         </button>
@@ -131,7 +177,7 @@ export const AffiliatesPage = () => {
             key={tag}
             type="button"
             className={`aff-filter-btn ${activeFilter === tag ? 'active' : ''}`}
-            onClick={() => setActiveFilter(tag)}
+            onClick={(e) => handleFilterSelect(e, tag)}
           >
             {tag.replace(/-/g, ' ').toUpperCase()}{' '}
             <span className="aff-filter-count">[{getTagCount(tag)}]</span>
@@ -142,12 +188,13 @@ export const AffiliatesPage = () => {
       {/* ── Roster Grid ── */}
       <div className="aff-roster-wrap">
         <div
-          className="aff-roster-grid"
+          className={`aff-roster-grid ${isTransitioning ? 'is-filtering' : ''}`}
           id="affGrid"
+          key={activeFilter}
           ref={gridRef}
           onMouseLeave={() => setHoveredName(null)}
         >
-          {filteredData.map((person) => {
+          {filteredData.map((person, idx) => {
             const isDimmed = hoveredName !== null && hoveredName !== person.name;
             const isActive = hoveredName === person.name;
 
@@ -157,6 +204,7 @@ export const AffiliatesPage = () => {
                 person={person}
                 isDimmed={isDimmed}
                 isActive={isActive}
+                staggerIndex={idx}
                 onMouseEnter={() => setHoveredName(person.name)}
                 onMouseLeave={() => setHoveredName(null)}
                 onClick={() => handleCardClick(person)}
@@ -166,7 +214,11 @@ export const AffiliatesPage = () => {
 
           {/* NO_SIGNAL padding for 'all' filter */}
           {Array.from({ length: padCount }).map((_, i) => (
-            <div key={`nosignal-${i}`} className="aff-panel aff-panel-nosignal">
+            <div
+              key={`nosignal-${i}`}
+              className="aff-panel aff-panel-nosignal"
+              style={{ '--stagger-idx': filteredData.length + i }}
+            >
               <div className="aff-panel-bg"></div>
               <div className="aff-nosignal-text">NO_SIGNAL</div>
             </div>

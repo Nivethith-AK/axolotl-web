@@ -75,20 +75,6 @@ export const BootScreen = React.memo(({
     if (onCompleteRef.current) onCompleteRef.current();
   }, []);
 
-  const handleSkip = useCallback(() => {
-    cleanupAndFinish();
-  }, [cleanupAndFinish]);
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
-        handleSkip();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleSkip]);
-
   useEffect(() => {
     // 1. Lock scrolling on body
     document.body.style.overflow = 'hidden';
@@ -210,13 +196,7 @@ export const BootScreen = React.memo(({
   if (hidden) return null;
 
   return (
-    <div
-      ref={screenRef}
-      id="boot-screen"
-      onClick={handleSkip}
-      title="Click or press Esc to skip"
-      style={{ cursor: 'pointer' }}
-    >
+    <div ref={screenRef} id="boot-screen">
       <div className="boot-scanlines"></div>
       <div ref={contentRef} className="boot-content" id="bootContent">
         <div className="boot-logo-wrap">

@@ -37,6 +37,8 @@ export const GeoCanvas = () => {
 
     const rand = (a, b) => a + Math.random() * (b - a);
     const randI = (a, b) => Math.floor(rand(a, b));
+    const randSpeed = (min, max) =>
+      (Math.random() < 0.5 ? -1 : 1) * (min + Math.random() * (max - min));
 
     const isMobile = window.innerWidth <= 768;
     const dotCount = isMobile ? 30 : 55;
@@ -45,8 +47,8 @@ export const GeoCanvas = () => {
       x: rand(0, 1),
       y: rand(0, 1),
       r: rand(1.2, 2.8),
-      vx: rand(-0.00012, 0.00012),
-      vy: rand(-0.00012, 0.00012),
+      vx: randSpeed(0.0001, 0.00025),
+      vy: randSpeed(0.0001, 0.00025),
       alpha: rand(0.2, 0.5),
     }));
 
@@ -57,15 +59,15 @@ export const GeoCanvas = () => {
     ].map((pos) => ({
       ...pos,
       r: rand(110, 210),
-      rotSpeed: rand(-0.0005, 0.0005),
+      rotSpeed: randSpeed(0.0006, 0.0014),
       rot: rand(0, Math.PI * 2),
-      driftX: rand(-0.00006, 0.00006),
-      driftY: rand(-0.00006, 0.00006),
+      driftX: randSpeed(0.00008, 0.00018),
+      driftY: randSpeed(0.00008, 0.00018),
       dashLen: rand(8, 18),
       gapLen: rand(8, 18),
       alpha: rand(0.18, 0.32),
       pulseAmp: rand(5, 14),
-      pulseSpeed: rand(0.007, 0.016),
+      pulseSpeed: rand(0.008, 0.018),
       pulsePhase: rand(0, Math.PI * 2),
     }));
 
@@ -74,10 +76,10 @@ export const GeoCanvas = () => {
       y1: rand(0, 1),
       x2: rand(0, 1),
       y2: rand(0, 1),
-      vx1: rand(-0.00008, 0.00008),
-      vy1: rand(-0.00008, 0.00008),
-      vx2: rand(-0.00008, 0.00008),
-      vy2: rand(-0.00008, 0.00008),
+      vx1: randSpeed(0.00008, 0.00018),
+      vy1: randSpeed(0.00008, 0.00018),
+      vx2: randSpeed(0.00008, 0.00018),
+      vy2: randSpeed(0.00008, 0.00018),
       alpha: rand(0.08, 0.2),
     }));
 
@@ -86,9 +88,9 @@ export const GeoCanvas = () => {
       y: rand(0.05, 0.95),
       size: rand(10, 32),
       rot: rand(0, Math.PI * 2),
-      rotSpeed: rand(-0.004, 0.004),
-      vx: rand(-0.00009, 0.00009),
-      vy: rand(-0.00009, 0.00009),
+      rotSpeed: randSpeed(0.003, 0.008),
+      vx: randSpeed(0.0001, 0.00022),
+      vy: randSpeed(0.0001, 0.00022),
       alpha: rand(0.15, 0.38),
     }));
 
@@ -97,9 +99,9 @@ export const GeoCanvas = () => {
       y: rand(0.05, 0.95),
       size: rand(8, 24),
       rot: rand(0, Math.PI * 2),
-      rotSpeed: rand(-0.003, 0.003),
-      vx: rand(-0.00007, 0.00007),
-      vy: rand(-0.00007, 0.00007),
+      rotSpeed: randSpeed(0.002, 0.006),
+      vx: randSpeed(0.00008, 0.0002),
+      vy: randSpeed(0.00008, 0.0002),
       alpha: rand(0.12, 0.28),
     }));
 
@@ -122,8 +124,13 @@ export const GeoCanvas = () => {
 
     let frame = 0;
     let animId;
+    let lastTime = performance.now();
+    const speedMultiplier = reducedMotion ? 0.4 : 1.0;
 
-    const draw = () => {
+    const draw = (now = performance.now()) => {
+      const dt = Math.min((now - lastTime) / 16.667, 3.0) * speedMultiplier;
+      lastTime = now;
+
       const W = window.innerWidth;
       const H = window.innerHeight;
       ctx.clearRect(0, 0, W, H);
@@ -141,8 +148,8 @@ export const GeoCanvas = () => {
       /* Dots */
       ctx.fillStyle = fc;
       dots.forEach((d) => {
-        d.x += d.vx;
-        d.y += d.vy;
+        d.x += d.vx * dt;
+        d.y += d.vy * dt;
         if (d.x < 0) d.x = 1;
         if (d.x > 1) d.x = 0;
         if (d.y < 0) d.y = 1;
@@ -156,9 +163,11 @@ export const GeoCanvas = () => {
 
       /* Dashed circles */
       dashedCircles.forEach((c) => {
-        c.rot += c.rotSpeed;
-        c.x = Math.max(0.05, Math.min(0.95, c.x + c.driftX));
-        c.y = Math.max(0.05, Math.min(0.95, c.y + c.driftY));
+        c.rot += c.rotSpeed * dt;
+        c.x += c.driftX * dt;
+        c.y += c.driftY * dt;
+        if (c.x <= 0.06 || c.x >= 0.94) c.driftX *= -1;
+        if (c.y <= 0.06 || c.y >= 0.94) c.driftY *= -1;
         const pulse = c.r + Math.sin(frame * c.pulseSpeed + c.pulsePhase) * c.pulseAmp;
         ctx.save();
         ctx.globalAlpha = c._glitch ? rand(0.1, 0.55) : c.alpha;
@@ -184,10 +193,10 @@ export const GeoCanvas = () => {
         ctx.strokeStyle = fc;
         ctx.lineWidth = 1;
         lines.forEach((l) => {
-          l.x1 += l.vx1;
-          l.y1 += l.vy1;
-          l.x2 += l.vx2;
-          l.y2 += l.vy2;
+          l.x1 += l.vx1 * dt;
+          l.y1 += l.vy1 * dt;
+          l.x2 += l.vx2 * dt;
+          l.y2 += l.vy2 * dt;
           ['x1', 'y1', 'x2', 'y2'].forEach((k) => {
             if (l[k] < 0) l[k] = 1;
             if (l[k] > 1) l[k] = 0;
@@ -203,9 +212,11 @@ export const GeoCanvas = () => {
 
       /* Triangles */
       tris.forEach((t) => {
-        t.rot += t.rotSpeed;
-        t.x = Math.max(0.02, Math.min(0.98, t.x + t.vx));
-        t.y = Math.max(0.02, Math.min(0.98, t.y + t.vy));
+        t.rot += t.rotSpeed * dt;
+        t.x += t.vx * dt;
+        t.y += t.vy * dt;
+        if (t.x <= 0.03 || t.x >= 0.97) t.vx *= -1;
+        if (t.y <= 0.03 || t.y >= 0.97) t.vy *= -1;
         ctx.save();
         ctx.translate(t.x * W + (t._glitch ? rand(-9, 9) : 0), t.y * H);
         ctx.rotate(t.rot);
@@ -223,9 +234,11 @@ export const GeoCanvas = () => {
 
       /* Squares */
       squares.forEach((s) => {
-        s.rot += s.rotSpeed;
-        s.x = Math.max(0.02, Math.min(0.98, s.x + s.vx));
-        s.y = Math.max(0.02, Math.min(0.98, s.y + s.vy));
+        s.rot += s.rotSpeed * dt;
+        s.x += s.vx * dt;
+        s.y += s.vy * dt;
+        if (s.x <= 0.03 || s.x >= 0.97) s.vx *= -1;
+        if (s.y <= 0.03 || s.y >= 0.97) s.vy *= -1;
         ctx.save();
         ctx.translate(s.x * W + (s._glitch ? rand(-10, 10) : 0), s.y * H);
         ctx.rotate(s.rot);
@@ -238,13 +251,14 @@ export const GeoCanvas = () => {
         ctx.restore();
       });
 
-      if (!reducedMotion && !document.hidden) {
+      if (!document.hidden) {
         animId = requestAnimationFrame(draw);
       }
     };
 
     const handleVisibility = () => {
-      if (!document.hidden && !reducedMotion) {
+      if (!document.hidden) {
+        lastTime = performance.now();
         cancelAnimationFrame(animId);
         animId = requestAnimationFrame(draw);
       }

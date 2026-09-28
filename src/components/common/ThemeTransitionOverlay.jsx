@@ -13,9 +13,6 @@ export const ThemeTransitionOverlay = () => {
       className={`theme-transition-overlay active ${isToDark ? 'to-dark' : 'to-light'}`}
       aria-hidden="true"
     >
-      <div className="theme-transition-raster"></div>
-      <div className="theme-transition-glitch-tear"></div>
-      <div className="theme-transition-chromatic"></div>
       <div className="theme-transition-scanline"></div>
       <div className="theme-telemetry-badge">
         <span className="theme-badge-dot"></span>

@@ -36,7 +36,7 @@ export const MusicPage = () => {
       </div>
 
       {/* Embed Music Section component */}
-      <MusicSection />
+      <MusicSection hideHeader={true} />
 
       {/* Cross link to Discography */}
       <div className="container-lg" style={{ marginTop: '40px' }}>

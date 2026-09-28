@@ -63,9 +63,20 @@ export const DiscoMarquee = ({ isVisible }) => {
     };
     document.addEventListener('visibilitychange', handleVisibility);
 
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined' && track) {
+      ro = new ResizeObserver(() => {
+        if (track.scrollWidth > 0) {
+          s.hw = track.scrollWidth / 2;
+        }
+      });
+      ro.observe(track);
+    }
+
     animRef.current = requestAnimationFrame(tick);
     return () => {
       running = false;
+      if (ro) ro.disconnect();
       cancelAnimationFrame(animRef.current);
       document.removeEventListener('visibilitychange', handleVisibility);
     };
@@ -96,8 +107,10 @@ export const DiscoMarquee = ({ isVisible }) => {
   };
 
   const handleWheel = (e) => {
-    stateRef.current.position += (e.deltaX || e.deltaY) * 0.7;
-    stateRef.current.velocity = 0;
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      stateRef.current.position += e.deltaX * 0.7;
+      stateRef.current.velocity = 0;
+    }
   };
 
   const renderPanel = (d, key, hidden = false) => (
