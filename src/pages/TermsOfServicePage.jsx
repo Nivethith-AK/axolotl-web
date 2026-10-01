@@ -25,6 +25,7 @@ export const TermsOfServicePage = () => {
   const [activeSection, setActiveSection] = useState('tos-preamble');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const mobileNavRef = useRef(null);
+  const sidenavRef = useRef(null);
 
   useEffect(() => {
     document.title = t('page_title.tos', 'Δxolotl // Terms of Service');
@@ -35,26 +36,73 @@ export const TermsOfServicePage = () => {
     }
   }, [t]);
 
-  // Scroll spy observing all 15 real section blocks
+  // Robust Scroll Spy: tracks user scrolling through all 15 authentic sections
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY || window.pageYOffset;
+          const windowHeight = window.innerHeight;
+          const docHeight = document.documentElement.scrollHeight;
+
+          // Bottom of page check: lock to final section
+          if (scrollY + windowHeight >= docHeight - 60) {
+            setActiveSection(SECTIONS[SECTIONS.length - 1].id);
+            ticking = false;
+            return;
           }
+
+          const readingLine = scrollY + 120;
+          let currentId = SECTIONS[0].id;
+
+          for (let i = 0; i < SECTIONS.length; i++) {
+            const el = document.getElementById(SECTIONS[i].id);
+            if (el) {
+              const top = el.getBoundingClientRect().top + scrollY;
+              if (top <= readingLine) {
+                currentId = SECTIONS[i].id;
+              } else {
+                break;
+              }
+            }
+          }
+
+          setActiveSection(currentId);
+          ticking = false;
         });
-      },
-      { rootMargin: '-15% 0px -75% 0px', threshold: 0 }
-    );
+        ticking = true;
+      }
+    };
 
-    SECTIONS.forEach((sec) => {
-      const el = document.getElementById(sec.id);
-      if (el) observer.observe(el);
-    });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    const timer = setTimeout(handleScroll, 100);
 
-    return () => observer.disconnect();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timer);
+    };
   }, []);
+
+  // Auto-scroll TOC sidebar to keep active section in view if sidebar overflows
+  useEffect(() => {
+    if (!sidenavRef.current) return;
+    const activeLink = sidenavRef.current.querySelector(`a[href="#${activeSection}"]`);
+    if (activeLink) {
+      const sidenav = sidenavRef.current;
+      const linkTop = activeLink.offsetTop;
+      const sidenavScroll = sidenav.scrollTop;
+      const sidenavHeight = sidenav.clientHeight;
+
+      if (linkTop < sidenavScroll + 20 || linkTop > sidenavScroll + sidenavHeight - 40) {
+        sidenav.scrollTo({
+          top: Math.max(0, linkTop - sidenavHeight / 2 + activeLink.offsetHeight / 2),
+          behavior: 'smooth',
+        });
+      }
+    }
+  }, [activeSection]);
 
   // Close mobile nav on outside click
   useEffect(() => {
@@ -76,6 +124,7 @@ export const TermsOfServicePage = () => {
 
   const handleLinkClick = (e, id) => {
     e.preventDefault();
+    setActiveSection(id);
     setMobileNavOpen(false);
     const el = document.getElementById(id);
     if (el) {
@@ -155,7 +204,7 @@ export const TermsOfServicePage = () => {
         {/* 2-Column Main Layout */}
         <div className="tos-layout">
           {/* Desktop Sticky Sidenav */}
-          <aside className="tos-sidenav">
+          <aside className="tos-sidenav" ref={sidenavRef}>
             <div className="tos-sidenav-label">SECTIONS // TOC</div>
             <ul className="tos-sidenav-list" id="tosNavList">
               {SECTIONS.map((sec) => (

@@ -34,6 +34,7 @@ export const ThemeProvider = ({ children }) => {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
 
     // Synchronously update DOM attributes immediately for zero perceived lag
+    localStorage.setItem('theme', nextTheme);
     if (nextTheme === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
       document.documentElement.classList.add('dark');
@@ -41,20 +42,17 @@ export const ThemeProvider = ({ children }) => {
       document.documentElement.removeAttribute('data-theme');
       document.documentElement.classList.remove('dark');
     }
-
-    // Update state immediately
     setTheme(nextTheme);
 
-    // Activate transition state & CSS smoothing class without blocking rapid clicks
+    // Trigger smooth cyberpunk glitch overlay and surface smoothing
     document.documentElement.classList.add('theme-transitioning');
     setTransitionState({ active: true, targetTheme: nextTheme });
 
-    // End transition after brief, smooth sweep
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       document.documentElement.classList.remove('theme-transitioning');
       setTransitionState({ active: false, targetTheme: null });
-    }, 280);
+    }, 420);
   };
 
   return (

@@ -13,11 +13,13 @@
       .tos-sidenav {
         position: sticky;
         top: 90px;
+        align-self: start;
         padding-top: 8px;
         padding-bottom: 40px;
         max-height: calc(100vh - 110px);
         overflow-y: auto;
         scrollbar-width: none;
+        overscroll-behavior: contain;
       }
       .tos-sidenav::-webkit-scrollbar {
         display: none;

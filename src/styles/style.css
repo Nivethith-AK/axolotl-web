@@ -296,7 +296,7 @@ html {
   background: var(--bg);
   color: var(--fg);
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
 }
 
@@ -304,7 +304,7 @@ body {
   font-family: "Roboto Mono", monospace;
   background: var(--bg);
   color: var(--fg);
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -313,7 +313,7 @@ body {
 }
 
 #root {
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
 }
 
@@ -581,7 +581,7 @@ button:focus-visible {
 }
 #modeToggle img {
   transform: rotate(0deg);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+  transition: transform 0.48s cubic-bezier(0.2, 0.9, 0.3, 1), filter 0.35s ease;
 }
 [data-theme="dark"] #modeToggle img {
   transform: rotate(180deg);
@@ -591,6 +591,12 @@ button:focus-visible {
 }
 [data-theme="dark"] #modeToggle:hover img {
   transform: rotate(198deg) scale(1.08);
+}
+#modeToggle:active img {
+  transform: scale(0.88);
+}
+[data-theme="dark"] #modeToggle:active img {
+  transform: rotate(180deg) scale(0.88);
 }
 #langToggle:hover img {
   transform: scale(1.08);
@@ -3762,10 +3768,11 @@ img.dossier-photo.raven-glitch-img {
 }
 
 /* =========================================
-   CYBERPUNK THEME TRANSITION EFFECT
+   CYBERPUNK THEME TRANSITION EFFECT (GLITCH & SCAN)
    ========================================= */
 
-/* Smooth color interpolation during theme toggle across major layout containers */
+/* Smooth color interpolation during theme toggle across layout elements */
+html.theme-transitioning,
 html.theme-transitioning body,
 html.theme-transitioning nav,
 html.theme-transitioning main,
@@ -3776,12 +3783,35 @@ html.theme-transitioning .container-lg,
 html.theme-transitioning .card,
 html.theme-transitioning .frame-bar,
 html.theme-transitioning .nav-links,
+html.theme-transitioning .social-side-panel,
+html.theme-transitioning .social-card,
+html.theme-transitioning .lang-panel,
+html.theme-transitioning .modal,
+html.theme-transitioning .disco-tabs,
+html.theme-transitioning .disco-tab,
+html.theme-transitioning .aff-filter-bar,
+html.theme-transitioning .aff-filter-btn,
+html.theme-transitioning .portfolio-filter-button,
+html.theme-transitioning .tos-layout,
+html.theme-transitioning .tos-sidenav,
+html.theme-transitioning .tos-preamble,
+html.theme-transitioning .tos-block,
+html.theme-transitioning .tos-mobile-nav-container,
+html.theme-transitioning .tos-mobile-nav-toggle,
+html.theme-transitioning .tos-mobile-nav-panel,
 html.theme-transitioning button,
-html.theme-transitioning a {
+html.theme-transitioning a,
+html.theme-transitioning h1,
+html.theme-transitioning h2,
+html.theme-transitioning h3,
+html.theme-transitioning p,
+html.theme-transitioning span,
+html.theme-transitioning div:not(.canvas-container):not(.geo-canvas) {
   transition:
-    background-color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-    color 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    background-color 0.36s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.36s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.32s ease,
+    box-shadow 0.36s ease !important;
 }
 
 /* Fullscreen Cyberpunk Overlay */
@@ -3797,21 +3827,76 @@ html.theme-transitioning a {
   display: block;
 }
 
-/* Sharp Traveling Matrix Scanline (Zero Glow, Hardware Accelerated) */
-.theme-transition-scanline {
+/* Phosphor Flash Flare */
+.theme-transition-flash {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  will-change: opacity;
+  animation: themePhosphorFlash 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.theme-transition-overlay.to-dark .theme-transition-flash {
+  background: radial-gradient(circle at center, rgba(0, 221, 233, 0.14) 0%, rgba(10, 10, 10, 0.45) 80%);
+}
+.theme-transition-overlay.to-light .theme-transition-flash {
+  background: radial-gradient(circle at center, rgba(255, 107, 0, 0.14) 0%, rgba(255, 255, 255, 0.52) 80%);
+}
+
+/* CRT Scanline Raster */
+.theme-transition-raster {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.14),
+    rgba(0, 0, 0, 0.14) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0;
+  will-change: opacity;
+  animation: themeRasterFlicker 0.42s ease forwards;
+}
+
+/* Matrix Glitch Displacement Jitter */
+.theme-transition-glitch {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: themeGlitchJitter 0.38s steps(5, end) forwards;
+}
+.theme-transition-overlay.to-dark .theme-transition-glitch {
+  box-shadow: inset 0 0 50px rgba(0, 221, 233, 0.08);
+}
+.theme-transition-overlay.to-light .theme-transition-glitch {
+  box-shadow: inset 0 0 50px rgba(255, 107, 0, 0.08);
+}
+
+/* High-Voltage Laser Beam Sweep */
+.theme-transition-beam {
   position: absolute;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 3px;
   top: 0;
   will-change: transform, opacity;
-  animation: themeScanlineTravel 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: themeBeamSweep 0.42s cubic-bezier(0.2, 0.8, 0.25, 1) forwards;
 }
-.theme-transition-overlay.to-dark .theme-transition-scanline {
+.theme-transition-overlay.to-dark .theme-transition-beam {
   background: #00dde9;
+  box-shadow:
+    0 0 12px #00dde9,
+    0 0 28px #00dde9,
+    0 0 55px rgba(0, 221, 233, 0.7);
 }
-.theme-transition-overlay.to-light .theme-transition-scanline {
+.theme-transition-overlay.to-light .theme-transition-beam {
   background: #ff6b00;
+  box-shadow:
+    0 0 12px #ff6b00,
+    0 0 28px #ff6b00,
+    0 0 55px rgba(255, 107, 0, 0.7);
 }
 
 /* Telemetry HUD Badge */
@@ -3824,13 +3909,15 @@ html.theme-transitioning a {
   letter-spacing: 2px;
   padding: 6px 14px;
   border: 1px solid var(--border);
-  background: rgba(10, 10, 10, 0.95);
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #fff;
   display: flex;
   align-items: center;
   gap: 8px;
   will-change: opacity, transform;
-  animation: themeBadgeGlitchSnap 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: themeBadgeSlide 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .theme-transition-overlay.to-dark .theme-telemetry-badge {
   border-color: #00dde9;
@@ -3843,68 +3930,93 @@ html.theme-transitioning a {
 .theme-badge-dot {
   width: 6px;
   height: 6px;
-  border-radius: 0;
-  animation: themeDotBlink 0.14s steps(1) infinite alternate;
+  border-radius: 50%;
+  animation: themePulseDot 0.18s infinite alternate;
 }
 .theme-transition-overlay.to-dark .theme-badge-dot {
   background: #00dde9;
+  box-shadow: 0 0 8px #00dde9;
 }
 .theme-transition-overlay.to-light .theme-badge-dot {
   background: #ff6b00;
+  box-shadow: 0 0 8px #ff6b00;
 }
 
-/* Mode Button Smooth Rotation */
-#modeToggle img {
-  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-}
-#modeToggle.switching img {
-  transform: rotate(180deg) scale(0.92);
-}
-
-@keyframes themeScanlineTravel {
+@keyframes themeBeamSweep {
   0% {
-    transform: translateY(0);
+    transform: translate3d(0, -6px, 0);
+    opacity: 0.95;
+  }
+  85% {
+    transform: translate3d(0, 100vh, 0);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate3d(0, 104vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes themePhosphorFlash {
+  0% { opacity: 0.65; }
+  45% { opacity: 0.25; }
+  100% { opacity: 0; }
+}
+
+@keyframes themeRasterFlicker {
+  0% { opacity: 0.38; }
+  25% { opacity: 0.16; }
+  60% { opacity: 0.28; }
+  100% { opacity: 0; }
+}
+
+@keyframes themeGlitchJitter {
+  0% { transform: translate3d(0, 0, 0); opacity: 0.8; }
+  20% { transform: translate3d(-3px, 1px, 0); opacity: 1; }
+  40% { transform: translate3d(3px, -1px, 0); opacity: 0.9; }
+  60% { transform: translate3d(-2px, 1px, 0); opacity: 1; }
+  80% { transform: translate3d(2px, 0, 0); opacity: 0.7; }
+  100% { transform: translate3d(0, 0, 0); opacity: 0; }
+}
+
+@keyframes themeBadgeSlide {
+  0% {
+    transform: translate3d(24px, 0, 0);
+    opacity: 0;
+  }
+  18% {
+    transform: translate3d(0, 0, 0);
     opacity: 1;
   }
-  90% {
-    transform: translateY(100vh);
+  78% {
+    transform: translate3d(0, 0, 0);
     opacity: 1;
   }
   100% {
-    transform: translateY(102vh);
+    transform: translate3d(16px, 0, 0);
     opacity: 0;
   }
 }
 
-@keyframes themeBadgeGlitchSnap {
-  0% {
-    transform: translateX(20px);
-    opacity: 0;
-  }
-  20% {
-    transform: translateX(-3px);
-    opacity: 1;
-  }
-  75% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(12px);
-    opacity: 0;
-  }
-}
-
-@keyframes themeDotBlink {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+@keyframes themePulseDot {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
 }
 
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  .theme-transition-scanline,
+  .theme-transition-beam,
+  .theme-transition-glitch,
+  .theme-transition-raster,
   .theme-telemetry-badge {
     display: none !important;
+  }
+  .theme-transition-flash {
+    animation: themeSimpleFade 0.3s ease forwards;
+  }
+  @keyframes themeSimpleFade {
+    0% { opacity: 0.4; }
+    100% { opacity: 0; }
   }
   #modeToggle img {
     transition: none !important;

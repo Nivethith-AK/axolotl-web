@@ -13,9 +13,12 @@ export const ThemeTransitionOverlay = () => {
       className={`theme-transition-overlay active ${isToDark ? 'to-dark' : 'to-light'}`}
       aria-hidden="true"
     >
-      <div className="theme-transition-scanline"></div>
+      <div className="theme-transition-flash" />
+      <div className="theme-transition-raster" />
+      <div className="theme-transition-glitch" />
+      <div className="theme-transition-beam" />
       <div className="theme-telemetry-badge">
-        <span className="theme-badge-dot"></span>
+        <span className="theme-badge-dot" />
         <span>
           {isToDark
             ? 'SYS_POLARITY // [DARK_MATRIX_ACTIVE]'
