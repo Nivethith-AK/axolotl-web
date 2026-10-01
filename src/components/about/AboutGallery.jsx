@@ -101,7 +101,7 @@ export const AboutGallery = () => {
             aria-hidden="true"
             style={{ width: `${100 / allSlots}%`, minWidth: `${100 / allSlots}%` }}
           >
-            <img src={SLIDES[total - 1].src} alt="" loading="lazy" decoding="async" width="300" height="300" />
+            <img src={SLIDES[total - 1].src} alt="" loading="lazy" decoding="async" width="300" height="300" draggable="false" />
           </div>
 
           {/* real slides */}
@@ -111,7 +111,7 @@ export const AboutGallery = () => {
               className="ag-slide"
               style={{ width: `${100 / allSlots}%`, minWidth: `${100 / allSlots}%` }}
             >
-              <img src={slide.src} alt={slide.alt} loading="lazy" decoding="async" width="300" height="300" />
+              <img src={slide.src} alt={slide.alt} loading="lazy" decoding="async" width="300" height="300" draggable="false" />
             </div>
           ))}
 
@@ -121,7 +121,7 @@ export const AboutGallery = () => {
             aria-hidden="true"
             style={{ width: `${100 / allSlots}%`, minWidth: `${100 / allSlots}%` }}
           >
-            <img src={SLIDES[0].src} alt="" loading="lazy" decoding="async" width="300" height="300" />
+            <img src={SLIDES[0].src} alt="" loading="lazy" decoding="async" width="300" height="300" draggable="false" />
           </div>
         </div>
       </div>

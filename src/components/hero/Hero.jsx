@@ -179,6 +179,7 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
               height="130"
               fetchPriority="high"
               decoding="async"
+              draggable="false"
             />
             <div className="btn-hint" aria-hidden="true">
               <svg className="btn-hint-ring" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
@@ -249,6 +250,7 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
                   width="20"
                   height="20"
                   decoding="async"
+                  draggable="false"
                 />
               </div>
             </a>

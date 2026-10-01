@@ -67,6 +67,7 @@ export const ConnectSection = ({ hideHeader = false }) => {
                   decoding="async"
                   width="40"
                   height="40"
+                  draggable="false"
                 />
               </div>
               <div className="social-card-label" data-i18n="connect.commission_label">
@@ -96,6 +97,7 @@ export const ConnectSection = ({ hideHeader = false }) => {
                   decoding="async"
                   width="40"
                   height="40"
+                  draggable="false"
                 />
               </div>
               <div className="social-card-label" data-i18n="connect.discord_label">

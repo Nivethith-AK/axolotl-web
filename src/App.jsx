@@ -136,6 +136,17 @@ export const App = () => {
     if (window.lenis) window.lenis.start();
   }, []);
 
+  // Prevent native browser ghost image dragging across the website
+  useEffect(() => {
+    const handleDragStart = (e) => {
+      if (e.target && (e.target.tagName === 'IMG' || e.target.closest('img'))) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('dragstart', handleDragStart);
+    return () => document.removeEventListener('dragstart', handleDragStart);
+  }, []);
+
   // When redirecting to another page link, trigger authentic loading animation for that page
   useEffect(() => {
     const top = getTopRoute(location.pathname);

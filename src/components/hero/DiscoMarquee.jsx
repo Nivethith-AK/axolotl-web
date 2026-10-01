@@ -136,6 +136,7 @@ export const DiscoMarquee = ({ isVisible }) => {
         decoding="async"
         width="144"
         height="144"
+        draggable="false"
         onError={(e) => {
           e.target.style.display = 'none';
         }}

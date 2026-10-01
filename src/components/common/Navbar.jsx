@@ -202,6 +202,7 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
           width="36"
           height="32"
           decoding="async"
+          draggable="false"
         />
         <div className="logo-text">ΔXOLOTL</div>
       </Link>
@@ -213,7 +214,7 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
           aria-label="Toggle theme"
           onClick={toggleTheme}
         >
-          <img src="/images/assets/mode.png" alt="Theme" width="26" height="26" decoding="async" />
+          <img src="/images/assets/mode.png" alt="Theme" width="26" height="26" decoding="async" draggable="false" />
         </button>
         <button
           className={`nav-icon-btn ${isLangOpen ? 'active' : ''}`}
@@ -225,7 +226,7 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
             onLangToggle();
           }}
         >
-          <img src="/images/assets/lang.png" alt="Language" width="26" height="26" decoding="async" />
+          <img src="/images/assets/lang.png" alt="Language" width="26" height="26" decoding="async" draggable="false" />
         </button>
         <div className="nav-divider"></div>
         <button

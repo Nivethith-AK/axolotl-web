@@ -331,6 +331,7 @@ export const AffiliatesTeaser = () => {
             decoding="async"
             width="200"
             height="220"
+            draggable="false"
           />
         ) : (
           <div className="aff-panel-initial" style={{ color: displayAccent }}>
@@ -353,6 +354,7 @@ export const AffiliatesTeaser = () => {
             decoding="async"
             width="24"
             height="24"
+            draggable="false"
           />
         )}
       </div>
@@ -450,6 +452,7 @@ export const AffiliatesTeaser = () => {
                       className="dossier-photo"
                       alt={activeName}
                       decoding="async"
+                      draggable="false"
                       onError={(e) => {
                         e.target.style.display = 'none';
                         if (e.target.nextElementSibling) {
@@ -501,6 +504,7 @@ export const AffiliatesTeaser = () => {
                       decoding="async"
                       width="18"
                       height="18"
+                      draggable="false"
                     />
                   </a>
                 )}
@@ -582,6 +586,7 @@ export const AffiliatesTeaser = () => {
               height="16"
               loading="lazy"
               decoding="async"
+              draggable="false"
               style={{ borderRadius: '50%', objectFit: 'cover' }}
             />
             <span className="prompt">&gt;&gt;&gt;</span> Full_Roster :=

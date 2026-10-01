@@ -131,6 +131,7 @@ export const PortfolioSection = () => {
           decoding="async"
           width="480"
           height="360"
+          draggable="false"
         />
         <span className="yt-facade-play">
           <svg viewBox="0 0 24 24">
@@ -375,6 +376,7 @@ export const PortfolioSection = () => {
               decoding="async"
               width="16"
               height="16"
+              draggable="false"
             />
             <span className="prompt">&gt;&gt;&gt;</span> External_Archive :=
             <span className="value">Foriio</span>
