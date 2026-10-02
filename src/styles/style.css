@@ -1017,15 +1017,28 @@ button:focus-visible {
 #about.section,
 #music.section,
 #portfolio.section,
-#affiliates.section,
 #connect.section {
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: max(76px, 8vh);
-  padding-bottom: max(36px, 4vh);
+  padding-top: max(72px, 7.5vh);
+  padding-bottom: max(24px, 3vh);
+}
+
+#affiliates.section {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: max(68px, 6.5vh);
+  padding-bottom: max(16px, 2vh);
 }
 
 /* =========================================
@@ -1329,6 +1342,9 @@ p {
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
+}
+#affiliates .ext-link-row {
+  margin-top: clamp(8px, 1.4vh, 16px) !important;
 }
 
 .ext-link {
@@ -2404,7 +2420,7 @@ p {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: clamp(8px, 1.4vh, 14px);
 }
 .aff-view-toggle {
   display: inline-flex;
@@ -2434,15 +2450,19 @@ p {
 }
 .aff-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
-  margin-top: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
   width: 100%;
+  max-height: 52vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding-right: 4px;
 }
 .aff-cards-grid .aff-panel {
   width: 100% !important;
   height: auto !important;
-  aspect-ratio: 1 / 1.1;
+  aspect-ratio: 1 / 1;
   position: relative;
   display: block;
   overflow: hidden;
@@ -3357,6 +3377,9 @@ p {
 }
 .aff-panels-wrap {
   cursor: grab;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.2vh, 12px);
   touch-action: pan-y;
 }
 .aff-panels-wrap:active {
@@ -3364,9 +3387,10 @@ p {
 }
 .aff-panel {
   position: relative;
-  width: 200px;
+  width: clamp(140px, 17.5vh, 185px);
+  height: clamp(140px, 17.5vh, 185px);
+  aspect-ratio: 1 / 1;
   flex-shrink: 0;
-  height: 220px;
   cursor: pointer;
   overflow: hidden;
   border: 2px solid rgba(255, 255, 255, 0.15);
@@ -3468,25 +3492,25 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 16px;
+  padding: clamp(10px, 1.2vh, 16px);
   z-index: 3;
 }
 .aff-panel-name {
   font-family: "Roboto Mono", monospace;
-  font-size: 0.72rem;
+  font-size: clamp(0.58rem, 1vh, 0.72rem);
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   color: #fff;
   text-transform: uppercase;
   transition: color 0.25s;
 }
 .aff-panel-role {
   font-family: "Roboto Mono", monospace;
-  font-size: 0.52rem;
+  font-size: clamp(0.44rem, 0.8vh, 0.52rem);
   color: #888;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  margin-top: 4px;
+  margin-top: 2px;
   transition: color 0.25s;
 }
 .aff-panel-affbadge {

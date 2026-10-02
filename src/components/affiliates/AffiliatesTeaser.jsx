@@ -159,12 +159,17 @@ export const AffiliatesTeaser = () => {
     const wrap = wrapRef.current;
     if (!wrap) return;
 
-    // Trackpad horizontal swipe & Shift+Wheel support
+    // Trackpad horizontal swipe & Shift+Wheel support with page scroll prevention
     const handleWheel = (e) => {
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      stateRef.current.positions[0] -= delta * 0.8;
-      stateRef.current.positions[1] -= delta * 0.8;
-      stateRef.current.velocity = -delta * 0.35;
+      // Prevent the page from scrolling while user is interacting with the affiliates stream!
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+      const isHorizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      const delta = isHorizontal ? e.deltaX : e.deltaY;
+      stateRef.current.positions[0] -= delta * 0.75;
+      stateRef.current.positions[1] += delta * 0.75;
+      stateRef.current.velocity = -delta * 0.3;
     };
 
     // Mobile touch gestures with vertical scroll pass-through
@@ -202,6 +207,7 @@ export const AffiliatesTeaser = () => {
       }
 
       if (isHorizontalSwipe) {
+        if (e.cancelable) e.preventDefault();
         stateRef.current.hasDragged = true;
         stateRef.current.positions[0] += dx;
         stateRef.current.positions[1] += dx;
@@ -240,9 +246,9 @@ export const AffiliatesTeaser = () => {
       }
     };
 
-    wrap.addEventListener('wheel', handleWheel, { passive: true });
+    wrap.addEventListener('wheel', handleWheel, { passive: false });
     wrap.addEventListener('touchstart', handleTouchStart, { passive: true });
-    wrap.addEventListener('touchmove', handleTouchMove, { passive: true });
+    wrap.addEventListener('touchmove', handleTouchMove, { passive: false });
     wrap.addEventListener('touchend', handleTouchEnd, { passive: true });
     window.addEventListener('pointermove', handleGlobalPointerMove);
     window.addEventListener('pointerup', handleGlobalPointerUp);
