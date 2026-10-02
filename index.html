@@ -76,8 +76,14 @@
       name="twitter:image"
       content="https://theaxolotlmusic.com/images/assets/banner.jpg"
     />
+    <script>
+      (function() {
+        window.addEventListener("dragstart", function(e) { e.preventDefault(); return false; }, true);
+        window.addEventListener("drop", function(e) { e.preventDefault(); return false; }, true);
+      })();
+    </script>
   </head>
-  <body>
+  <body ondragstart="return false;" ondrop="return false;">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

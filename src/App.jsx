@@ -136,15 +136,35 @@ export const App = () => {
     if (window.lenis) window.lenis.start();
   }, []);
 
-  // Prevent native browser ghost image dragging across the website
+  // Lock all elements - completely prevent native dragging of any element across the website
   useEffect(() => {
     const handleDragStart = (e) => {
-      if (e.target && (e.target.tagName === 'IMG' || e.target.closest('img'))) {
-        e.preventDefault();
-      }
+      e.preventDefault();
+      return false;
     };
-    document.addEventListener('dragstart', handleDragStart);
-    return () => document.removeEventListener('dragstart', handleDragStart);
+    const handleDrop = (e) => {
+      e.preventDefault();
+      return false;
+    };
+    const handleDragOver = (e) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener('dragstart', handleDragStart, true);
+    window.addEventListener('drop', handleDrop, true);
+    window.addEventListener('dragover', handleDragOver, true);
+    document.addEventListener('dragstart', handleDragStart, true);
+    document.addEventListener('drop', handleDrop, true);
+    document.addEventListener('dragover', handleDragOver, true);
+
+    return () => {
+      window.removeEventListener('dragstart', handleDragStart, true);
+      window.removeEventListener('drop', handleDrop, true);
+      window.removeEventListener('dragover', handleDragOver, true);
+      document.removeEventListener('dragstart', handleDragStart, true);
+      document.removeEventListener('drop', handleDrop, true);
+      document.removeEventListener('dragover', handleDragOver, true);
+    };
   }, []);
 
   // When redirecting to another page link, trigger authentic loading animation for that page

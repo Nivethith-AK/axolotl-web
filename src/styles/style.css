@@ -317,15 +317,55 @@ body {
   width: 100%;
 }
 
-/* Disable native ghost image dragging and accidental image selection across all browsers */
+/* Lock all elements - completely disable native ghost dragging across the entire site */
+*,
+*::before,
+*::after {
+  -webkit-user-drag: none !important;
+  -khtml-user-drag: none !important;
+  -moz-user-drag: none !important;
+  -o-user-drag: none !important;
+  user-drag: none !important;
+}
+
+/* Media elements should also never be selectable or draggable */
 img,
 svg,
-picture {
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  user-drag: none;
+picture,
+canvas,
+video,
+iframe {
+  -webkit-user-drag: none !important;
+  -khtml-user-drag: none !important;
+  -moz-user-drag: none !important;
+  -o-user-drag: none !important;
+  user-drag: none !important;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Interactive UI controls, links, buttons, and panels should not accidentally trigger text highlight or drag */
+a,
+button,
+[role="button"],
+.nav,
+.nav-links,
+.nav-link-item,
+.big-button,
+.hero-content,
+.disco-marquee-wrap,
+.disco-marquee-row,
+.disco-marquee-panel,
+.aff-panel,
+.aff-marquee-row,
+.work-card,
+.disco-card,
+.social-card,
+.waveform-container,
+.frame-bar,
+.telemetry-decals,
+.badge,
+.tag {
   user-select: none;
   -webkit-user-select: none;
 }
