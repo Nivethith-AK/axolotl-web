@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { useTheme } from '../../context/ThemeContext';
 
 export const GeoCanvas = () => {
   const canvasRef = useRef(null);
-  const { theme } = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -274,7 +272,7 @@ export const GeoCanvas = () => {
       clearTimeout(glitchTimeoutId);
       cancelAnimationFrame(animId);
     };
-  }, [theme]);
+  }, []);
 
   return <canvas id="geoCanvas" ref={canvasRef} className="geo-canvas" aria-hidden="true"></canvas>;
 };
