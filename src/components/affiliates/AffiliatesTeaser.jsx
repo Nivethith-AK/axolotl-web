@@ -7,6 +7,7 @@ import { AFFILIATES_DATA, toSlug } from '../../data/affiliatesData';
 export const AffiliatesTeaser = () => {
   const { t } = useLanguage();
   const [selectedAffiliate, setSelectedAffiliate] = useState(null);
+  const [viewMode, setViewMode] = useState('stream');
   const [showingAlt, setShowingAlt] = useState(false);
   const [accessingName, setAccessingName] = useState('');
   const [altPersonaText, setAltPersonaText] = useState('');
@@ -67,7 +68,8 @@ export const AffiliatesTeaser = () => {
   });
 
   useEffect(() => {
-    const SPEEDS = [-0.4, 0.4];
+    const SPEED_ROW1 = -0.45;
+    const SPEED_ROW2 = 0.45;
     const s = stateRef.current;
 
     const updateHalfWidths = () => {
@@ -96,8 +98,8 @@ export const AffiliatesTeaser = () => {
       }
 
       if (!s.isDragging && s.hoveredRow === null) {
-        s.positions[0] += SPEEDS[0];
-        s.positions[1] += SPEEDS[1];
+        s.positions[0] += SPEED_ROW1;
+        s.positions[1] += SPEED_ROW2;
       }
 
       if (!s.isDragging && s.velocity !== 0) {
@@ -113,7 +115,7 @@ export const AffiliatesTeaser = () => {
       }
       if (s.hw2) {
         const wrap1 = ((s.positions[1] % s.hw2) + s.hw2) % s.hw2;
-        t2.style.transform = `translateX(${-wrap1}px)`;
+        t2.style.transform = `translateX(${wrap1 - s.hw2}px)`;
       }
 
       animRef.current = requestAnimationFrame(tick);
@@ -159,11 +161,10 @@ export const AffiliatesTeaser = () => {
 
     // Trackpad horizontal swipe & Shift+Wheel support
     const handleWheel = (e) => {
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        stateRef.current.positions[0] += e.deltaX * 0.8;
-        stateRef.current.positions[1] += e.deltaX * 0.8;
-        stateRef.current.velocity = 0;
-      }
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      stateRef.current.positions[0] -= delta * 0.8;
+      stateRef.current.positions[1] -= delta * 0.8;
+      stateRef.current.velocity = -delta * 0.35;
     };
 
     // Mobile touch gestures with vertical scroll pass-through
@@ -202,9 +203,9 @@ export const AffiliatesTeaser = () => {
 
       if (isHorizontalSwipe) {
         stateRef.current.hasDragged = true;
-        stateRef.current.positions[0] -= dx;
-        stateRef.current.positions[1] -= dx;
-        stateRef.current.velocity = -dx * 0.4;
+        stateRef.current.positions[0] += dx;
+        stateRef.current.positions[1] += dx;
+        stateRef.current.velocity = dx * 0.35;
       }
       touchLastX = cx;
     };
@@ -222,9 +223,9 @@ export const AffiliatesTeaser = () => {
       const totalDx = Math.abs(e.clientX - stateRef.current.dragStartX);
       if (totalDx > 6) stateRef.current.hasDragged = true;
       const dx = e.clientX - stateRef.current.dragLastX;
-      stateRef.current.positions[0] -= dx;
-      stateRef.current.positions[1] -= dx;
-      stateRef.current.velocity = -dx * 0.4;
+      stateRef.current.positions[0] += dx;
+      stateRef.current.positions[1] += dx;
+      stateRef.current.velocity = dx * 0.35;
       stateRef.current.dragLastX = e.clientX;
     };
 
@@ -258,6 +259,19 @@ export const AffiliatesTeaser = () => {
     };
   }, []);
 
+  // Keyboard Escape listener to dismiss modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setSelectedAffiliate(null);
+        setAccessingName('');
+        setShowingAlt(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const openDossier = (data) => {
     setSelectedAffiliate(data);
     setShowingAlt(false);
@@ -265,30 +279,12 @@ export const AffiliatesTeaser = () => {
     if (data.altName) {
       setAltPersonaText(data.altName.toUpperCase());
     }
-    setTimeout(() => {
-      if (window.lenis) {
-        window.lenis.resize();
-        const dossierEl = document.getElementById('dossierPanel');
-        if (dossierEl) {
-          window.lenis.scrollTo(dossierEl, { offset: -90, duration: 1.2 });
-        }
-      }
-    }, 60);
   };
 
   const closeDossier = () => {
     setSelectedAffiliate(null);
     setAccessingName('');
     setShowingAlt(false);
-    setTimeout(() => {
-      if (window.lenis) {
-        window.lenis.resize();
-      }
-      const t1 = track1Ref.current;
-      const t2 = track2Ref.current;
-      if (t1 && t1.scrollWidth > 0) stateRef.current.hw1 = t1.scrollWidth / 2;
-      if (t2 && t2.scrollWidth > 0) stateRef.current.hw2 = t2.scrollWidth / 2;
-    }, 60);
   };
 
   const togglePersona = () => {
@@ -375,205 +371,231 @@ export const AffiliatesTeaser = () => {
           dataText="Affiliates"
           i18nKey="affiliates.heading"
         />
-        <p className="aff-subline">
-          <span data-i18n="affiliates.sub">
-            {t('affiliates.sub', 'Collaborative network: //')}
-          </span>
-          <span className={`accessing-dossier ${accessingName ? 'visible' : ''}`} id="accessingDossier">
-            {accessingName ? `ACCESSING_DOSSIER: ${accessingName}` : ''}
-          </span>
-        </p>
-
-        {/* ── Marquee Rows ── */}
-        <div
-          className={`aff-panels-wrap ${activeData ? 'panels-out' : ''}`}
-          id="affPanelsWrap"
-          ref={wrapRef}
-          style={
-            activeData
-              ? { height: '0', overflow: 'hidden', pointerEvents: 'none' }
-              : undefined
-          }
-          onPointerDown={(e) => {
-            if (e.pointerType === 'touch') return;
-            stateRef.current.isDragging = true;
-            stateRef.current.hasDragged = false;
-            stateRef.current.dragStartX = e.clientX;
-            stateRef.current.dragLastX = e.clientX;
-            stateRef.current.velocity = 0;
-            if (wrapRef.current) wrapRef.current.style.cursor = 'grabbing';
-          }}
-        >
-          <div
-            className="aff-marquee-row"
-            onMouseEnter={() => {
-              stateRef.current.hoveredRow = 0;
-            }}
-            onMouseLeave={() => {
-              stateRef.current.hoveredRow = null;
-              setHoveredAffId(null);
-            }}
-          >
-            <div className="aff-marquee-track" ref={track1Ref}>
-              {row1.map((d, i) => renderCard(d, i, 1))}
-              {row1.map((d, i) => renderCard(d, `dup-${i}`, 1))}
-            </div>
-          </div>
-
-          <div
-            className="aff-marquee-row"
-            onMouseEnter={() => {
-              stateRef.current.hoveredRow = 1;
-            }}
-            onMouseLeave={() => {
-              stateRef.current.hoveredRow = null;
-              setHoveredAffId(null);
-            }}
-          >
-            <div className="aff-marquee-track" ref={track2Ref}>
-              {row2.map((d, i) => renderCard(d, i, 2))}
-              {row2.map((d, i) => renderCard(d, `dup-${i}`, 2))}
-            </div>
+        <div className="aff-subline-row">
+          <p className="aff-subline">
+            <span data-i18n="affiliates.sub">
+              {t('affiliates.sub', 'Collaborative network: //')}
+            </span>
+            <span className={`accessing-dossier ${accessingName ? 'visible' : ''}`} id="accessingDossier">
+              {accessingName ? `ACCESSING_DOSSIER: ${accessingName}` : ''}
+            </span>
+          </p>
+          <div className="aff-view-toggle">
+            <button
+              type="button"
+              className={`aff-toggle-btn ${viewMode === 'stream' ? 'active' : ''}`}
+              onClick={() => setViewMode('stream')}
+              title="Stream View"
+            >
+              [STREAM_VIEW]
+            </button>
+            <button
+              type="button"
+              className={`aff-toggle-btn ${viewMode === 'cards' ? 'active' : ''}`}
+              onClick={() => setViewMode('cards')}
+              title="Cards Grid"
+            >
+              [CARDS_GRID]
+            </button>
           </div>
         </div>
 
-        {/* ── Inline Dossier Panel ── */}
-        <div
-          className={`dossier-panel ${activeData ? 'is-open dossier-open' : ''}`}
-          id="dossierPanel"
-        >
-          {activeData && (
-            <>
-              <div className="dossier-photo-col" id="dossierPhotoCol">
-                <div className="dossier-photo-inner" id="dossierPhotoInner">
-                  {activeImage ? (
-                    <img
-                      src={`/images/${activeImage}`}
-                      className="dossier-photo"
-                      alt={activeName}
-                      decoding="async"
-                      draggable="false"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        if (e.target.nextElementSibling) {
-                          e.target.nextElementSibling.style.display = 'flex';
-                        }
-                      }}
-                    />
-                  ) : null}
-                  <div
-                    className="dossier-photo-placeholder"
-                    style={{ display: activeImage ? 'none' : 'flex' }}
-                  >
-                    IMAGE_DATA
-                    <br />
-                    NOT_FOUND
-                  </div>
-                </div>
+        {/* ── Stream Marquee Rows ── */}
+        {viewMode === 'stream' && (
+          <div
+            className="aff-panels-wrap"
+            id="affPanelsWrap"
+            ref={wrapRef}
+            onPointerDown={(e) => {
+              if (e.pointerType === 'touch') return;
+              stateRef.current.isDragging = true;
+              stateRef.current.hasDragged = false;
+              stateRef.current.dragStartX = e.clientX;
+              stateRef.current.dragLastX = e.clientX;
+              stateRef.current.velocity = 0;
+              if (wrapRef.current) wrapRef.current.style.cursor = 'grabbing';
+            }}
+          >
+            <div
+              className="aff-marquee-row"
+              onMouseEnter={() => {
+                stateRef.current.hoveredRow = 0;
+              }}
+              onMouseLeave={() => {
+                stateRef.current.hoveredRow = null;
+                setHoveredAffId(null);
+              }}
+            >
+              <div className="aff-marquee-track" ref={track1Ref}>
+                {row1.map((d, i) => renderCard(d, i, 1))}
+                {row1.map((d, i) => renderCard(d, `dup-${i}`, 1))}
               </div>
+            </div>
 
-              <div className="dossier-info-col" id="dossierInfoCol">
-                <button
-                  type="button"
-                  className="dossier-close"
-                  id="dossierClose"
-                  onClick={closeDossier}
-                >
-                  [×]
-                </button>
-                <div className="dossier-tag">NODE_AFFILIATE // COLLABORATOR</div>
-                <div className="dossier-name" id="dossierName" style={{ color: activeAccent }}>
-                  {activeName}
-                </div>
+            <div
+              className="aff-marquee-row"
+              onMouseEnter={() => {
+                stateRef.current.hoveredRow = 1;
+              }}
+              onMouseLeave={() => {
+                stateRef.current.hoveredRow = null;
+                setHoveredAffId(null);
+              }}
+            >
+              <div className="aff-marquee-track" ref={track2Ref}>
+                {row2.map((d, i) => renderCard(d, i, 2))}
+                {row2.map((d, i) => renderCard(d, `dup-${i}`, 2))}
+              </div>
+            </div>
+          </div>
+        )}
 
-                {activeData.affiliation && (
-                  <a
-                    href={activeData.affiliation.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="dossier-affiliation"
-                  >
-                    <span className="dossier-affiliation-from">from</span>
-                    <span className="dossier-affiliation-name">
-                      {activeData.affiliation.name}
-                    </span>
-                    <img
-                      src={`/images/${activeData.affiliation.badge}`}
-                      className="dossier-affiliation-badge"
-                      alt={activeData.affiliation.name}
-                      decoding="async"
-                      width="18"
-                      height="18"
-                      draggable="false"
-                    />
-                  </a>
-                )}
+        {/* ── Cards Component Grid ── */}
+        {viewMode === 'cards' && (
+          <div className="aff-cards-grid">
+            {sorted.map((d, i) => renderCard(d, i, 'grid'))}
+          </div>
+        )}
 
-                <div className="dossier-role">{activeData.role}</div>
+        {/* ── Centered Holographic Dossier Modal (Screen Pop Up) ── */}
+        {activeData && (
+          <div
+            className="dossier-modal-overlay"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) closeDossier();
+            }}
+          >
+            <div className="dossier-modal-container" role="dialog" aria-modal="true">
+              <button
+                type="button"
+                className="dossier-modal-close"
+                onClick={closeDossier}
+                aria-label="Close Dossier"
+              >
+                [× CLOSE]
+              </button>
 
-                {activeData.altImage && (
-                  <div className="dossier-section">
-                    <div className="dossier-section-label">// ALT</div>
-                    <button
-                      type="button"
-                      id="ravenToggleBtn"
-                      onClick={togglePersona}
-                      style={{
-                        fontFamily: "'Roboto Mono', monospace",
-                        fontSize: '0.52rem',
-                        letterSpacing: '1px',
-                        padding: '6px 14px',
-                        border: `1px solid ${activeAccent}`,
-                        color: activeAccent,
-                        background: 'transparent',
-                        cursor: 'pointer',
-                        textTransform: 'uppercase',
-                        transition: 'background 0.2s, color 0.2s, border-color 0.2s',
-                      }}
+              <div className="dossier-modal-body">
+                {/* Left Column: Photo & Persona Switch */}
+                <div className="dossier-photo-col">
+                  <div className="dossier-photo-inner">
+                    {activeImage ? (
+                      <img
+                        src={`/images/${activeImage}`}
+                        className="dossier-photo"
+                        alt={activeName}
+                        decoding="async"
+                        draggable="false"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          if (e.target.nextElementSibling) {
+                            e.target.nextElementSibling.style.display = 'flex';
+                          }
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className="dossier-photo-placeholder"
+                      style={{ display: activeImage ? 'none' : 'flex' }}
                     >
-                      SWITCH → {showingAlt ? activeData.name.toUpperCase() : activeData.altName.toUpperCase()}
-                    </button>
+                      IMAGE_DATA
+                      <br />
+                      NOT_FOUND
+                    </div>
                   </div>
-                )}
 
-                {activeData.projects?.length > 0 && (
-                  <div className="dossier-section">
-                    <div className="dossier-section-label">// COLLABORATIVE_LOG</div>
-                    {activeData.projects.map((p, pIdx) => (
-                      <a
-                        key={pIdx}
-                        href={p.url || '#'}
-                        className="dossier-project"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                  {activeData.altImage && (
+                    <div className="dossier-alt-action">
+                      <button
+                        type="button"
+                        className="dossier-persona-btn"
+                        onClick={togglePersona}
+                        style={{
+                          borderColor: activeAccent,
+                          color: activeAccent,
+                        }}
                       >
-                        <div className="dossier-project-title">{p.title}</div>
-                        <div className="dossier-project-role">{p.role}</div>
-                      </a>
-                    ))}
-                  </div>
-                )}
+                        SWITCH → {showingAlt ? activeData.name.toUpperCase() : activeData.altName.toUpperCase()}
+                      </button>
+                    </div>
+                  )}
+                </div>
 
-                {activeLinks?.length > 0 && (
-                  <div className="dossier-section" id="dossierLinksWrap">
-                    <div className="dossier-section-label">// LINKS</div>
-                    {activeLinks.map((l, lIdx) => (
-                      <a
-                        key={lIdx}
-                        href={l.url}
-                        className="dossier-link"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        &gt;&gt; {l.label}
-                      </a>
-                    ))}
+                {/* Right Column: Metadata & Projects */}
+                <div className="dossier-info-col">
+                  <div className="dossier-tag">NODE_AFFILIATE // COLLABORATOR</div>
+                  <div className="dossier-name" style={{ color: activeAccent }}>
+                    {activeName}
                   </div>
-                )}
+
+                  {activeData.affiliation && (
+                    <a
+                      href={activeData.affiliation.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="dossier-affiliation"
+                    >
+                      <span className="dossier-affiliation-from">from</span>
+                      <span className="dossier-affiliation-name">
+                        {activeData.affiliation.name}
+                      </span>
+                      <img
+                        src={`/images/${activeData.affiliation.badge}`}
+                        className="dossier-affiliation-badge"
+                        alt={activeData.affiliation.name}
+                        decoding="async"
+                        width="18"
+                        height="18"
+                        draggable="false"
+                      />
+                    </a>
+                  )}
+
+                  <div className="dossier-role">{activeData.role}</div>
+
+                  {activeData.projects?.length > 0 && (
+                    <div className="dossier-section">
+                      <div className="dossier-section-label">// COLLABORATIVE_LOG</div>
+                      <div className="dossier-projects-list">
+                        {activeData.projects.map((p, pIdx) => (
+                          <a
+                            key={pIdx}
+                            href={p.url || '#'}
+                            className="dossier-project"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <div className="dossier-project-title">{p.title}</div>
+                            <div className="dossier-project-role">{p.role}</div>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {activeLinks?.length > 0 && (
+                    <div className="dossier-section">
+                      <div className="dossier-section-label">// LINKS</div>
+                      <div className="dossier-links-wrap">
+                        {activeLinks.map((l, lIdx) => (
+                          <a
+                            key={lIdx}
+                            href={l.url}
+                            className="dossier-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            &gt;&gt; {l.label}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            </>
-          )}
-        </div>
+            </div>
+          </div>
+        )}
 
         {/* ── Link to Full Roster ── */}
         <div className="ext-link-row mt-4">

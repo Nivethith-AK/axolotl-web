@@ -52,7 +52,7 @@ export const ThemeProvider = ({ children }) => {
     timerRef.current = setTimeout(() => {
       document.documentElement.classList.remove('theme-transitioning');
       setTransitionState({ active: false, targetTheme: null });
-    }, 500);
+    }, 380);
   };
 
   return (

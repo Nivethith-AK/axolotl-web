@@ -18,22 +18,33 @@ const MORSE_CHARS = [
 ];
 
 /**
- * SplittingText - Clean character-by-character kinetic spring motion
+ * TypewriterText - Authentic character-by-character terminal typing animation with blinking cursor
  */
-const SplittingText = React.memo(({ text }) => {
+const TypewriterText = React.memo(({ text, isComplete }) => {
+  const [displayedText, setDisplayedText] = useState('');
+
+  useEffect(() => {
+    let idx = 0;
+    setDisplayedText('');
+
+    // Dynamic typing speed ensuring entire line finishes in ~180-240ms
+    const stepMs = Math.max(12, Math.floor(210 / Math.max(1, text.length)));
+    const interval = setInterval(() => {
+      idx++;
+      if (idx <= text.length) {
+        setDisplayedText(text.slice(0, idx));
+      } else {
+        clearInterval(interval);
+      }
+    }, stepMs);
+
+    return () => clearInterval(interval);
+  }, [text]);
+
   return (
-    <span className="split-text-root" key={text}>
-      {text.split('').map((char, idx) => (
-        <span
-          key={`${char}-${idx}`}
-          className="split-char"
-          style={{
-            animationDelay: `${idx * 0.018}s`,
-          }}
-        >
-          {char === ' ' ? '\u00A0' : char}
-        </span>
-      ))}
+    <span className="boot-typewriter">
+      <span>{displayedText}</span>
+      <span className={`boot-cursor ${isComplete ? 'cursor-complete' : ''}`}>█</span>
     </span>
   );
 });
@@ -214,7 +225,7 @@ export const BootScreen = React.memo(({
             0%
           </span>
           <span id="bootLine" className="boot-line-wrap">
-            <SplittingText text={currentLine} />
+            <TypewriterText text={currentLine} isComplete={isComplete} />
           </span>
         </div>
         <div className="boot-morse" id="bootMorse">
