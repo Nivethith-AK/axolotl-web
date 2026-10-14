@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
@@ -68,8 +69,8 @@ export const AffiliatesTeaser = () => {
   });
 
   useEffect(() => {
-    const SPEED_ROW1 = -0.45;
-    const SPEED_ROW2 = 0.45;
+    const SPEED_ROW1 = 0.45;
+    const SPEED_ROW2 = 0.32;
     const s = stateRef.current;
 
     const updateHalfWidths = () => {
@@ -115,7 +116,7 @@ export const AffiliatesTeaser = () => {
       }
       if (s.hw2) {
         const wrap1 = ((s.positions[1] % s.hw2) + s.hw2) % s.hw2;
-        t2.style.transform = `translateX(${wrap1 - s.hw2}px)`;
+        t2.style.transform = `translateX(${-wrap1}px)`;
       }
 
       animRef.current = requestAnimationFrame(tick);
@@ -159,17 +160,16 @@ export const AffiliatesTeaser = () => {
     const wrap = wrapRef.current;
     if (!wrap) return;
 
-    // Trackpad horizontal swipe & Shift+Wheel support with page scroll prevention
+    // Trackpad horizontal swipe & Shift+Wheel support (vertical scrolling passes through naturally)
     const handleWheel = (e) => {
-      // Prevent the page from scrolling while user is interacting with the affiliates stream!
-      if (e.cancelable) {
-        e.preventDefault();
+      const isHorizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey;
+      if (isHorizontal) {
+        if (e.cancelable) e.preventDefault();
+        const delta = e.shiftKey ? e.deltaY : e.deltaX;
+        stateRef.current.positions[0] -= delta * 0.75;
+        stateRef.current.positions[1] += delta * 0.75;
+        stateRef.current.velocity = -delta * 0.3;
       }
-      const isHorizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
-      const delta = isHorizontal ? e.deltaX : e.deltaY;
-      stateRef.current.positions[0] -= delta * 0.75;
-      stateRef.current.positions[1] += delta * 0.75;
-      stateRef.current.velocity = -delta * 0.3;
     };
 
     // Mobile touch gestures with vertical scroll pass-through
@@ -464,13 +464,14 @@ export const AffiliatesTeaser = () => {
         )}
 
         {/* ── Centered Holographic Dossier Modal (Screen Pop Up) ── */}
-        {activeData && (
-          <div
-            className="dossier-modal-overlay"
-            onClick={(e) => {
-              if (e.target === e.currentTarget) closeDossier();
-            }}
-          >
+        {activeData &&
+          createPortal(
+            <div
+              className="dossier-modal-overlay"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) closeDossier();
+              }}
+            >
             <div className="dossier-modal-container" role="dialog" aria-modal="true">
               <button
                 type="button"
@@ -600,7 +601,8 @@ export const AffiliatesTeaser = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
 
         {/* ── Link to Full Roster ── */}

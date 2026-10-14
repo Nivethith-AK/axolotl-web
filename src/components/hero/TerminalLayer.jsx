@@ -67,55 +67,50 @@ export const TerminalLayer = forwardRef(({ isRevealed }, ref) => {
       return;
     }
 
-    const totalFrames = opts.totalFrames ?? 3;
-    const frameMs = opts.frameMs ?? 8;
-    const staggerMs = opts.staggerMs ?? 10;
+    const totalFrames = opts.totalFrames ?? 4;
+    const frameMs = opts.frameMs ?? 10;
+    const betweenMs = opts.betweenMs ?? 6;
     const shuffled = [...lines].sort(() => Math.random() - 0.5);
-    let completedCount = 0;
-    const totalLines = shuffled.length;
+    let idx = 0;
 
-    shuffled.forEach((line, idx) => {
-      setTimeout(() => {
+    const wipeNext = () => {
+      if (deleteAbortRef.current || idx >= shuffled.length) {
+        if (!deleteAbortRef.current) layer.classList.add('terminal-hidden');
+        if (onDone) onDone();
+        return;
+      }
+      const line = shuffled[idx];
+      const originalLen = Math.max((line.textContent || '').length, 8);
+      let frame = 0;
+      const iv = setInterval(() => {
         if (deleteAbortRef.current) {
-          completedCount++;
-          if (completedCount === totalLines && onDone) onDone();
+          clearInterval(iv);
+          if (onDone) onDone();
           return;
         }
-        const originalLen = Math.max((line.textContent || '').length, 8);
-        let frame = 0;
-        const iv = setInterval(() => {
-          if (deleteAbortRef.current) {
-            clearInterval(iv);
-            completedCount++;
-            if (completedCount === totalLines && onDone) onDone();
-            return;
-          }
-          if (frame < totalFrames) {
-            const remaining = Math.max(
-              0,
-              originalLen - Math.floor(((frame + 1) / totalFrames) * originalLen)
-            );
-            line.textContent = noise(remaining);
-            frame++;
-          } else {
-            clearInterval(iv);
-            line.textContent = '';
-            line.style.visibility = 'hidden';
-            completedCount++;
-            if (completedCount >= totalLines) {
-              if (!deleteAbortRef.current) layer.classList.add('terminal-hidden');
-              if (onDone) onDone();
-            }
-          }
-        }, frameMs);
-      }, idx * staggerMs);
-    });
+        if (frame < totalFrames) {
+          const remaining = Math.max(
+            0,
+            originalLen - Math.floor(((frame + 1) / totalFrames) * originalLen)
+          );
+          line.textContent = noise(remaining);
+          frame++;
+        } else {
+          clearInterval(iv);
+          line.textContent = '';
+          line.style.visibility = 'hidden';
+          idx++;
+          setTimeout(wipeNext, betweenMs);
+        }
+      }, frameMs);
+    };
+    wipeNext();
   };
 
   const deleteLayersPooled = (l1, l2, onDone, opts = {}) => {
-    const totalFrames = opts.totalFrames ?? 2;
-    const frameMs = opts.frameMs ?? 6;
-    const staggerMs = opts.staggerMs ?? 6;
+    const totalFrames = opts.totalFrames ?? 3;
+    const frameMs = opts.frameMs ?? 8;
+    const betweenMs = opts.betweenMs ?? 4;
     const allLines = [
       ...Array.from(l1 ? l1.children : []),
       ...Array.from(l2 ? l2.children : []),
@@ -127,50 +122,44 @@ export const TerminalLayer = forwardRef(({ isRevealed }, ref) => {
       if (onDone) onDone();
       return;
     }
-    let completedCount = 0;
-    const totalLines = allLines.length;
-
-    allLines.forEach((line, idx) => {
-      setTimeout(() => {
+    let idx = 0;
+    const wipeNext = () => {
+      if (deleteAbortRef.current || idx >= allLines.length) {
+        if (!deleteAbortRef.current) {
+          [l1, l2].forEach((l) => {
+            if (l) l.classList.add('terminal-hidden');
+          });
+        }
+        if (onDone) onDone();
+        return;
+      }
+      const line = allLines[idx];
+      const originalLen = Math.max((line.textContent || '').length, 8);
+      let frame = 0;
+      const iv = setInterval(() => {
         if (deleteAbortRef.current) {
-          completedCount++;
-          if (completedCount === totalLines && onDone) onDone();
+          clearInterval(iv);
+          if (onDone) onDone();
           return;
         }
-        const originalLen = Math.max((line.textContent || '').length, 8);
-        let frame = 0;
-        const iv = setInterval(() => {
-          if (deleteAbortRef.current) {
-            clearInterval(iv);
-            completedCount++;
-            if (completedCount === totalLines && onDone) onDone();
-            return;
-          }
-          if (frame < totalFrames) {
-            line.textContent = noise(
-              Math.max(
-                0,
-                originalLen - Math.floor(((frame + 1) / totalFrames) * originalLen)
-              )
-            );
-            frame++;
-          } else {
-            clearInterval(iv);
-            line.textContent = '';
-            line.style.visibility = 'hidden';
-            completedCount++;
-            if (completedCount >= totalLines) {
-              if (!deleteAbortRef.current) {
-                [l1, l2].forEach((l) => {
-                  if (l) l.classList.add('terminal-hidden');
-                });
-              }
-              if (onDone) onDone();
-            }
-          }
-        }, frameMs);
-      }, idx * staggerMs);
-    });
+        if (frame < totalFrames) {
+          line.textContent = noise(
+            Math.max(
+              0,
+              originalLen - Math.floor(((frame + 1) / totalFrames) * originalLen)
+            )
+          );
+          frame++;
+        } else {
+          clearInterval(iv);
+          line.textContent = '';
+          line.style.visibility = 'hidden';
+          idx++;
+          setTimeout(wipeNext, betweenMs);
+        }
+      }, frameMs);
+    };
+    wipeNext();
   };
 
   const materializeLayer = (layer, content, onComplete, opts = {}) => {

@@ -142,7 +142,7 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
         el.style.opacity = '1';
         el.style.transform = 'translateY(0)';
         if (window.lenis) {
-          window.lenis.scrollTo(el, { offset: targetId === 'hero' ? 0 : -60, duration: 1.5 });
+          window.lenis.scrollTo(el, { offset: targetId === 'hero' ? 0 : -105, duration: 1.5 });
         } else {
           if (targetId === 'hero') {
             window.scrollTo({ top: 0, behavior: 'smooth' });

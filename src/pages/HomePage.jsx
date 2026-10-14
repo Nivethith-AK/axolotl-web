@@ -19,7 +19,7 @@ export const HomePage = ({ revealTrigger, onResetRevealTrigger }) => {
         el.style.opacity = '1';
         setTimeout(() => {
           if (window.lenis) {
-            window.lenis.scrollTo(el, { offset: -60, duration: 1.5 });
+            window.lenis.scrollTo(el, { offset: -105, duration: 1.5 });
           } else {
             el.scrollIntoView({ behavior: 'smooth' });
           }
