@@ -130,7 +130,6 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
 
   return (
     <section className="hero" id="hero">
-      <div className="hero-grid"></div>
       <TerminalLayer ref={terminalRef} isRevealed={isRevealed} />
       <RevealPanel isOpen={isRevealed} onCloseComplete={handlePanelCloseComplete} />
       <DiscoMarquee isVisible={marqueeVisible} />

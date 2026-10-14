@@ -192,12 +192,12 @@
         right: 8px;
       }
 
-      /* Lift shared fixed bg layers above the backdrop —
+      /* Lift shared fixed bg layers above the backdrop when modal is open —
          pointer-events:none means clicks still reach modal content */
-      #geoCanvas {
+      body:has(.aff-modal-backdrop.is-open) #geoCanvas {
         z-index: 1001 !important;
       }
-      #globalGrid {
+      body:has(.aff-modal-backdrop.is-open) #globalGrid {
         z-index: 1001 !important;
       }
 

@@ -775,7 +775,7 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: var(--bg);
+  background: transparent;
   overflow: hidden;
 }
 
@@ -799,17 +799,7 @@ button:focus-visible {
 }
 
 .hero-grid {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(180deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
-  animation: heroGridDrift 20s linear infinite;
-  will-change: background-position;
+  display: none;
 }
 
 .hero-big-button {

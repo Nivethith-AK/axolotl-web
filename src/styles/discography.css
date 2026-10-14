@@ -719,11 +719,11 @@
       }
 
       /* Lift shared fixed bg layers above the modal backdrop so the
-         animated canvas shows through — mirrors affiliates.html exactly */
-      #geoCanvas {
+         animated canvas shows through when modal is open */
+      body:has(.disco-modal-backdrop.is-open) #geoCanvas {
         z-index: 1001 !important;
       }
-      #globalGrid {
+      body:has(.disco-modal-backdrop.is-open) #globalGrid {
         z-index: 1001 !important;
       }
 
