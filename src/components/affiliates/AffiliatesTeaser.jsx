@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
+import { useTheme } from '../../context/ThemeContext';
 import { WaveformHeader } from '../common/WaveformHeader';
 import { AFFILIATES_DATA, toSlug } from '../../data/affiliatesData';
 
 export const AffiliatesTeaser = () => {
   const { t } = useLanguage();
+  const { theme } = useTheme();
   const [selectedAffiliate, setSelectedAffiliate] = useState(null);
   const [viewMode, setViewMode] = useState('stream');
   const [showingAlt, setShowingAlt] = useState(false);
@@ -609,7 +611,7 @@ export const AffiliatesTeaser = () => {
         <div className="ext-link-row mt-4">
           <Link to="/affiliates" className="ext-link">
             <img
-              src="/images/assets/logo_main.webp"
+              src={theme === 'light' ? '/images/assets/logo_black.webp' : '/images/assets/logo_white.webp'}
               alt="Affiliates"
               className="ext-link-icon"
               width="16"
@@ -617,7 +619,7 @@ export const AffiliatesTeaser = () => {
               loading="lazy"
               decoding="async"
               draggable="false"
-              style={{ borderRadius: '50%', objectFit: 'cover' }}
+              style={{ objectFit: 'contain' }}
             />
             <span className="prompt">&gt;&gt;&gt;</span> Full_Roster :=
             <span className="value">Affiliates</span>

@@ -171,7 +171,7 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
             }}
           >
             <img
-              src="/images/assets/logo_main.webp"
+              src={theme === 'light' ? '/images/assets/logo_black.webp' : '/images/assets/logo_white.webp'}
               className="hero-logo"
               alt="Δxolotl"
               width="130"
