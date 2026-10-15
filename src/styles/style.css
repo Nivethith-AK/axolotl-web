@@ -295,7 +295,7 @@
 html {
   background: var(--bg);
   color: var(--fg);
-  scroll-behavior: smooth;
+  scroll-behavior: auto !important;
   scroll-padding-top: 105px;
   overflow-x: clip;
   width: 100%;
@@ -4424,7 +4424,7 @@ label,
 }
 
 .scroll-area-thumb:hover {
-  background: #ffffff;
+  background: var(--cyan, #00dde9);
 }
 
 /* Override scrollbar styling when used in modals */
@@ -4460,19 +4460,24 @@ label,
 }
 
 /* Global scrollbar fallback matching shadcn cyberpunk look */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-dim, #555) var(--bg, #0a0a0a);
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg, #0a0a0a);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border-dim, #555);
-  border-radius: 1px;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #ffffff;
+  background: var(--accent, #ff6b00);
 }
 
 

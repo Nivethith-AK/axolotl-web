@@ -20,12 +20,12 @@ export const SmoothScrollProvider = ({ children }) => {
 
     // Initialize Lenis for cinematic slomo scrolling momentum
     const lenis = new Lenis({
-      duration: 1.8, // Slow-motion weighted momentum glide
+      duration: 1.4, // Responsive weighted momentum glide
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential deceleration curve
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.85, // Controlled, slow-motion mouse wheel glide
+      wheelMultiplier: 0.9,
       touchMultiplier: 1.5,
       smoothTouch: false, // CRITICAL FOR ALL DEVICES: Native 120Hz/60Hz hardware touch responsiveness
       infinite: false,
@@ -56,14 +56,27 @@ export const SmoothScrollProvider = ({ children }) => {
         targetEl.style.opacity = '1';
         targetEl.style.transform = 'translateY(0)';
         lenis.scrollTo(targetEl, {
-          offset: -60,
-          duration: 1.8,
+          offset: -105,
+          duration: 1.4,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         });
       }
     };
 
     document.addEventListener('click', handleAnchorClick);
+
+    // Synchronize Lenis immediately if native scroll occurs (e.g. dragging scrollbar thumb or clicking track)
+    const handleNativeScroll = () => {
+      if (lenis.isScrolling === 'smooth') {
+        const diff = Math.abs(lenis.animatedScroll - window.scrollY);
+        if (diff > 40) {
+          lenis.isScrolling = 'native';
+          if (lenis.animate) lenis.animate.stop();
+          lenis.animatedScroll = lenis.targetScroll = window.scrollY;
+        }
+      }
+    };
+    window.addEventListener('scroll', handleNativeScroll, { passive: true });
 
     // Observe body size changes to keep Lenis geometry synchronized with lazy-loaded routes
     let resizeObserver;
@@ -80,6 +93,7 @@ export const SmoothScrollProvider = ({ children }) => {
 
     return () => {
       document.removeEventListener('click', handleAnchorClick);
+      window.removeEventListener('scroll', handleNativeScroll);
       if (resizeObserver) resizeObserver.disconnect();
       cancelAnimationFrame(rafId);
       lenis.destroy();
