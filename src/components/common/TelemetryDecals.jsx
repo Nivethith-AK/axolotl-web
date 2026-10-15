@@ -1,14 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const SESSION_STATES = ['ACTIVE', 'STREAMING', 'LINK_OPEN', 'SYNC_OK', 'NODE_LIVE'];
 
 export const TelemetryDecals = () => {
+  const location = useLocation();
   const [clock, setClock] = useState(() => new Date().toTimeString().split(' ')[0]);
   const [sysStatus, setSysStatus] = useState('ONLINE');
   const [sessionTimer, setSessionTimer] = useState('00:00:00');
   const [sessionState, setSessionState] = useState(SESSION_STATES[0]);
   const [sysOs, setSysOs] = useState('SYS: UNKNOWN');
   const [sysHw, setSysHw] = useState('SCANNING...');
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+
+  // Observe footer visibility to smoothly hide bottom decals and prevent collision
+  useEffect(() => {
+    const footer = document.querySelector('footer');
+    if (!footer) {
+      setIsFooterVisible(false);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFooterVisible(entry.isIntersecting);
+      },
+      { threshold: 0.02 }
+    );
+
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, [location.pathname]);
 
   // Clock & Session Timer
   useEffect(() => {
@@ -89,12 +111,12 @@ export const TelemetryDecals = () => {
         <span id="session-state">{sessionState}</span>
       </div>
 
-      <div className="ui-decal decal-bl">
+      <div className={`ui-decal decal-bl ${isFooterVisible ? 'decal-hidden' : ''}`}>
         <span id="sys-os">{sysOs}</span> //{' '}
         <span id="sys-hw">{sysHw}</span>
       </div>
 
-      <div className="ui-decal decal-br">
+      <div className={`ui-decal decal-br ${isFooterVisible ? 'decal-hidden' : ''}`}>
         &copy; 2026 THEAXOLOTLMUSIC
       </div>
     </>

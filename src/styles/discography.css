@@ -134,9 +134,10 @@
       .htl-arrow-wrap {
         position: relative;
       }
-      /* Desktop only - keep right arrow clear of the fixed 52px social side panel */
+      /* Desktop only - keep timeline symmetrically centered between left edge and the fixed 52px social side panel */
       @media (min-width: 769px) {
         .htl-arrow-wrap {
+          margin-left: 52px;
           margin-right: 52px;
         }
       }

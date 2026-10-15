@@ -316,6 +316,16 @@ body {
 #root {
   overflow-x: clip;
   width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+#main-content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Lock all elements - completely disable native ghost dragging across the entire site */
@@ -494,6 +504,11 @@ button:focus-visible {
   color: var(--text-9);
   z-index: 500;
   letter-spacing: 1px;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.ui-decal.decal-hidden {
+  opacity: 0 !important;
   pointer-events: none;
 }
 .decal-tl {
@@ -984,7 +999,12 @@ button:focus-visible {
   border-top: 2px solid var(--border);
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out,
+    background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.38s ease;
   background: transparent;
   min-height: 100vh;
   min-height: 100dvh;
@@ -1360,7 +1380,9 @@ p {
 
 .ext-link {
   display: inline-flex;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: baseline;
+  row-gap: 4px;
   gap: 8px;
   text-decoration: none;
   color: var(--fg);
@@ -2563,6 +2585,7 @@ p {
    FOOTER
    ========================================= */
 .footer {
+  margin-top: auto;
   padding: 28px 80px max(44px, calc(20px + env(safe-area-inset-bottom)));
   border-top: 2px solid var(--border);
   background: rgba(10, 10, 10, 0.68);
@@ -2766,13 +2789,14 @@ p {
   }
   .mobile-icons-bar {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
     width: 100%;
-    max-width: 320px;
-    margin: 30px auto 0;
+    max-width: 290px;
+    margin: 28px auto 0;
+    justify-items: center;
     opacity: 1;
-    max-height: 120px;
+    max-height: 140px;
     overflow: hidden;
     transition:
       opacity 0.2s ease,
@@ -4125,7 +4149,6 @@ body,
 nav,
 main,
 footer,
-.section,
 .container,
 .container-lg,
 .card,
