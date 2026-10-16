@@ -25,7 +25,7 @@ export const ThemeProvider = ({ children }) => {
       document.documentElement.setAttribute('data-theme', 'dark');
       document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.removeAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', 'light');
       document.documentElement.classList.remove('dark');
     }
   }, [theme]);
@@ -39,7 +39,7 @@ export const ThemeProvider = ({ children }) => {
       document.documentElement.setAttribute('data-theme', 'dark');
       document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.removeAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', 'light');
       document.documentElement.classList.remove('dark');
     }
     setTheme(nextTheme);

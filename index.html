@@ -42,9 +42,11 @@
           t = prefersDark ? "dark" : "light";
           localStorage.setItem("theme", t);
         }
+        document.documentElement.setAttribute("data-theme", t);
         if (t === "dark") {
-          document.documentElement.setAttribute("data-theme", "dark");
           document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
         }
         var l = localStorage.getItem("lang") || "en";
         document.documentElement.setAttribute("lang", l);
