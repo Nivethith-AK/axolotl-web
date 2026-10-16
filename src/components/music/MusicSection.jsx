@@ -37,7 +37,6 @@ export const MusicSection = ({ hideHeader = false }) => {
                 title="YouTube video player"
                 frameBorder="0"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                allowFullScreen
                 loading="lazy"
               ></iframe>
             </div>
@@ -60,7 +59,6 @@ export const MusicSection = ({ hideHeader = false }) => {
                   width="100%"
                   height="352"
                   frameBorder="0"
-                  allowFullScreen
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                   loading="lazy"
                   title="Spotify embed"

@@ -176,7 +176,7 @@ export const Hero = ({ revealTrigger, onResetRevealTrigger }) => {
               alt="Δxolotl"
               width="130"
               height="130"
-              fetchPriority="high"
+              fetchpriority="high"
               decoding="async"
               draggable="false"
             />
