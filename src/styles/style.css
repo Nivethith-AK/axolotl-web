@@ -837,10 +837,10 @@ button:focus-visible {
   transform: scale(1.08);
 }
 .big-button:hover .hero-logo {
-  border-color: var(--accent);
+  filter: drop-shadow(0 0 10px var(--accent, #ff6b00));
 }
 .big-button:hover .btn-hint-ring-text {
-  fill: #fff;
+  fill: var(--fg);
 }
 .big-button:active {
   transform: scale(0.92);
@@ -883,10 +883,10 @@ button:focus-visible {
 .hero-logo {
   width: 100%;
   height: 100%;
-  border: 2px solid var(--border);
-  border-radius: 50%;
+  border: none;
+  background: transparent;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
   position: relative;
   z-index: 5;
   pointer-events: none;
@@ -894,8 +894,8 @@ button:focus-visible {
   user-drag: none;
   user-select: none;
   transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.25s ease,
+    filter 0.3s ease;
 }
 
 /* ── PRESS-TO-ACCESS HINT (rotating ring) ────────────────────── */
