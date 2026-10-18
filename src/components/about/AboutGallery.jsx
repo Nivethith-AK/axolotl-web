@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useTheme } from '../../context/ThemeContext';
+
+const SLIDES = [
+  { src: '/images/assets/logo_main.webp', alt: 'Δxolotl' },
+  { src: '/images/assets/profile_image.webp', alt: 'Δxolotl' },
+];
 
 export const AboutGallery = () => {
-  const { theme } = useTheme();
-  const logoSrc = theme === 'light' ? '/images/assets/logo_black.webp' : '/images/assets/logo_white.webp';
-  const slides = [
-    { src: logoSrc, alt: 'Δxolotl', isLogo: true },
-    { src: '/images/assets/profile_image.webp', alt: 'Δxolotl', isLogo: false },
-  ];
-  const total = slides.length;
+  const total = SLIDES.length;
   const allSlots = total + 2; // cloneLast + real[0..total-1] + cloneFirst
   const [current, setCurrent] = useState(1);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -103,35 +101,17 @@ export const AboutGallery = () => {
             aria-hidden="true"
             style={{ width: `${100 / allSlots}%`, minWidth: `${100 / allSlots}%` }}
           >
-            <img
-              src={slides[total - 1].src}
-              alt=""
-              className={slides[total - 1].isLogo ? 'ag-logo' : ''}
-              loading="lazy"
-              decoding="async"
-              width="300"
-              height="300"
-              draggable="false"
-            />
+            <img src={SLIDES[total - 1].src} alt="" loading="lazy" decoding="async" width="300" height="300" draggable="false" />
           </div>
 
           {/* real slides */}
-          {slides.map((slide, i) => (
+          {SLIDES.map((slide, i) => (
             <div
               key={i}
               className="ag-slide"
               style={{ width: `${100 / allSlots}%`, minWidth: `${100 / allSlots}%` }}
             >
-              <img
-                src={slide.src}
-                alt={slide.alt}
-                className={slide.isLogo ? 'ag-logo' : ''}
-                loading="lazy"
-                decoding="async"
-                width="300"
-                height="300"
-                draggable="false"
-              />
+              <img src={slide.src} alt={slide.alt} loading="lazy" decoding="async" width="300" height="300" draggable="false" />
             </div>
           ))}
 
@@ -141,16 +121,7 @@ export const AboutGallery = () => {
             aria-hidden="true"
             style={{ width: `${100 / allSlots}%`, minWidth: `${100 / allSlots}%` }}
           >
-            <img
-              src={slides[0].src}
-              alt=""
-              className={slides[0].isLogo ? 'ag-logo' : ''}
-              loading="lazy"
-              decoding="async"
-              width="300"
-              height="300"
-              draggable="false"
-            />
+            <img src={SLIDES[0].src} alt="" loading="lazy" decoding="async" width="300" height="300" draggable="false" />
           </div>
         </div>
       </div>
