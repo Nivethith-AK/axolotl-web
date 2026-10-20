@@ -53,6 +53,9 @@
   --c-text-faint: #aaa;
   --c-text-subtle: #555;
   --c-border-subtle: rgba(0, 0, 0, 0.06);
+
+  /* Header height*/
+  --header-h: 75px; /* overwritten by JS with the real height */
 }
 
 [data-theme="dark"] {
@@ -1002,7 +1005,7 @@ button:focus-visible {
   min-height: 100vh;
   min-height: 100dvh;
   box-sizing: border-box;
-  scroll-margin-top: 105px;
+  scroll-margin-top: var(--header-h);
   position: relative;
   z-index: 3;
   display: flex;
@@ -1037,10 +1040,10 @@ button:focus-visible {
 }
 
 #affiliates.section {
-  height: 100vh;
-  height: 100dvh;
-  min-height: 100vh;
-  max-height: 100vh;
+  height: calc(100vh - var(--header-h));
+  height: calc(100dvh - var(--header-h));
+  min-height: calc(100vh - var(--header-h));
+  max-height: calc(100vh - var(--header-h));
   overflow: hidden;
   box-sizing: border-box;
   display: flex;
@@ -2831,7 +2834,8 @@ p {
   #portfolio.section,
   #affiliates.section,
   #connect.section {
-    min-height: auto !important;
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100dvh - var(--header-h));
     display: block !important;
     padding: 60px 20px 40px !important;
   }
@@ -4485,6 +4489,7 @@ label,
 html {
   scrollbar-width: thin;
   scrollbar-color: var(--border-dim, #555) var(--bg, #0a0a0a);
+  scroll-padding-top: var(--header-h);
 }
 
 ::-webkit-scrollbar {

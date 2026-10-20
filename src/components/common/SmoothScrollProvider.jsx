@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
+import { scrollToSection } from '../../lib/scrollToSection';
 
 const SmoothScrollContext = createContext(null);
 
@@ -44,24 +45,16 @@ export const SmoothScrollProvider = ({ children }) => {
 
     // Global interceptor for in-page anchor links (e.g. #about, #music, etc.)
     const handleAnchorClick = (e) => {
-      const anchor = e.target.closest('a[href^="#"]');
-      if (!anchor) return;
-      const href = anchor.getAttribute('href');
-      if (!href || href === '#' || href === '#!') return;
-
-      const targetEl = document.querySelector(href);
-      if (targetEl) {
-        e.preventDefault();
-        targetEl.classList.add('is-visible');
-        targetEl.style.opacity = '1';
-        targetEl.style.transform = 'translateY(0)';
-        lenis.scrollTo(targetEl, {
-          offset: -105,
-          duration: 1.4,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        });
-      }
-    };
+  if (e.defaultPrevented) return; // Navbar / ToS links already handled it
+  const anchor = e.target.closest('a[href^="#"]');
+  if (!anchor) return;
+  const href = anchor.getAttribute('href');
+  if (!href || href === '#' || href === '#!') return;
+  if (document.querySelector(href)) {
+    e.preventDefault();
+    scrollToSection(href.slice(1), { duration: 1.4 });
+  }
+};
 
     document.addEventListener('click', handleAnchorClick);
 
@@ -116,6 +109,17 @@ export const SmoothScrollProvider = ({ children }) => {
       }, 300);
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+  const nav = document.getElementById('mainNav');
+  if (!nav || typeof ResizeObserver === 'undefined') return;
+  const setH = () =>
+    document.documentElement.style.setProperty('--header-h', `${nav.offsetHeight}px`);
+  setH();
+  const ro = new ResizeObserver(setH);
+  ro.observe(nav);
+  return () => ro.disconnect();
+  }, []);
 
   return (
     <SmoothScrollContext.Provider value={lenisRef.current}>

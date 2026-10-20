@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { scrollToSection } from '../../lib/scrollToSection';
 
 export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) => {
   const { theme, toggleTheme, transitionState } = useTheme();
@@ -133,26 +134,10 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
 
   const handleNavClick = (e, targetHash) => {
     closeNav();
+    e.preventDefault();
     if (isIndex) {
-      e.preventDefault();
-      const targetId = targetHash.replace('#', '');
-      const el = document.getElementById(targetId);
-      if (el) {
-        el.classList.add('is-visible');
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-        if (window.lenis) {
-          window.lenis.scrollTo(el, { offset: targetId === 'hero' ? 0 : -105, duration: 1.5 });
-        } else {
-          if (targetId === 'hero') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          } else {
-            el.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
-      }
+      scrollToSection(targetHash.replace('#', ''), { duration: 1.5 });
     } else {
-      e.preventDefault();
       navigate('/' + targetHash);
     }
   };
