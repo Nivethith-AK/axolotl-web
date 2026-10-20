@@ -55,14 +55,14 @@ export const RevealPanel = ({ isOpen, onCloseComplete }) => {
       [5, 4, 3, 2, 1, 0].forEach((nodeIdx, i) => {
         const t = setTimeout(() => {
           setNodeState((prev) => ({ ...prev, [nodeIdx]: 'out' }));
-        }, i * 60);
+        }, i * 90); // was i * 60
         nodeTimersRef.current.push(t);
       });
       exitTimerRef.current = setTimeout(() => {
         setPanelVisible(false);
         setNodeState({});
         if (onCloseComplete) onCloseComplete();
-      }, 6 * 60 + 200);
+      }, 5 * 90 + 300 + 30); // last node starts at 450ms, runs 300ms, plus a small buffer
     }
 
     return clearNodeTimers;

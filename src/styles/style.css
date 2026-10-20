@@ -837,7 +837,8 @@ button:focus-visible {
   transform: scale(1.08);
 }
 .big-button:hover .hero-logo {
-  filter: drop-shadow(0 0 10px var(--accent, #ff6b00));
+  /* Burst on hover, then calm, repeating like the title */
+  animation: heroLogoGlitchHover 2.4s steps(1, end) infinite;
 }
 .big-button:hover .btn-hint-ring-text {
   fill: var(--fg);
@@ -849,34 +850,31 @@ button:focus-visible {
 
 @keyframes heroLogoGlitchHover {
   0% {
-    transform: translate(0, 0);
-    filter: none;
-    clip-path: none;
+    transform: translate(-4px, 2px);
+    clip-path: inset(15% 0 45% 0);
+    filter: drop-shadow(3px 0 0 var(--accent)) drop-shadow(-3px 0 0 var(--glow));
   }
-  20% {
-    transform: translate(-3px, 1px);
-    filter: drop-shadow(2px 0 0 #00dde9) drop-shadow(-2px 0 0 var(--accent));
-    clip-path: inset(15% 0 30% 0);
+  3% {
+    transform: translate(4px, -1px);
+    clip-path: inset(60% 0 10% 0);
+    filter: drop-shadow(-3px 0 0 var(--accent)) drop-shadow(3px 0 0 var(--glow));
   }
-  40% {
-    transform: translate(3px, -2px);
-    filter: none;
-    clip-path: none;
+  6% {
+    transform: translate(-2px, -2px);
+    clip-path: inset(30% 0 30% 0);
+    filter: drop-shadow(2px 0 0 var(--glow));
   }
-  60% {
-    transform: translate(-2px, 2px);
-    filter: drop-shadow(-2px 0 0 #00dde9) drop-shadow(2px 0 0 var(--accent));
-    clip-path: inset(45% 0 20% 0);
-  }
-  80% {
-    transform: translate(2px, -1px);
-    filter: none;
-    clip-path: none;
-  }
+  9%,
   100% {
-    transform: translate(0, 0);
-    filter: none;
+    transform: none;
     clip-path: none;
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .big-button:hover .hero-logo {
+    animation: none;
   }
 }
 
@@ -2155,7 +2153,7 @@ p {
   animation: nodeSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .reveal-node.node-out {
-  animation: nodeSlideOut 0.2s ease-in forwards;
+  animation: nodeSlideOut 0.3s cubic-bezier(0.7, 0, 0.84, 0) forwards;
 }
 
 @keyframes nodeSlideIn {
@@ -2175,7 +2173,7 @@ p {
   }
   to {
     opacity: 0;
-    transform: translateX(40px);
+    transform: translateX(30px);
   }
 }
 

@@ -20,10 +20,12 @@ export const TerminalLayer = forwardRef(({ isRevealed }, ref) => {
   const activeRef = useRef(!isRevealed);
   const deleteAbortRef = useRef(false);
 
+  // Commenting this because it's causing issues
+  /*
   useEffect(() => {
     activeRef.current = !isRevealed;
   }, [isRevealed]);
-
+*/
   const buildLayer1 = () => {
     const base = [
       `[STATUS]: <span class="status-fixed">ENCRYPTING_NEURAL_LINK...</span>`,
@@ -302,7 +304,7 @@ export const TerminalLayer = forwardRef(({ isRevealed }, ref) => {
   };
 
   const showTerminals = (onComplete) => {
-    deleteAbortRef.current = true;
+    deleteAbortRef.current = false;
     activeRef.current = false;
     const mobile = isMobile();
     const content1 = buildLayer1()
@@ -386,19 +388,11 @@ export const TerminalLayer = forwardRef(({ isRevealed }, ref) => {
   }, []);
 
   return (
-    <>
-      <div
-        id="hero-terminal-layer"
-        ref={layer1Ref}
-        className={`terminal-bg-layer ${isRevealed ? 'terminal-hidden' : ''}`}
-      ></div>
-      <div
-        id="hero-terminal-layer-2"
-        ref={layer2Ref}
-        className={`terminal-bg-layer-2 ${isRevealed ? 'terminal-hidden' : ''}`}
-      ></div>
-    </>
-  );
+  <>
+    <div id="hero-terminal-layer" ref={layer1Ref} className="terminal-bg-layer"></div>
+    <div id="hero-terminal-layer-2" ref={layer2Ref} className="terminal-bg-layer-2"></div>
+  </>
+);
 });
 
 TerminalLayer.displayName = 'TerminalLayer';
