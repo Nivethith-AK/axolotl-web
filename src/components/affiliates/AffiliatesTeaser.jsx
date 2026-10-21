@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
 import { AFFILIATES_DATA, toSlug } from '../../data/affiliatesData';
+import { TechButton } from '../common/TechButton';
 
 export const AffiliatesTeaser = () => {
   const { t } = useLanguage();
   const [selectedAffiliate, setSelectedAffiliate] = useState(null);
-  const [viewMode, setViewMode] = useState('stream');
+  // const [viewMode, setViewMode] = useState('stream');
   const [showingAlt, setShowingAlt] = useState(false);
   const [accessingName, setAccessingName] = useState('');
   const [altPersonaText, setAltPersonaText] = useState('');
@@ -308,7 +309,8 @@ export const AffiliatesTeaser = () => {
     const displayName = isAlt ? data.altName : data.name;
     const displayAccent = isAlt ? data.altAccent || data.accent : data.accent || '#ff6b00';
     const isHovered = hoveredAffId === data.name;
-    const isDimmed = hoveredAffId !== null && !isHovered;
+    const isDraggingActive = stateRef.current.isDragging || stateRef.current.hasDragged;
+    const isDimmed = !isDraggingActive && hoveredAffId !== null && !isHovered;
 
     return (
       <div
@@ -386,82 +388,68 @@ export const AffiliatesTeaser = () => {
               {accessingName ? `ACCESSING_DOSSIER: ${accessingName}` : ''}
             </span>
           </p>
-          <div className="aff-view-toggle">
-            <button
-              type="button"
-              className={`aff-toggle-btn ${viewMode === 'stream' ? 'active' : ''}`}
-              onClick={() => setViewMode('stream')}
-              title="Stream View"
-            >
-              [STREAM_VIEW]
-            </button>
-            <button
-              type="button"
-              className={`aff-toggle-btn ${viewMode === 'cards' ? 'active' : ''}`}
-              onClick={() => setViewMode('cards')}
-              title="Cards Grid"
-            >
-              [CARDS_GRID]
-            </button>
+          <div 
+            className="aff-drag-instruction" 
+            style={{ 
+              fontFamily: "'Roboto Mono', monospace", 
+              fontSize: '0.68rem', 
+              fontWeight: '700',
+              letterSpacing: '2px', 
+              color: 'var(--accent)', 
+              textTransform: 'uppercase' 
+            }}
+          >
+            // HOLD &amp; DRAG TO NAVIGATE ROSTER
           </div>
         </div>
 
         {/* ── Stream Marquee Rows ── */}
-        {viewMode === 'stream' && (
+        <div
+          className="aff-panels-wrap"
+          id="affPanelsWrap"
+          ref={wrapRef}
+          onPointerDown={(e) => {
+            if (e.pointerType === 'touch') return;
+            stateRef.current.isDragging = true;
+            stateRef.current.hasDragged = false;
+            stateRef.current.dragStartX = e.clientX;
+            stateRef.current.dragLastX = e.clientX;
+            stateRef.current.velocity = 0;
+            if (wrapRef.current) wrapRef.current.style.cursor = 'grabbing';
+          }}
+        >
           <div
-            className="aff-panels-wrap"
-            id="affPanelsWrap"
-            ref={wrapRef}
-            onPointerDown={(e) => {
-              if (e.pointerType === 'touch') return;
-              stateRef.current.isDragging = true;
-              stateRef.current.hasDragged = false;
-              stateRef.current.dragStartX = e.clientX;
-              stateRef.current.dragLastX = e.clientX;
-              stateRef.current.velocity = 0;
-              if (wrapRef.current) wrapRef.current.style.cursor = 'grabbing';
+            className="aff-marquee-row"
+            onMouseEnter={() => {
+              stateRef.current.hoveredRow = 0;
+            }}
+            onMouseLeave={() => {
+              stateRef.current.hoveredRow = null;
+              setHoveredAffId(null);
             }}
           >
-            <div
-              className="aff-marquee-row"
-              onMouseEnter={() => {
-                stateRef.current.hoveredRow = 0;
-              }}
-              onMouseLeave={() => {
-                stateRef.current.hoveredRow = null;
-                setHoveredAffId(null);
-              }}
-            >
-              <div className="aff-marquee-track" ref={track1Ref}>
-                {row1.map((d, i) => renderCard(d, i, 1))}
-                {row1.map((d, i) => renderCard(d, `dup-${i}`, 1))}
-              </div>
-            </div>
-
-            <div
-              className="aff-marquee-row"
-              onMouseEnter={() => {
-                stateRef.current.hoveredRow = 1;
-              }}
-              onMouseLeave={() => {
-                stateRef.current.hoveredRow = null;
-                setHoveredAffId(null);
-              }}
-            >
-              <div className="aff-marquee-track" ref={track2Ref}>
-                {row2.map((d, i) => renderCard(d, i, 2))}
-                {row2.map((d, i) => renderCard(d, `dup-${i}`, 2))}
-              </div>
+            <div className="aff-marquee-track" ref={track1Ref}>
+              {row1.map((d, i) => renderCard(d, i, 1))}
+              {row1.map((d, i) => renderCard(d, `dup-${i}`, 1))}
             </div>
           </div>
-        )}
 
-        {/* ── Cards Component Grid ── */}
-        {viewMode === 'cards' && (
-          <div className="aff-cards-grid">
-            {sorted.map((d, i) => renderCard(d, i, 'grid'))}
+          <div
+            className="aff-marquee-row"
+            onMouseEnter={() => {
+              stateRef.current.hoveredRow = 1;
+            }}
+            onMouseLeave={() => {
+              stateRef.current.hoveredRow = null;
+              setHoveredAffId(null);
+            }}
+          >
+            <div className="aff-marquee-track" ref={track2Ref}>
+              {row2.map((d, i) => renderCard(d, i, 2))}
+              {row2.map((d, i) => renderCard(d, `dup-${i}`, 2))}
+            </div>
           </div>
-        )}
+        </div>
 
         {/* ── Centered Holographic Dossier Modal (Screen Pop Up) ── */}
         {activeData &&
@@ -605,23 +593,11 @@ export const AffiliatesTeaser = () => {
           document.body
         )}
 
-        {/* ── Link to Full Roster ── */}
-        <div className="ext-link-row mt-4">
-          <Link to="/affiliates" className="ext-link">
-            <img
-              src="/images/assets/logo_main.webp"
-              alt="Affiliates"
-              className="ext-link-icon"
-              width="16"
-              height="16"
-              loading="lazy"
-              decoding="async"
-              draggable="false"
-              style={{ borderRadius: '50%', objectFit: 'cover' }}
-            />
-            <span className="prompt">&gt;&gt;&gt;</span> Full_Roster :=
-            <span className="value">Affiliates</span>
-          </Link>
+        {/* ── Reusable Full Roster Control (Left-Aligned) ── */}
+        <div className="ext-link-row mt-4" style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <TechButton to="/affiliates" variant="secondary">
+            FULL_ROSTER // AFFILIATES_PAGE
+          </TechButton>
         </div>
       </div>
     </section>

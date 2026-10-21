@@ -4159,6 +4159,84 @@ img.dossier-photo.raven-glitch-img {
 }
 
 /* =========================================
+   REUSABLE TECH BUTTONS
+   ========================================= */
+.tech-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 12px 22px;
+  border: 2px solid var(--border-mid, #000);
+  cursor: pointer;
+  box-shadow: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.tech-btn:active {
+  transform: translateY(2px) scale(0.98);
+}
+
+/* Primary Variant (Solid Orange Fill) */
+.tech-btn-primary {
+  background: var(--accent, #ff6b00);
+  color: #000;
+  border-color: var(--border-mid, #000);
+}
+
+.tech-btn-primary .tech-btn-prompt {
+  color: #000;
+}
+
+.tech-btn-primary:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
+}
+
+/* Secondary Variant (Clean Outline Surface) */
+.tech-btn-secondary {
+  background: var(--surface, #fff);
+  color: var(--fg, #000);
+  border-color: var(--border-mid, #000);
+}
+
+.tech-btn-secondary .tech-btn-prompt {
+  color: var(--accent, #ff6b00);
+}
+
+.tech-btn-secondary:hover {
+  background: var(--fg, #000);
+  color: var(--bg, #fff);
+}
+
+.tech-btn-secondary:hover .tech-btn-prompt {
+  color: var(--accent, #ff6b00);
+}
+
+[data-theme="dark"] .tech-btn-secondary {
+  background: var(--surface, #0a0a0a);
+  color: var(--fg, #e0e0e0);
+  border-color: var(--border-mid, #ccc);
+}
+
+[data-theme="dark"] .tech-btn-secondary:hover {
+  background: var(--fg, #e0e0e0);
+  color: var(--bg, #0a0a0a);
+}
+
+/* =========================================
    CYBERPUNK THEME TRANSITION EFFECT (GLITCH & SCAN)
    ========================================= */
 
