@@ -4507,5 +4507,95 @@ html {
   background: var(--accent, #ff6b00);
 }
 
+/* =========================================
+   SECTION FIT
+   Every home section = exactly one screen:
+   from the bottom of the header to the next section's divider.
+   Paste this at the very END of style.css (it overrides earlier rules).
+   ========================================= */
+:root {
+  --section-h: calc(100dvh - var(--header-h));
+}
+ 
+/* Fit mode: desktop-style screens only. Phones, portrait tablets and very
+   short windows keep the natural-height layout (sections grow to content). */
+@media (min-width: 992px) and (min-height: 640px) {
+  /* ---- 1. Same dimension for all five ---- */
+  #about.section,
+  #music.section,
+  #portfolio.section,
+  #affiliates.section,
+  #connect.section {
+    min-height: var(--section-h);
+    height: auto; /* grows instead of clipping if a screen is too short */
+    max-height: none;
+    overflow: visible;
+    justify-content: center;
+    padding-top: clamp(18px, 3.2vh, 40px);
+    padding-bottom: clamp(14px, 2.4vh, 28px);
+  }
+ 
+  /* ---- 2. Shared header + footer-link spacing scales with height ---- */
+  #about h2,
+  #music h2,
+  #portfolio h2,
+  #affiliates h2,
+  #connect h2 {
+    font-size: clamp(1.8rem, 4.2vh, 2.5rem);
+    margin-bottom: clamp(4px, 1vh, 10px);
+  }
+  #about .waveform-wrap,
+  #music .waveform-wrap,
+  #portfolio .waveform-wrap,
+  #affiliates .waveform-wrap,
+  #connect .waveform-wrap {
+    margin-bottom: clamp(10px, 2vh, 25px);
+  }
+  #about .ext-link-row,
+  #music .ext-link-row,
+  #portfolio .ext-link-row,
+  #connect .ext-link-row {
+    margin-top: clamp(10px, 2vh, 24px) !important; /* beats Bootstrap mt-4 */
+  }
+ 
+  /* ---- 3. About: gallery follows the available height ---- */
+  #about .about-layout {
+    margin-top: clamp(4px, 1vh, 10px);
+  }
+  #about .about-gallery {
+    width: clamp(220px, 36vh, 340px);
+  }
+ 
+  /* ---- 4. Music: both players share one height ---- */
+  #music {
+    --media-h: clamp(320px, 40vh, 380px);
+  }
+  #music #main-video {
+    height: var(--media-h);
+  }
+  #music .stacked-players {
+    height: var(--media-h);
+  }
+ 
+  /* ---- 5. Portfolio: thumbnails follow the available height ---- */
+  #portfolio .mini-video-container {
+    padding-top: 0;
+    height: clamp(80px, 15vh, 170px);
+  }
+  #portfolio .portfolio-pager-counter {
+    margin-top: clamp(6px, 1.2vh, 12px);
+  }
+ 
+  /* ---- 6. Affiliates: panels already scale (17.5vh); just the gap ---- */
+  #affiliates .aff-panels-wrap {
+    margin-top: clamp(10px, 2vh, 24px);
+  }
+ 
+  /* ---- 7. Connect: cards grow a little on tall screens ---- */
+  #connect .social-card {
+    padding: clamp(24px, 6.5vh, 64px) 32px;
+  }
+}
+
 
 
