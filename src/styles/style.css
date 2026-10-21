@@ -170,21 +170,26 @@
    ========================================= */
 .lang-panel {
   position: fixed;
-  top: 0;
+  top: var(--header-h, 90px);
   right: 0;
   width: 280px;
-  height: 100%;
+  height: calc(100% - var(--header-h, 90px));
   background: var(--surface);
   border-left: 2px solid var(--border-mid);
-  padding: 90px 32px 40px;
+  border-top: none;
+  padding: 32px 32px 40px;
   transform: translateX(100%);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 998; /* just below nav drawer */
+  z-index: 999; /* Updated to match .nav-links so it sits cleanly on top */
   box-shadow: -4px 0 24px var(--shadow-nav);
   display: flex;
   flex-direction: column;
   gap: 0;
+  overflow-y: auto; /* Match nav-links scrollability */
+  overflow-x: hidden;
+  scrollbar-width: thin;
 }
+
 .lang-panel.open {
   transform: translateX(0);
 }
@@ -269,27 +274,15 @@
 /* Active state on langToggle button when panel is open */
 #langToggle.active img {
   opacity: 1;
+  transform: scale(1.1) rotate(15deg);
 }
 
-/* Mobile: full-width from top, same as nav-links */
-@media (max-width: 768px) {
-  .lang-panel {
-    width: 100%;
-    right: auto;
-    left: 0;
-    height: auto;
-    border-left: none;
-    border-bottom: 2px solid var(--border-mid);
-    padding: max(80px, calc(60px + env(safe-area-inset-top))) 24px max(28px, env(safe-area-inset-bottom));
-    transform: translateY(-100%);
-    box-shadow: none;
-  }
-  .lang-panel.open {
-    transform: translateY(0);
-  }
-}
+/* Mobile dropdown styling for .lang-panel lives with .nav-links in the
+   unified mobile block further down. */
 
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -432,6 +425,27 @@ button:not(.big-button):active,
 a:focus-visible,
 button:focus-visible {
   transition-duration: 0.18s;
+}
+
+/* Header controls: no focus ring left behind after a tap/click. */
+.nav-toggler,
+.nav-icon-btn {
+  outline: none;
+}
+.nav-toggler:focus,
+.nav-icon-btn:focus,
+.nav-toggler:active,
+.nav-icon-btn:active {
+  outline: none;
+  box-shadow: none;
+}
+/* Keep a visible keyboard ring for mouse-and-keyboard desktops only. */
+@media (hover: hover) and (pointer: fine) {
+  .nav-toggler:focus-visible,
+  .nav-icon-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
 }
 
 /* Skip-navigation link — visually hidden until focused by keyboard.
@@ -697,13 +711,13 @@ button:focus-visible {
   flex-direction: column;
   align-items: flex-start;
   position: fixed;
-  top: 0;
+  top: var(--header-h, 90px);
   right: 0;
   width: 280px;
-  height: 100%;
+  height: calc(100% - var(--header-h, 90px));
   background: var(--surface);
   border-left: 2px solid var(--border-mid);
-  padding: 90px 32px 40px;
+  padding: 32px 32px 40px;
   transform: translateX(100%);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 999;
@@ -2610,27 +2624,67 @@ p {
 }
 
 @media (max-width: 768px) {
+  :root {
+    --header-h: 64px; /* mobile header height; JS may overwrite with the measured value */
+  }
   .nav {
     padding: max(16px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 16px max(20px, env(safe-area-inset-left));
   }
-  .nav-links {
-    width: 100%;
-    right: auto;
+
+  /* .nav-links lives inside .nav, so by default it would paint over the header
+     bar. Paint the header surface on a pseudo-element above the dropdown and
+     lift the header content above that, so the menu slides out from UNDER it. */
+  .nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--surface);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .nav-left,
+  .nav-right {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Unified mobile dropdown: nav menu + language panel.
+     Anchored directly below the header (--header-h) and slid in/out with translateY.
+     z-index 999 < .nav (1000), so a closing panel slides back *behind* the
+     header and never covers the logo or title. */
+  .nav-links,
+  .lang-panel {
+    position: fixed;
+    top: var(--header-h, 64px);
     left: 0;
+    right: 0;
+    width: 100%;
     height: auto;
-    max-height: 85vh;
+    max-height: calc(100vh - var(--header-h, 64px));
+    max-height: calc(100dvh - var(--header-h, 64px));
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
-    border-left: none;
-    border-bottom: 2px solid var(--border-mid);
     background: var(--surface);
-    padding: max(80px, calc(60px + env(safe-area-inset-top))) 24px max(28px, env(safe-area-inset-bottom));
-    transform: translateY(-100%);
+    border-left: none;
+    border-top: none;
+    border-bottom: 2px solid var(--border-mid);
+    padding: 24px 24px max(32px, env(safe-area-inset-bottom));
     box-shadow: none;
+    z-index: 999;
+    transform: translateY(-105%);
+    visibility: hidden;
+    pointer-events: none;
   }
-  .nav-links.open {
+  .nav-links {
+    z-index: 0; /* below .nav::before (1) and header content (2) */
+  }
+  .nav-links.open,
+  .lang-panel.open {
     transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+    box-shadow: 0 10px 24px var(--shadow-nav);
   }
   .nav-link-item {
     font-size: 1rem;
@@ -4118,10 +4172,8 @@ footer,
 .container-lg,
 .card,
 .frame-bar,
-.nav-links,
 .social-side-panel,
 .social-card,
-.lang-panel,
 .modal,
 .disco-tabs,
 .disco-tab,
@@ -4143,6 +4195,39 @@ button:not(.big-button),
     border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
     color 0.38s ease,
     box-shadow 0.45s ease;
+}
+
+/* Slide-out drawers / dropdowns: slide + theme colour fades together */
+.nav-links,
+.lang-panel {
+  transition:
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  .nav-links,
+  .lang-panel {
+    /* hide after the slide-up finishes */
+    transition:
+      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s linear 0.4s,
+      background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.4s ease;
+  }
+  .nav-links.open,
+  .lang-panel.open {
+    /* show immediately when opening */
+    transition:
+      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s linear 0s,
+      background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.4s ease;
+  }
 }
 
 h1,

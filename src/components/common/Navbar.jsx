@@ -19,19 +19,20 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
   const togglerRef = useRef(null);
   const lastScrollY = useRef(0);
 
-  // Scroll shadow
+  // Scroll shadow & auto-close drawers on scroll
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-      if (Math.abs(window.scrollY - lastScrollY.current) > 8 && navOpen) {
-        setNavOpen(false);
+      if (Math.abs(window.scrollY - lastScrollY.current) > 8) {
+        if (navOpen) setNavOpen(false);
+        if (isLangOpen) onLangToggle(); // Close lang panel on scroll
       }
       lastScrollY.current = window.scrollY;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [navOpen]);
-
+  }, [navOpen, isLangOpen, onLangToggle]);
+  
   // Track active section on the homepage based on scroll position
   useEffect(() => {
     if (!isIndex) return;
@@ -222,7 +223,11 @@ export const Navbar = ({ onMoreClick, onHomeClick, onLangToggle, isLangOpen }) =
           aria-expanded={navOpen}
           onClick={(e) => {
             e.stopPropagation();
-            setNavOpen((prev) => !prev);
+            const willOpen = !navOpen;
+            setNavOpen(willOpen);
+            if (willOpen && isLangOpen) {
+              onLangToggle(); // Automatically close language panel if opening the mobile menu
+            }
           }}
         >
           <span></span>
