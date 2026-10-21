@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useAliasCycle } from './useAliasCycle';
 
 export const AffiliateCard = ({
   person,
@@ -9,27 +10,13 @@ export const AffiliateCard = ({
   onMouseLeave,
   onClick,
 }) => {
-  const [showingAlt, setShowingAlt] = useState(false);
-  const [isGlitching, setIsGlitching] = useState(false);
-
-  useEffect(() => {
-    if (!person.altImage) return;
-
-    let to;
-    const interval = setInterval(() => {
-      if (isDimmed) return;
-      setIsGlitching(true);
-      to = setTimeout(() => {
-        setShowingAlt((prev) => !prev);
-        setIsGlitching(false);
-      }, 80);
-    }, 2200 + Math.random() * 500);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(to);
-    };
-  }, [person.altImage, isDimmed]);
+  // Flips between main and alias every ~2s; skips while dimmed by a hover elsewhere.
+  const { showingAlias, isGlitching } = useAliasCycle({
+    enabled: Boolean(person.altImage),
+    paused: isDimmed,
+    baseMs: 2200, // cards flip a bit slower than the index marquee (2000)
+    jitterMs: 500,
+  });
 
   if (person.noSignal) {
     return (
@@ -40,13 +27,13 @@ export const AffiliateCard = ({
     );
   }
 
-  const name = showingAlt ? person.altName : person.name;
-  const image = showingAlt ? person.altImage : person.image;
-  const accent = showingAlt ? person.altAccent || person.accent : person.accent || '#ff6b00';
+  const name = showingAlias ? person.altName : person.name;
+  const image = showingAlias ? person.altImage : person.image;
+  const accent = showingAlias ? person.altAccent || person.accent || '#ff6b00' : person.accent || '#ff6b00';
 
   return (
     <div
-      className={`aff-panel ${isDimmed ? 'aff-dimmed' : ''} ${isActive ? 'aff-active' : ''} ${isGlitching ? 'raven-glitch' : ''}`}
+      className={`aff-panel ${isDimmed ? 'aff-dimmed' : ''} ${isActive ? 'aff-active' : ''} ${isGlitching ? 'alias-glitch' : ''}`}
       style={{ '--accent': accent, '--stagger-idx': staggerIndex }}
       data-aff-id={person.name}
       onMouseEnter={onMouseEnter}

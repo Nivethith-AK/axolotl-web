@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { AFFILIATES_DATA, toSlug } from '../data/affiliatesData';
 import { AffiliateCard } from '../components/affiliates/AffiliateCard';
-import { AffiliateModal } from '../components/affiliates/AffiliateModal';
+import { AffiliateDossier } from '../components/affiliates/AffiliateDossier';
 
 const TIER_ORDER = { high: 0, mid: 1, low: 2 };
 
@@ -142,7 +142,7 @@ export const AffiliatesPage = () => {
     navigate(`/affiliates/${toSlug(person.name)}`);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseDossier = () => {
     navigate('/affiliates');
   };
 
@@ -226,10 +226,8 @@ export const AffiliatesPage = () => {
         </div>
       </div>
 
-      {/* ── Full-Page Dossier Modal ── */}
-      {selectedPerson && (
-        <AffiliateModal person={selectedPerson} onClose={handleCloseModal} />
-      )}
+      {/* ── Full-Page Dossier ── */}
+      <AffiliateDossier variant="page" person={selectedPerson} onClose={handleCloseDossier} />
     </main>
   );
 };

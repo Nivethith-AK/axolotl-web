@@ -3758,30 +3758,6 @@ p {
   position: relative;
 }
 
-.dossier-alt-action {
-  padding: 12px;
-  background: rgba(10, 10, 15, 0.95);
-  border-top: 1px solid var(--border-soft, #222);
-  display: flex;
-  justify-content: center;
-}
-
-.dossier-persona-btn {
-  font-family: "Roboto Mono", monospace;
-  font-size: 0.58rem;
-  letter-spacing: 1.5px;
-  padding: 8px 16px;
-  background: transparent;
-  border: 1px solid currentColor;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: background 0.2s, color 0.2s;
-  width: 100%;
-}
-.dossier-persona-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
 .dossier-modal-body .dossier-info-col {
   flex: 1;
   padding: 32px 36px 32px;
@@ -4099,9 +4075,11 @@ p {
 }
 
 /* =========================================
-   RAVEN ALT-PERSONA PANEL GLITCH
+   ALIAS (ALT / LEGACY ACCOUNT) SWITCH
+   Glitch effects + switch button, shared by the
+   roster cards and both dossier variants.
    ========================================= */
-@keyframes ravenGlitch {
+@keyframes aliasGlitch {
   0%,
   100% {
     transform: none;
@@ -4124,14 +4102,7 @@ p {
     filter: none;
   }
 }
-.aff-panel.raven-glitch {
-  animation: ravenGlitch 0.3s steps(4, end);
-  z-index: 5;
-}
-.aff-panel.raven-glitch .aff-panel-cover {
-  animation: ravenCover 0.3s steps(4, end);
-}
-@keyframes ravenCover {
+@keyframes aliasGlitchCover {
   0%,
   100% {
     filter: none;
@@ -4151,11 +4122,52 @@ p {
     filter: none;
   }
 }
-.dossier-photo-col.raven-glitch-dossier {
-  animation: ravenGlitch 0.3s steps(4, end);
+
+/* Roster / marquee card — 0.6s, matches glitchMs in useAliasCycle.js */
+.aff-panel.alias-glitch {
+  animation: aliasGlitch 0.6s steps(4, end);
+  z-index: 5;
 }
-img.dossier-photo.raven-glitch-img {
-  animation: ravenCover 0.3s steps(4, end);
+.aff-panel.alias-glitch .aff-panel-cover {
+  animation: aliasGlitchCover 0.6s steps(4, end);
+}
+
+/* Dossier (both variants): photo column, photo, and name */
+.alias-glitch-photo,
+.alias-glitch-text {
+  animation: aliasGlitch 0.3s steps(4, end);
+}
+img.alias-glitch-img {
+  animation: aliasGlitchCover 0.3s steps(4, end);
+}
+
+/* "| SWITCH → NAME" — colour comes from --alias-accent (set inline per person) */
+.alias-switch-divider {
+  color: var(--text-6, #999);
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+.alias-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid var(--alias-accent, var(--accent));
+  color: var(--alias-accent, var(--accent));
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.alias-switch:hover {
+  background: color-mix(in srgb, var(--alias-accent, var(--accent)) 14%, transparent);
 }
 
 /* =========================================
@@ -4187,6 +4199,14 @@ img.dossier-photo.raven-glitch-img {
 
 .tech-btn:active {
   transform: translateY(2px) scale(0.98);
+}
+
+.tech-btn-md {
+  padding: 12px 22px;
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  gap: 10px;
+  border-width: 2px;
 }
 
 /* Primary Variant (Solid Orange Fill) */
@@ -4223,6 +4243,15 @@ img.dossier-photo.raven-glitch-img {
 
 .tech-btn-secondary:hover .tech-btn-prompt {
   color: var(--accent, #ff6b00);
+}
+
+/* Tech Button Sizes */
+.tech-btn-sm {
+  padding: 6px 12px;
+  font-size: 0.52rem;
+  letter-spacing: 1.5px;
+  gap: 6px;
+  border-width: 1px;
 }
 
 [data-theme="dark"] .tech-btn-secondary {

@@ -1,40 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
 import { AFFILIATES_DATA, toSlug } from '../../data/affiliatesData';
 import { TechButton } from '../common/TechButton';
+import { AffiliateDossier } from '../affiliates/AffiliateDossier';
+import { useAliasCycle } from '../affiliates/useAliasCycle';
 
 export const AffiliatesTeaser = () => {
   const { t } = useLanguage();
   const [selectedAffiliate, setSelectedAffiliate] = useState(null);
   // const [viewMode, setViewMode] = useState('stream');
-  const [showingAlt, setShowingAlt] = useState(false);
-  const [accessingName, setAccessingName] = useState('');
-  const [altPersonaText, setAltPersonaText] = useState('');
-  const [ravenShowingAlt, setRavenShowingAlt] = useState(false);
-  const [ravenGlitching, setRavenGlitching] = useState(false);
+  // Mirrors the open dossier's alias state so its roster card flips with it.
+  const [dossierShowingAlias, setDossierShowingAlias] = useState(false);
+  // One shared timer so the duplicated marquee cards flip in sync.
+  const cycle = useAliasCycle();
 
-  useEffect(() => {
-    let timer;
-    let glitchInnerTimer;
-    const scheduleNext = () => {
-      timer = setTimeout(() => {
-        setRavenGlitching(true);
-        glitchInnerTimer = setTimeout(() => {
-          setRavenShowingAlt((prev) => !prev);
-          setRavenGlitching(false);
-          scheduleNext();
-        }, 80);
-      }, 2000 + Math.random() * 500);
-    };
-    scheduleNext();
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(glitchInnerTimer);
-    };
-  }, []);
+  const accessingName = selectedAffiliate
+    ? (dossierShowingAlias ? selectedAffiliate.altName : selectedAffiliate.name)
+        .toUpperCase()
+        .replace(/ /g, '_')
+    : '';
 
   const wrapRef = useRef(null);
   const track1Ref = useRef(null);
@@ -266,45 +252,13 @@ export const AffiliatesTeaser = () => {
     };
   }, []);
 
-  // Keyboard Escape listener to dismiss modal
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        setSelectedAffiliate(null);
-        setAccessingName('');
-        setShowingAlt(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  const openDossier = (data) => {
-    setSelectedAffiliate(data);
-    setShowingAlt(false);
-    setAccessingName(data.name.toUpperCase().replace(/ /g, '_'));
-    if (data.altName) {
-      setAltPersonaText(data.altName.toUpperCase());
-    }
-  };
-
-  const closeDossier = () => {
-    setSelectedAffiliate(null);
-    setAccessingName('');
-    setShowingAlt(false);
-  };
-
-  const togglePersona = () => {
-    if (!selectedAffiliate?.altImage) return;
-    setShowingAlt((prev) => !prev);
-    const nextName = !showingAlt ? selectedAffiliate.altName : selectedAffiliate.name;
-    setAccessingName(nextName.toUpperCase().replace(/ /g, '_'));
-  };
+  const openDossier = (data) => setSelectedAffiliate(data);
+  const closeDossier = () => setSelectedAffiliate(null);
 
   const renderCard = (data, idx, rowNum) => {
     const isDossierOpenForThis = selectedAffiliate?.name === data.name;
-    const isAlt = isDossierOpenForThis ? showingAlt : data.altImage ? ravenShowingAlt : false;
-    const isGlitching = !isDossierOpenForThis && data.altImage ? ravenGlitching : false;
+    const isAlt = isDossierOpenForThis ? dossierShowingAlias : data.altImage ? cycle.showingAlias : false;
+    const isGlitching = !isDossierOpenForThis && data.altImage ? cycle.isGlitching : false;
     const coverSrc = isAlt ? `/images/${data.altImage}` : data.image ? `/images/${data.image}` : null;
     const displayName = isAlt ? data.altName : data.name;
     const displayAccent = isAlt ? data.altAccent || data.accent : data.accent || '#ff6b00';
@@ -315,7 +269,7 @@ export const AffiliatesTeaser = () => {
     return (
       <div
         key={`${rowNum}-${data.name}-${idx}`}
-        className={`aff-panel ${isGlitching ? 'raven-glitch' : ''} ${isHovered ? 'aff-active' : ''} ${isDimmed ? 'aff-dimmed' : ''}`}
+        className={`aff-panel ${isGlitching ? 'alias-glitch' : ''} ${isHovered ? 'aff-active' : ''} ${isDimmed ? 'aff-dimmed' : ''}`}
         style={{ '--accent': displayAccent }}
         data-aff-id={data.name}
         onMouseEnter={() => setHoveredAffId(data.name)}
@@ -365,11 +319,6 @@ export const AffiliatesTeaser = () => {
     );
   };
 
-  const activeData = selectedAffiliate;
-  const activeName = showingAlt ? activeData?.altName : activeData?.name;
-  const activeImage = showingAlt ? activeData?.altImage : activeData?.image;
-  const activeAccent = showingAlt ? activeData?.altAccent || activeData?.accent : activeData?.accent || '#ff6b00';
-  const activeLinks = showingAlt ? activeData?.altLinks || activeData?.links : activeData?.links;
 
   return (
     <section id="affiliates" className="section">
@@ -452,146 +401,12 @@ export const AffiliatesTeaser = () => {
         </div>
 
         {/* ── Centered Holographic Dossier Modal (Screen Pop Up) ── */}
-        {activeData &&
-          createPortal(
-            <div
-              className="dossier-modal-overlay"
-              onClick={(e) => {
-                if (e.target === e.currentTarget) closeDossier();
-              }}
-            >
-            <div className="dossier-modal-container" role="dialog" aria-modal="true">
-              <button
-                type="button"
-                className="dossier-modal-close"
-                onClick={closeDossier}
-                aria-label="Close Dossier"
-              >
-                [× CLOSE]
-              </button>
-
-              <div className="dossier-modal-body">
-                {/* Left Column: Photo & Persona Switch */}
-                <div className="dossier-photo-col">
-                  <div className="dossier-photo-inner">
-                    {activeImage ? (
-                      <img
-                        src={`/images/${activeImage}`}
-                        className="dossier-photo"
-                        alt={activeName}
-                        decoding="async"
-                        draggable="false"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          if (e.target.nextElementSibling) {
-                            e.target.nextElementSibling.style.display = 'flex';
-                          }
-                        }}
-                      />
-                    ) : null}
-                    <div
-                      className="dossier-photo-placeholder"
-                      style={{ display: activeImage ? 'none' : 'flex' }}
-                    >
-                      IMAGE_DATA
-                      <br />
-                      NOT_FOUND
-                    </div>
-                  </div>
-
-                  {activeData.altImage && (
-                    <div className="dossier-alt-action">
-                      <button
-                        type="button"
-                        className="dossier-persona-btn"
-                        onClick={togglePersona}
-                        style={{
-                          borderColor: activeAccent,
-                          color: activeAccent,
-                        }}
-                      >
-                        SWITCH → {showingAlt ? activeData.name.toUpperCase() : activeData.altName.toUpperCase()}
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Right Column: Metadata & Projects */}
-                <div className="dossier-info-col">
-                  <div className="dossier-tag">NODE_AFFILIATE // COLLABORATOR</div>
-                  <div className="dossier-name" style={{ color: activeAccent }}>
-                    {activeName}
-                  </div>
-
-                  {activeData.affiliation && (
-                    <a
-                      href={activeData.affiliation.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="dossier-affiliation"
-                    >
-                      <span className="dossier-affiliation-from">from</span>
-                      <span className="dossier-affiliation-name">
-                        {activeData.affiliation.name}
-                      </span>
-                      <img
-                        src={`/images/${activeData.affiliation.badge}`}
-                        className="dossier-affiliation-badge"
-                        alt={activeData.affiliation.name}
-                        decoding="async"
-                        width="18"
-                        height="18"
-                        draggable="false"
-                      />
-                    </a>
-                  )}
-
-                  <div className="dossier-role">{activeData.role}</div>
-
-                  {activeData.projects?.length > 0 && (
-                    <div className="dossier-section">
-                      <div className="dossier-section-label">// COLLABORATIVE_LOG</div>
-                      <div className="dossier-projects-list">
-                        {activeData.projects.map((p, pIdx) => (
-                          <a
-                            key={pIdx}
-                            href={p.url || '#'}
-                            className="dossier-project"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <div className="dossier-project-title">{p.title}</div>
-                            <div className="dossier-project-role">{p.role}</div>
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {activeLinks?.length > 0 && (
-                    <div className="dossier-section">
-                      <div className="dossier-section-label">// LINKS</div>
-                      <div className="dossier-links-wrap">
-                        {activeLinks.map((l, lIdx) => (
-                          <a
-                            key={lIdx}
-                            href={l.url}
-                            className="dossier-link"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            &gt;&gt; {l.label}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>,
-          document.body
-        )}
+        <AffiliateDossier
+          variant="popup"
+          person={selectedAffiliate}
+          onClose={closeDossier}
+          onAliasChange={setDossierShowingAlias}
+        />
 
         {/* ── Reusable Full Roster Control (Left-Aligned) ── */}
         <div className="ext-link-row mt-4" style={{ display: 'flex', justifyContent: 'flex-start' }}>

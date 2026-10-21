@@ -5,12 +5,13 @@ export const TechButton = ({
   to,
   href,
   children,
-  variant = 'primary', // 'primary' (orange fill) or 'secondary' (outline / surface fill)
+  variant = 'primary', // 'primary' or 'secondary'
+  size = 'md',          // 'sm', 'md', 'lg'
   className = '',
   onClick,
   ...props
 }) => {
-  const baseClass = `tech-btn tech-btn-${variant} ${className}`;
+  const baseClass = `tech-btn tech-btn-${variant} tech-btn-${size} ${className}`;
 
   const content = (
     <>
@@ -19,23 +20,14 @@ export const TechButton = ({
     </>
   );
 
-  // External link (http/https)
   if (href) {
     return (
-      <a
-        href={href}
-        className={baseClass}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onClick}
-        {...props}
-      >
+      <a href={href} className={baseClass} target="_blank" rel="noopener noreferrer" onClick={onClick} {...props}>
         {content}
       </a>
     );
   }
 
-  // Internal client-side router link
   if (to) {
     return (
       <Link to={to} className={baseClass} onClick={onClick} {...props}>
@@ -44,7 +36,6 @@ export const TechButton = ({
     );
   }
 
-  // Standard interactive button
   return (
     <button type="button" className={baseClass} onClick={onClick} {...props}>
       {content}
