@@ -15,8 +15,9 @@ export function scrollToSection(id, { duration = 1.4 } = {}) {
   el.style.opacity = '1';
   el.style.transform = 'translateY(0)';
 
+  const DIVIDER = 2; // section's 2px border tucks under the navbar's own 2px border
   const target = () =>
-    id === 'hero' ? 0 : Math.max(0, docTop(el) - getHeaderHeight());
+  id === 'hero' ? 0 : Math.max(0, docTop(el) - getHeaderHeight() + DIVIDER);
 
   const lenis = window.lenis;
   if (!lenis) {
