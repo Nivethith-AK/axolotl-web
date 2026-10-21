@@ -110,15 +110,20 @@ export const SmoothScrollProvider = ({ children }) => {
     }
   }, [location.pathname]);
 
-  useEffect(() => {
-  const nav = document.getElementById('mainNav');
-  if (!nav || typeof ResizeObserver === 'undefined') return;
-  const setH = () =>
-    document.documentElement.style.setProperty('--header-h', `${nav.offsetHeight}px`);
-  setH();
-  const ro = new ResizeObserver(setH);
-  ro.observe(nav);
-  return () => ro.disconnect();
+    useEffect(() => {
+    if (typeof ResizeObserver === 'undefined') return;
+    const root = document.documentElement;
+    const nav = document.getElementById('mainNav');
+    const footer = document.querySelector('.footer');
+    const sync = () => {
+      if (nav) root.style.setProperty('--header-h', `${nav.offsetHeight}px`);
+      if (footer) root.style.setProperty('--footer-h', `${footer.offsetHeight}px`);
+    };
+    sync();
+    const ro = new ResizeObserver(sync);
+    if (nav) ro.observe(nav);
+    if (footer) ro.observe(footer);
+    return () => ro.disconnect();
   }, []);
 
   return (

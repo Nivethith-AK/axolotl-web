@@ -4597,5 +4597,12 @@ html {
   }
 }
 
+@media (min-width: 992px) and (min-height: 640px) {
+  #connect.section {
+    /* +2px = the divider overlap, so the page bottom matches the scroll target */
+    min-height: calc(var(--section-h) - var(--footer-h, 0px) + 2px);
+  }
+}
+
 
 
