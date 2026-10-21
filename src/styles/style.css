@@ -3170,15 +3170,17 @@ p {
 }
 
 .boot-status {
-  width: 260px;
+  width: auto;
+  min-width: 260px;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 14px;
   font-family: "Roboto Mono", monospace;
   font-size: 0.62rem;
   letter-spacing: 2px;
-  text-align: left;
+  text-align: center;
 }
 
 #bootPercent {
@@ -3186,7 +3188,7 @@ p {
   width: 44px;
   min-width: 44px;
   flex-shrink: 0;
-  text-align: left;
+  text-align: right;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
   transition: color 0.35s ease;
@@ -3198,7 +3200,7 @@ p {
 }
 
 .boot-line-wrap {
-  flex: 1;
+  flex: none;
   min-width: 0;
   color: #888;
   min-height: 1.2em;
@@ -3206,7 +3208,7 @@ p {
   align-items: center;
   justify-content: flex-start;
   text-align: left;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* ── AUTHENTIC TERMINAL TYPEWRITER ANIMATION ───────────── */

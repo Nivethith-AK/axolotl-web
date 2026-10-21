@@ -20,34 +20,11 @@ const MORSE_CHARS = [
 /**
  * TypewriterText - Authentic character-by-character terminal typing animation with blinking cursor
  */
-const TypewriterText = React.memo(({ text, isComplete }) => {
-  const [displayedText, setDisplayedText] = useState('');
-
-  useEffect(() => {
-    let idx = 0;
-    setDisplayedText('');
-
-    // Dynamic typing speed ensuring entire line finishes in ~180-240ms
-    const stepMs = Math.max(12, Math.floor(210 / Math.max(1, text.length)));
-    const interval = setInterval(() => {
-      idx++;
-      if (idx <= text.length) {
-        setDisplayedText(text.slice(0, idx));
-      } else {
-        clearInterval(interval);
-      }
-    }, stepMs);
-
-    return () => clearInterval(interval);
-  }, [text]);
-
-  return (
-    <span className="boot-typewriter">
-      <span>{displayedText}</span>
-      <span className={`boot-cursor ${isComplete ? 'cursor-complete' : ''}`}>█</span>
-    </span>
-  );
-});
+const TypewriterText = React.memo(({ text, isComplete }) => (
+  <span className="boot-typewriter">
+    <span>{text}</span>
+  </span>
+));
 
 export const BootScreen = React.memo(({
   lines = DEFAULT_LINES,
