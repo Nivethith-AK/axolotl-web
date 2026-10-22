@@ -18,15 +18,6 @@ const WorksPage = React.lazy(() =>
 const PortfolioPage = React.lazy(() =>
   import('./pages/PortfolioPage').then((m) => ({ default: m.PortfolioPage }))
 );
-const AboutPage = React.lazy(() =>
-  import('./pages/AboutPage').then((m) => ({ default: m.AboutPage }))
-);
-const MusicPage = React.lazy(() =>
-  import('./pages/MusicPage').then((m) => ({ default: m.MusicPage }))
-);
-const ConnectPage = React.lazy(() =>
-  import('./pages/ConnectPage').then((m) => ({ default: m.ConnectPage }))
-);
 const DiscographyPage = React.lazy(() =>
   import('./pages/DiscographyPage').then((m) => ({ default: m.DiscographyPage }))
 );
@@ -50,27 +41,6 @@ const ROUTE_BOOT_LINES = {
     'SCANNING_PROJECT_FILES...',
     'INDEXING_PRODUCTIONS...',
     'MOUNTING_MEDIA_STREAM...',
-    'SYSTEM_READY',
-  ],
-  '/about': [
-    'LOADING_BIO_ARCHIVE...',
-    'DECRYPTING_DOSSIER...',
-    'MOUNTING_IDENTITY_NODE...',
-    'VERIFYING_CAPABILITIES...',
-    'SYSTEM_READY',
-  ],
-  '/music': [
-    'LOADING_AUDIO_FEED...',
-    'SCANNING_FREQUENCY_SPECTRUM...',
-    'INITIALIZING_PLAYBACK...',
-    'MOUNTING_STREAM_RELAYS...',
-    'SYSTEM_READY',
-  ],
-  '/connect': [
-    'INITIALIZING_TRANSMISSION...',
-    'SCANNING_NEURAL_FREQUENCIES...',
-    'MOUNTING_COMMS_ARRAY...',
-    'CHANNELS_OPEN',
     'SYSTEM_READY',
   ],
   '/works': [
@@ -108,9 +78,6 @@ const getTopRoute = (path) => {
   if (path.startsWith('/affiliates')) return '/affiliates';
   if (path.startsWith('/works')) return '/works';
   if (path.startsWith('/portfolio')) return '/portfolio';
-  if (path.startsWith('/about')) return '/about';
-  if (path.startsWith('/music')) return '/music';
-  if (path.startsWith('/connect')) return '/connect';
   if (path.startsWith('/terms-of-service')) return '/terms-of-service';
   return '/';
 };
@@ -287,9 +254,6 @@ export const App = () => {
             }
           />
           <Route path="/portfolio" element={<PortfolioPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/music" element={<MusicPage />} />
-          <Route path="/connect" element={<ConnectPage />} />
           <Route path="/works" element={<WorksPage />} />
           <Route path="/discography" element={<DiscographyPage />} />
           <Route path="/discography/:slug" element={<DiscographyPage />} />

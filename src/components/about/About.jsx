@@ -1,8 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
 import { AboutGallery } from './AboutGallery';
+import { TechButton } from '../common/TechButton';
+
+// TODO: replace with the personal project page (internal route => use `to` on the TechButton instead of `href`)
+const PERSONAL_PROJECT_URL = '#';
 
 export const About = () => {
   const { t } = useLanguage();
@@ -27,11 +30,10 @@ export const About = () => {
               data-i18n-html="about.p2"
               dangerouslySetInnerHTML={{ __html: t('about.p2', defaultP2) }}
             ></p>
-            <div style={{ marginTop: '1.4rem' }}>
-              <Link to="/about" className="ext-link" style={{ textDecoration: 'none' }}>
-                <span className="prompt">&gt;&gt;&gt;</span> Dossier :=
-                <span className="value">Open /ABOUT [Capabilities Profile]</span>
-              </Link>
+            <div className="ext-link-row" style={{ marginTop: '1.4rem' }}>
+              <TechButton href={PERSONAL_PROJECT_URL} variant="secondary">
+                PERSONAL_PROJECT // PROJECT_PAGE
+              </TechButton>
             </div>
           </div>
 

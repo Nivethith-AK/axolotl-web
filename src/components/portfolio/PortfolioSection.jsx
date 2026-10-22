@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
+import { TechButton } from '../common/TechButton';
 import { PORTFOLIO_DATA } from '../../data/portfolioData';
 
 export const PortfolioSection = () => {
@@ -360,36 +360,14 @@ export const PortfolioSection = () => {
           </div>
         </div>
 
-        {/* External Foriio Link & Standalone Portfolio Route Link */}
-        <div className="ext-link-row mt-4" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center' }}>
-          <a
-            href="https://foriio.com/theaxolotlmusic"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ext-link"
-          >
-            <img
-              src="/images/icons/foriio.webp"
-              alt="Foriio"
-              className="ext-link-icon"
-              loading="lazy"
-              decoding="async"
-              width="16"
-              height="16"
-              draggable="false"
-            />
-            <span className="prompt">&gt;&gt;&gt;</span> External_Archive :=
-            <span className="value">Foriio</span>
-          </a>
-
-          <Link
-            to="/portfolio"
-            className="ext-link"
-            style={{ textDecoration: 'none' }}
-          >
-            <span className="prompt">&gt;&gt;&gt;</span> Standalone_Archive :=
-            <span className="value">Open /PORTFOLIO [All Projects &amp; Filters]</span>
-          </Link>
+        {/* External Foriio link & standalone portfolio page */}
+        <div className="ext-link-row mt-4">
+          <TechButton href="https://foriio.com/theaxolotlmusic" variant="secondary">
+            EXTERNAL_ARCHIVE // FORIIO
+          </TechButton>
+          <TechButton to="/portfolio" variant="secondary">
+            FULL_PORTFOLIO // PORTFOLIO_PAGE
+          </TechButton>
         </div>
       </div>
     </section>

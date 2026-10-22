@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { WaveformHeader } from '../common/WaveformHeader';
+import { TechButton } from '../common/TechButton';
 
 export const MusicSection = ({ hideHeader = false }) => {
   const { t } = useLanguage();
@@ -104,15 +104,10 @@ export const MusicSection = ({ hideHeader = false }) => {
           </div>
         </div>
 
-        <div className="ext-link-row mt-4" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center' }}>
-          <Link to="/discography" className="ext-link" style={{ textDecoration: 'none' }}>
-            <span className="prompt">&gt;&gt;&gt;</span> Full_Discography :=
-            <span className="value">Open /DISCOGRAPHY Timeline</span>
-          </Link>
-          <Link to="/music" className="ext-link" style={{ textDecoration: 'none' }}>
-            <span className="prompt">&gt;&gt;&gt;</span> Standalone_Feed :=
-            <span className="value">Open /MUSIC Stream</span>
-          </Link>
+        <div className="ext-link-row mt-4">
+          <TechButton to="/discography" variant="secondary">
+            FULL_DISCOGRAPHY // DISCOGRAPHY_PAGE
+          </TechButton>
         </div>
       </div>
     </section>
