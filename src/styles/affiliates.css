@@ -130,6 +130,17 @@
         }
       }
 
+      /* Alias glitch on roster cards. The cascade-in rule above uses the same
+         `animation` property and beat the glitch from style.css, so the shake
+         never played here. Keep both in one list: the cascade keeps its name
+         (so it does NOT replay) and the glitch runs on top for 0.6s. */
+      .aff-roster-grid .aff-panel.alias-glitch {
+        animation:
+          affCardCascadeIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both,
+          aliasGlitch 0.6s steps(4, end);
+        animation-delay: calc(min(var(--stagger-idx, 0), 24) * 18ms), 0s;
+      }
+
       /* ── CARD — uses .aff-panel from style.css, overrides below ─ */
       .aff-roster-grid .aff-panel {
         aspect-ratio: 1 / 1;
