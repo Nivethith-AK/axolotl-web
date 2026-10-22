@@ -5,7 +5,7 @@ import { AboutGallery } from './AboutGallery';
 import { TechButton } from '../common/TechButton';
 
 // TODO: replace with the personal project page (internal route => use `to` on the TechButton instead of `href`)
-const PERSONAL_PROJECT_URL = '#';
+const PROJECT_EDEN_URL = '#';
 
 export const About = () => {
   const { t } = useLanguage();
@@ -31,8 +31,8 @@ export const About = () => {
               dangerouslySetInnerHTML={{ __html: t('about.p2', defaultP2) }}
             ></p>
             <div className="ext-link-row" style={{ marginTop: '1.4rem' }}>
-              <TechButton href={PERSONAL_PROJECT_URL} variant="secondary">
-                PERSONAL_PROJECT // PROJECT_PAGE
+              <TechButton href={PROJECT_EDEN_URL} variant="secondary">
+                PROJECT_EDEN // MEMENTO MORI: A REASON TO LIVE
               </TechButton>
             </div>
           </div>
