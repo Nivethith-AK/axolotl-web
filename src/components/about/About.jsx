@@ -12,6 +12,7 @@ export const About = () => {
 
   const defaultP1 = `Wello there, <strong>Δxolotl</strong> here!<br />I'm a composer, arranger, producer and multi-instrumentalist with a focus on contemporary music that bridges electronic and traditional influences across a wide range of genres.`;
   const defaultP2 = `I work across indie projects and freelance commissions, releasing original compositions, soundtracks, rearrangements and covers. My work draws heavily from Japanese anime and pop culture - though the sound rarely stays in one place for long.`;
+  const defaultP3 = `You can take a look at my multimedia project here:`;
 
   return (
     <section id="about" className="section">
@@ -29,6 +30,11 @@ export const About = () => {
               style={{ marginTop: '1rem' }}
               data-i18n-html="about.p2"
               dangerouslySetInnerHTML={{ __html: t('about.p2', defaultP2) }}
+            ></p>
+            <p
+              style={{ marginTop: '1rem' }}
+              data-i18n-html="about.p3"
+              dangerouslySetInnerHTML={{ __html: t('about.p3', defaultP3) }}
             ></p>
             <div className="ext-link-row" style={{ marginTop: '1.4rem' }}>
               <TechButton href={PROJECT_EDEN_URL} variant="secondary">

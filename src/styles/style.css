@@ -4254,6 +4254,28 @@ img.alias-glitch-img {
   border-width: 1px;
 }
 
+/* Phones / small tablets: default (md) buttons were ~66px tall with wrapped labels.
+   Tighter type + padding keeps long "NAME // PAGE" labels on one line and the
+   button sized to its content. sm is already compact, so it's left alone. */
+@media (max-width: 768px) {
+  .tech-btn-md {
+    padding: 9px 14px;
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    gap: 8px;
+  }
+  .ext-link-row {
+    gap: 12px;
+  }
+}
+@media (max-width: 380px) {
+  .tech-btn-md {
+    padding: 8px 12px;
+    font-size: 0.56rem;
+    letter-spacing: 0.5px;
+  }
+}
+
 [data-theme="dark"] .tech-btn-secondary {
   background: var(--surface, #0a0a0a);
   color: var(--fg, #e0e0e0);
