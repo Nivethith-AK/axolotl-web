@@ -5,7 +5,7 @@
   "page_title": {
     "index": "Δxolotl // Official Website",
     "discography": "Δxolotl // Discography",
-    "works": "Δxolotl // Works",
+    "works": "Δxolotl // Portfolio & Works",
     "tos": "Δxolotl // Terms of Service"
   },
 
@@ -18,7 +18,7 @@
     "connect": "/CONNECT",
     "more": "/MORE",
     "discography": "/DISCOGRAPHY",
-    "works": "/WORKS",
+    "portfolio-and-works": "/PORTFOLIO_AND_WORKS",
     "tos": "/TERMS_OF_SERVICE",
     "shop": "/SHOP",
     "unknown": "/UNKNOWN"
@@ -34,8 +34,8 @@
     "reveal_tag": "SYS_LINK: ESTABLISHED // NODES_UNLOCKED",
     "node_disco_label": "DISCOGRAPHY",
     "node_disco_sub": "PRJ_ARCHIVE // AUDIO_LOG",
-    "node_works_label": "WORKS",
-    "node_works_sub": "SELECTED_WORKS // PORTFOLIO",
+    "node_portfolio-and-works_label": "PORTFOLIO_AND_WORKS",
+    "node_portfolio-and-works_sub": " PORTFOLIO // WORKED PROJECTS",
     "node_tos_label": "TERMS_OF_SERVICE",
     "node_tos_sub": "LEGAL // USAGE_POLICY",
     "node_shop_sub": "MERCH // ACCESS_RESTRICTED",

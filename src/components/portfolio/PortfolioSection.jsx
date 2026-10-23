@@ -365,8 +365,8 @@ export const PortfolioSection = () => {
           <TechButton href="https://foriio.com/theaxolotlmusic" variant="secondary">
             EXTERNAL_ARCHIVE // FORIIO
           </TechButton>
-          <TechButton to="/portfolio" variant="secondary">
-            FULL_PORTFOLIO // PORTFOLIO_PAGE
+          <TechButton to="/portfolio-and-works" variant="secondary">
+            PORTFOLIO_AND_WORKS // FULL_ARCHIVE
           </TechButton>
         </div>
       </div>

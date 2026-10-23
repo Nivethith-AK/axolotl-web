@@ -1518,10 +1518,10 @@ p {
   width: 6px;
   height: 6px;
   flex: 0 0 6px;
-  background: var(--accent);
+  background: var(--cyan);
 }
 .portfolio-filter-status-label {
-  color: var(--accent);
+  color: var(--cyan);
 }
 .portfolio-filter-status strong {
   color: var(--fg);

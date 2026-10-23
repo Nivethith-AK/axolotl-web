@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { GlobalGrid } from './components/common/GlobalGrid';
 import { GeoCanvas } from './components/common/GeoCanvas';
 import { TelemetryDecals } from './components/common/TelemetryDecals';
@@ -12,11 +12,8 @@ import { ThemeTransitionOverlay } from './components/common/ThemeTransitionOverl
 import { SmoothScrollProvider } from './components/common/SmoothScrollProvider';
 import { HomePage } from './pages/HomePage';
 
-const WorksPage = React.lazy(() =>
-  import('./pages/WorksPage').then((m) => ({ default: m.WorksPage }))
-);
-const PortfolioPage = React.lazy(() =>
-  import('./pages/PortfolioPage').then((m) => ({ default: m.PortfolioPage }))
+const PortfolioAndWorksPage = React.lazy(() =>
+  import('./pages/PortfolioAndWorksPage').then((m) => ({ default: m.PortfolioAndWorksPage }))
 );
 const DiscographyPage = React.lazy(() =>
   import('./pages/DiscographyPage').then((m) => ({ default: m.DiscographyPage }))
@@ -36,18 +33,11 @@ const ROUTE_BOOT_LINES = {
     'VERIFYING_INTEGRITY...',
     'SYSTEM_READY',
   ],
-  '/portfolio': [
+  '/portfolio-and-works': [
     'LOADING_PORTFOLIO_DATA...',
     'SCANNING_PROJECT_FILES...',
-    'INDEXING_PRODUCTIONS...',
+    'INDEXING_PRODUCTIONS_AND_CREDITS...',
     'MOUNTING_MEDIA_STREAM...',
-    'SYSTEM_READY',
-  ],
-  '/works': [
-    'LOADING_PROJECT_FILES...',
-    'SCANNING_WORKS_LOG...',
-    'INDEXING_COMMISSIONS...',
-    'MOUNTING_CREDITS_DB...',
     'SYSTEM_READY',
   ],
   '/discography': [
@@ -76,8 +66,9 @@ const ROUTE_BOOT_LINES = {
 const getTopRoute = (path) => {
   if (path.startsWith('/discography')) return '/discography';
   if (path.startsWith('/affiliates')) return '/affiliates';
-  if (path.startsWith('/works')) return '/works';
-  if (path.startsWith('/portfolio')) return '/portfolio';
+  // /portfolio and /works are legacy URLs that redirect; map them to the same top route
+  // so the boot screen doesn't run twice.
+  if (path.startsWith('/portfolio') || path.startsWith('/works')) return '/portfolio-and-works';
   if (path.startsWith('/terms-of-service')) return '/terms-of-service';
   return '/';
 };
@@ -253,22 +244,17 @@ export const App = () => {
               />
             }
           />
-          <Route path="/portfolio" element={<PortfolioPage />} />
-          <Route path="/works" element={<WorksPage />} />
+          <Route path="/portfolio-and-works" element={<PortfolioAndWorksPage />} />
+          {/* Legacy URLs */}
+          <Route path="/portfolio" element={<Navigate to="/portfolio-and-works?view=portfolio" replace />} />
+          <Route path="/works" element={<Navigate to="/portfolio-and-works?view=works" replace />} />
           <Route path="/discography" element={<DiscographyPage />} />
           <Route path="/discography/:slug" element={<DiscographyPage />} />
           <Route path="/affiliates" element={<AffiliatesPage />} />
           <Route path="/affiliates/:slug" element={<AffiliatesPage />} />
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-          <Route
-            path="*"
-            element={
-              <HomePage
-                revealTrigger={revealTrigger}
-                onResetRevealTrigger={() => setRevealTrigger(false)}
-              />
-            }
-          />
+          {/* Unknown / retired URLs (/about, /connect, /music, ...) go home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </React.Suspense>
 

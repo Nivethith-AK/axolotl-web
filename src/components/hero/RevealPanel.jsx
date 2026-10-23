@@ -248,11 +248,11 @@ export const RevealPanel = ({ isOpen, onCloseComplete }) => {
       <Link to="/works" className={`reveal-node active-node ${getNodeClass(1)}`}>
         <div className="node-bracket">[</div>
         <div className="node-content">
-          <div className="node-label" data-i18n="hero.node_works_label">
-            {t('hero.node_works_label', 'WORKS')}
+          <div className="node-label" data-i18n="hero.node_portfolio-and-works_label">
+            {t('hero.node_portfolio-and-works_label', 'WORKS')}
           </div>
-          <div className="node-sub" data-i18n="hero.node_works_sub">
-            {t('hero.node_works_sub', 'SELECTED_WORKS // PORTFOLIO')}
+          <div className="node-sub" data-i18n="hero.node_portfolio-and-works_sub">
+            {t('hero.node_portfolio-and-works_sub', 'SELECTED_WORKS // PORTFOLIO')}
           </div>
         </div>
         <div className="node-bracket">]</div>

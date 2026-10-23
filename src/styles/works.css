@@ -431,3 +431,49 @@
       [data-theme="dark"] .works-header-sub {
         color: var(--text-6);
       }
+
+      /* ── PORTFOLIO + WORKS PAGE (view toggle) ────────────── */
+      .pw-sub-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 14px 20px;
+        margin-top: 10px;
+      }
+      .pw-sub-row .works-header-sub {
+        margin-top: 0;
+        flex: 1 1 320px;
+        min-width: 0;
+      }
+      .pw-view-toggle {
+        display: flex;
+        flex-shrink: 0;
+        margin-left: auto;
+      }
+      .pw-view-toggle .tech-btn + .tech-btn {
+        margin-left: -2px; /* shared border between the two halves */
+      }
+      .pw-view {
+        animation: pwViewIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      @keyframes pwViewIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media (max-width: 768px) {
+        .pw-view-toggle {
+          margin-left: 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pw-view {
+          animation: none;
+        }
+      }
